@@ -1,8 +1,5 @@
 export type int = number;
 
-export class Terminal {}
-export class Process {}
-
 export class BinaryFile {
 	write(data: ArrayBuffer): Promise<int>;
 
@@ -41,7 +38,7 @@ export class BrowserPod {
 			}
   	): Promise<Process>;
 
-   onPortal(cb: ( args: { url: string, port: int }) => void): void;
+   onPortal(cb: ({ url: string, port: int }) => void): void;
 
 	createDirectory(
 		path: string,
@@ -56,4 +53,3 @@ export class BrowserPod {
 		consoleDiv: HTMLElement,
 	): Promise<Terminal>;
 }
-
