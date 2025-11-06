@@ -1,4 +1,7 @@
 CheerpX: Sandboxed Dev Environments in any Browser
 
+Version 0.9.1:
+	* NPM automation
+
 Version 0.9.0:
 	* First NPM release
