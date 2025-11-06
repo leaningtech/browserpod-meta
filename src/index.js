@@ -1,4 +1,4 @@
-const version="0.9.0"
+const version="0.9.1"
 const dynImport = new Function("x", "return import(x)");
 const BrowserPod = await dynImport(`https://rt.browserpod.io/${version}/browserpod.js`);
 debugger;
