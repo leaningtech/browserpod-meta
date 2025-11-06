@@ -1,0 +1,34 @@
+{
+  "name": "browserpod",
+  "version": "0.9.0",
+  "type": "module",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "description": "Sandboxed Dev Environments in any Browser",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leaningtech/browserpod-meta.git"
+  },
+  "files": [
+    "LICENSE.txt",
+    "README.md",
+    "index.js",
+    "index.d.ts"
+  ],
+  "keywords": [
+    "webassembly",
+    "node",
+    "virtualization",
+    "sandbox",
+    "agengts",
+    "wasm",
+    "leaningtech"
+  ],
+  "scripts": {
+    "prepack": "cp ../../README.md ../../LICENSE.txt ../../COPYRIGHT.txt ../../src/index.js ../../src/index.d.ts ."
+  },
+  "author": "Leaning Technologies",
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "bugs": "https://github.com/leaningtech/browserpod-meta/issues",
+  "homepage": "https://browserpod.io/docs"
+}

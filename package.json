@@ -1,0 +1,7 @@
+{
+  "name": "browserpod-meta",
+  "workspaces": [
+    "packages/browserpod",
+    "packages/browserpod-lt"
+  ]
+}
