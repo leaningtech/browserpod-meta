@@ -1,7 +1,16 @@
 const version="0.9.1"
 const dynImport = new Function("x", "return import(x)");
-const BrowserPod = await dynImport(`https://rt.browserpod.io/${version}/browserpod.js`);
-debugger;
-export const BrowserPod = BrowserPod.BrowserPod;
-export const BinaryFile = BrowserPod.BinaryFile;
-export const TextFile = BrowserPod.TextFile;
+async function loadLbrary()
+{
+	try
+	{
+		return await dynImport(`https://rt.browserpod.io/${version}/browserpod.js`);
+	}
+	catch(e)
+	{
+		// Be robust to spurious SSR of this import
+		return {BrowserPod: null}
+	}
+}
+const Library = await loadLbrary();
+export const BrowserPod = Library.BrowserPod;
