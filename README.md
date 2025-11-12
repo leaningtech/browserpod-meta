@@ -1,4 +1,9 @@
-<h1><img src="assets/logotype.png" alt="BrowserPod" height="96"></h1>
+<h1>
+<picture>
+  <source srcset="assets/logotype-white-text.png" media="(prefers-color-scheme: dark)">
+  <source srcset="assets/logotype-black-text.png" media="(prefers-color-scheme: light)">
+<img src="assets/logotype-black-text.png" alt="BrowserPod" height="96"></h1>
+</picture>
 
 [![Discord server](https://img.shields.io/discord/988743885121548329?color=%237289DA&logo=discord&logoColor=ffffff)](https://discord.leaningtech.com)
 [![GitHub Issues](https://img.shields.io/github/issues/leaningtech/cheerpx-meta.svg)](https://github.com/leaningtech/browserpod-meta/issues)
