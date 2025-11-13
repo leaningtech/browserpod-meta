@@ -1,0 +1,10 @@
+Copyright © 2025 Leaning Technologies. All Rights Reserved.
+
+The contents of this npm package, relating to BrowserPod, are proprietary to Leaning Technologies. The use, copying, distribution, or modification of these package contents, and the operation of the BrowserPod product, are strictly regulated by and conditioned upon acceptance of Leaning Technologies' official policies.
+
+The use of BrowserPod is regulated by:
+1. Terms of Service (TOS): https://browserpod.io/browserpod-tos
+2. Pricing Policy: https://browserpod.io/browserpod-pricing-policy
+3. Privacy Policy: https://browserpod.io/browserpod-privacy-policy
+
+No rights are granted to use the contents of this package except as expressly permitted by the aforementioned policies.
