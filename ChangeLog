@@ -1,5 +1,10 @@
 CheerpX: Sandboxed Dev Environments in any Browser
 
+Version 0.9.2:
+	* Support node REPL
+	* Added TypeScript types
+	* First public beta release
+
 Version 0.9.1:
 	* NPM automation
 
