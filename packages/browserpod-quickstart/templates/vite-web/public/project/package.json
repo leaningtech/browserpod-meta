@@ -1,0 +1,13 @@
+{
+  "name": "expressjs-tutorial",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
