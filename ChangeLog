@@ -1,5 +1,9 @@
 CheerpX: Sandboxed Dev Environments in any Browser
 
+Version 0.9.3:
+	* Fixed a few issues
+	* Added browserpod-quickstart package
+
 Version 0.9.2:
 	* Support node REPL
 	* Added TypeScript types
