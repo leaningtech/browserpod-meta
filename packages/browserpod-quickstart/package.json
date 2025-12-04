@@ -10,11 +10,6 @@
   "engines": {
     "node": "^18.0.0 || >=20.0.0"
   },
-  "files": [
-    "index.js",
-    "src/**/*",
-    "templates/**/*"
-  ],
   "keywords": [
     "browserpod",
     "template",
