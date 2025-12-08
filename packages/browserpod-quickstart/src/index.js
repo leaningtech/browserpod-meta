@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import prompts from 'prompts';
 import chalk from 'chalk';
+import isBinaryPath from 'is-binary-path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -47,6 +48,8 @@ async function copyFilesAndDirectories(src, dest, projectName, apiKey) {
     if (stat.isDirectory()) {
       await fs.ensureDir(destPath);
       await copyFilesAndDirectories(srcPath, destPath, projectName, apiKey);
+    } else if (isBinaryPath(srcPath)) {
+      await fs.copyFile(srcPath, destPath);
     } else {
       let content = await fs.readFile(srcPath, 'utf8');
 
