@@ -1,5 +1,8 @@
 CheerpX: Sandboxed Dev Environments in any Browser
 
+Version 0.9.5:
+	* Improved looks of browserpod-quickstart templates
+
 Version 0.9.4:
 	* Fixed an issue with browserpod-quickstart
 
