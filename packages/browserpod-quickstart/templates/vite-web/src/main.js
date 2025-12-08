@@ -1,17 +1,14 @@
 import { BrowserPod } from '@leaningtech/browserpod'
 import { copyFile } from './utils'
 
-// Initialize the Pod.
-// VITE_BP_APIKEY is an environmental variable containing your Api Key.
-// You can define it by creating a file called `.env` in the project directory
-// with the content `VITE_BP_APIKEY=your-key`.
-// To get an Api Key, visit https://console.browserpod.io .
+// Initialize the Pod
+// VITE_BP_APIKEY is an environmental variable containing your Api Key
+// Its value is defined in the file `.env` in the project's main directory
+// To get an Api Key, visit https://console.browserpod.io
 const pod = await BrowserPod.boot({apiKey:import.meta.env.VITE_BP_APIKEY});
 
 // Create a Terminal
-const terminalElem = document.getElementById("console");
-document.body.appendChild(terminalElem);
-const terminal = await pod.createDefaultTerminal(terminalElem);
+const terminal = await pod.createDefaultTerminal(document.querySelector("#console"));
 
 // Hook the portal to preview the web page in an iframe
 const portalIframe = document.getElementById("portal");

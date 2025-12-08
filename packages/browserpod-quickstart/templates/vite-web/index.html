@@ -2,12 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hello BrowserPod</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
-    <div id="url">Waiting for portal...</div>
-    <iframe id="portal"></iframe>
-    <div class="console" id="console"></div>
+    <div class="container">
+      <div class="header">
+        <img src="/logo.png" alt="BrowserPod Logo" class="logo" />
+        <h1>Hello BrowserPod</h1>
+      </div>
+      <p>Running Node.js in your browser</p>
+      <div id="url">Waiting for portal...</div>
+      <div class="preview-container">
+        <iframe id="portal"></iframe>
+        <pre id="console"></pre>
+      </div>
+    </div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
