@@ -1,5 +1,8 @@
 CheerpX: Sandboxed Dev Environments in any Browser
 
+Version 0.9.7:
+	* Fixed a regression introduced by reducing the thread pool size
+
 Version 0.9.6:
 	* Fixed crash when formatting some types
 	* Fixed formatting of objects with null prototype
