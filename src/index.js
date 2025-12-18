@@ -1,6 +1,6 @@
 const version="0.9.7"
 const dynImport = new Function("x", "return import(x)");
-async function loadLbrary()
+async function loadLibrary()
 {
 	try
 	{
@@ -12,5 +12,5 @@ async function loadLbrary()
 		return {BrowserPod: null}
 	}
 }
-const Library = await loadLbrary();
+const Library = await loadLibrary();
 export const BrowserPod = Library.BrowserPod;
