@@ -1,5 +1,10 @@
 CheerpX: Sandboxed Dev Environments in any Browser
 
+Version 0.9.8:
+	* Fixed an internal error that could leave the kernel in a deadlocked
+	state
+	* Added support for reporting unhandled promise rejections
+
 Version 0.9.7:
 	* Fixed a regression introduced by reducing the thread pool size
 
