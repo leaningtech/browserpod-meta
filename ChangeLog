@@ -1,5 +1,8 @@
 CheerpX: Sandboxed Dev Environments in any Browser
 
+Version 1.0.0:
+	* Faster BrowserPod.boot()
+
 Version 0.9.10:
 	* Improved overall disk performance
 	* Enable OPFS disk backend  by default
