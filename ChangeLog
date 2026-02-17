@@ -1,5 +1,10 @@
 CheerpX: Sandboxed Dev Environments in any Browser
 
+Version 0.9.10:
+	* Improved overall disk performance
+	* Enable OPFS disk backend  by default
+	* Bug fixes
+
 Version 0.9.8:
 	* Fixed an internal error that could leave the kernel in a deadlocked
 	state

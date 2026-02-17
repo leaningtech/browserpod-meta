@@ -1,6 +1,6 @@
 {
   "name": "create-browserpod-quickstart",
-  "version": "0.9.8",
+  "version": "0.9.10",
   "description": "Create a new BrowserPod project quickly",
   "type": "module",
   "main": "index.js",
