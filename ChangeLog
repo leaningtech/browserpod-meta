@@ -1,5 +1,9 @@
 CheerpX: Sandboxed Dev Environments in any Browser
 
+Version 0.9.10:
+	* New feature1
+	* New feature2
+
 Version 0.9.8:
 	* Fixed an internal error that could leave the kernel in a deadlocked
 	state
