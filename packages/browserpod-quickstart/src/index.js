@@ -84,7 +84,7 @@ async function createProject() {
     {
       type: 'password',
       name: 'apiKey',
-      message: 'Browserpod API key (optional):',
+      message: 'BrowserPod API key (get one at https://console.browserpod.io):',
       hint: 'You can add this later in the .env file'
     }
   ]);
