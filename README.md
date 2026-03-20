@@ -1,3 +1,4 @@
+Hello Wasm IO!
 <h1>
 <picture>
   <source srcset="assets/logotype-white-text.png" media="(prefers-color-scheme: dark)">
