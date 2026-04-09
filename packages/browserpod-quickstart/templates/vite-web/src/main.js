@@ -19,11 +19,13 @@ pod.onPortal(({ url, port }) => {
 });
 
 // Copy our project files
-await pod.createDirectory("/project");
-await copyFile(pod, "project/main.js");
-await copyFile(pod, "project/package.json");
+const homePath = "/home/user";
+const projectPath = `${homePath}/project`;
+await pod.createDirectory(projectPath);
+await copyFile(pod, "project/main.js", homePath);
+await copyFile(pod, "project/package.json", homePath);
 
 // Install dependencies
-await pod.run("npm", ["install"], {echo:true, terminal:terminal, cwd: "/project"});
+await pod.run("npm", ["install"], {echo:true, terminal:terminal, cwd: projectPath});
 // Run the web server
-await pod.run("node", ["main.js"], {echo:true, terminal:terminal, cwd: "/project"});
+await pod.run("node", ["main.js"], {echo:true, terminal:terminal, cwd: projectPath});
