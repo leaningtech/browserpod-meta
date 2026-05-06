@@ -26,20 +26,23 @@ export class BrowserPod {
 	static boot(opts: {
 		nodeVersion?: string;
 		apiKey: string;
-  	}): Promise<BrowserPod>;
+		storageKey?: string;
+		userImage?: string;
+	}): Promise<BrowserPod>;
 
 	run(
 		executable: string,
 		args: Array<string>,
 		opts: {
-				terminal: Terminal,
-				env?: Array<string>;
-				cwd?: string,
-				echo?: boolean
-			}
-  	): Promise<Process>;
+			terminal: Terminal,
+			env?: Array<string>;
+			cwd?: string,
+			echo?: boolean
+		}
+	): Promise<Process>;
 
-   onPortal(cb: ( args: { url: string, port: number }) => void): void;
+	onPortal(cb: ( args: { url: string, port: number }) => void): void;
+	onOpen(cb: ( urlOrPath: string ) => void): void;
 
 	createDirectory(
 		path: string,
@@ -53,5 +56,11 @@ export class BrowserPod {
 	createDefaultTerminal(
 		consoleDiv: HTMLElement,
 	): Promise<Terminal>;
+
+	createCustomTerminal(opts: {
+		cols?: number;
+		rows?: number;
+		onOutput: (buffer: Uint8Array | ArrayBuffer, vt?: unknown) => void;
+	}): Promise<Terminal>;
 }
 
