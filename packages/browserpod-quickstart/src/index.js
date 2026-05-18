@@ -39,6 +39,13 @@ const booleanOptions = new Map([
   ['--non-interactive', 'nonInteractive']
 ]);
 
+class PromptCancelledError extends Error {
+  constructor() {
+    super('Setup cancelled');
+    this.name = 'PromptCancelledError';
+  }
+}
+
 function printHelp() {
   console.log(`Create Browserpod Quickstart
 
@@ -239,7 +246,17 @@ async function resolveProjectOptions(cliOptions) {
     });
   }
 
-  const response = await prompts(questions);
+  let promptCancelled = false;
+  const response = await prompts(questions, {
+    onCancel: () => {
+      promptCancelled = true;
+      return false;
+    }
+  });
+
+  if (promptCancelled) {
+    throw new PromptCancelledError();
+  }
 
   return {
     template: cliOptions.template || response.template,
@@ -271,6 +288,11 @@ async function createProject(argv = process.argv.slice(2)) {
   try {
     response = await resolveProjectOptions(cliOptions);
   } catch (error) {
+    if (error instanceof PromptCancelledError) {
+      console.log(chalk.red(error.message));
+      process.exit(1);
+    }
+
     console.error(chalk.red(error.message));
     printHelp();
     process.exit(1);
