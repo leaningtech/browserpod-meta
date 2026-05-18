@@ -26,6 +26,102 @@ const templates = [
   }
 ];
 
+const optionAliases = {
+  '-t': 'template',
+  '--template': 'template',
+  '-k': 'apiKey',
+  '--api-key': 'apiKey'
+};
+
+const booleanOptions = new Map([
+  ['-h', 'help'],
+  ['--help', 'help'],
+  ['--non-interactive', 'nonInteractive']
+]);
+
+function printHelp() {
+  console.log(`Create Browserpod Quickstart
+
+Usage:
+  create-browserpod-quickstart [project-name] [options]
+
+Options:
+  -t, --template <name>        Template to use (${templates.map(t => t.name).join(', ')})
+  -k, --api-key <key>          BrowserPod API key to write to .env
+      --non-interactive        Fail instead of prompting for missing required values
+  -h, --help                   Show this help message
+
+Examples:
+  create-browserpod-quickstart my-app --template vite-web
+  create-browserpod-quickstart my-app --template bash --api-key bp_...
+`);
+}
+
+function readOptionValue(argv, index, option) {
+  const next = argv[index + 1];
+
+  if (next === undefined || next.startsWith('-')) {
+    throw new Error(`Missing value for ${option}`);
+  }
+
+  return next;
+}
+
+function parseArgs(argv) {
+  const options = {};
+  const positional = [];
+
+  for (let i = 0; i < argv.length; i += 1) {
+    const arg = argv[i];
+
+    if (arg === '--') {
+      positional.push(...argv.slice(i + 1));
+      break;
+    }
+
+    if (!arg.startsWith('-')) {
+      positional.push(arg);
+      continue;
+    }
+
+    const equalsIndex = arg.indexOf('=');
+    const option = equalsIndex === -1 ? arg : arg.slice(0, equalsIndex);
+    const inlineValue = equalsIndex === -1 ? undefined : arg.slice(equalsIndex + 1);
+
+    if (booleanOptions.has(option)) {
+      if (inlineValue !== undefined) {
+        throw new Error(`${option} does not take a value`);
+      }
+
+      options[booleanOptions.get(option)] = true;
+      continue;
+    }
+
+    const optionName = optionAliases[option];
+
+    if (!optionName) {
+      throw new Error(`Unknown option: ${option}`);
+    }
+
+    if (inlineValue !== undefined) {
+      options[optionName] = inlineValue;
+    } else {
+      options[optionName] = readOptionValue(argv, i, option);
+      i += 1;
+    }
+  }
+
+  if (positional.length > 1) {
+    throw new Error(`Unexpected arguments: ${positional.slice(1).join(' ')}`);
+  }
+
+  if (positional.length === 1) {
+    options.projectName = positional[0];
+  }
+
+  return options;
+}
+
 async function validateProjectName(name) {
   if (!name || name.trim().length === 0) {
     return 'Project name is required';
@@ -37,6 +133,14 @@ async function validateProjectName(name) {
 
   if (fs.existsSync(name)) {
     return `Directory "${name}" already exists`;
+  }
+
+  return true;
+}
+
+function validateTemplateName(name) {
+  if (!templates.some(template => template.name === name)) {
+    return `Unknown template "${name}". Available templates: ${templates.map(t => t.name).join(', ')}`;
   }
 
   return true;
@@ -67,11 +171,46 @@ async function copyFilesAndDirectories(src, dest, projectName, apiKey) {
   }
 }
 
-async function createProject() {
-  console.log(chalk.blue.bold('🚀 Create Browserpod Quickstart\n'));
+async function resolveProjectOptions(cliOptions) {
+  if (cliOptions.template) {
+    const templateValidation = validateTemplateName(cliOptions.template);
 
-  const response = await prompts([
-    {
+    if (templateValidation !== true) {
+      throw new Error(templateValidation);
+    }
+  }
+
+  if (cliOptions.projectName) {
+    const projectValidation = await validateProjectName(cliOptions.projectName);
+
+    if (projectValidation !== true) {
+      throw new Error(projectValidation);
+    }
+  }
+
+  const hasRequiredOptions = Boolean(cliOptions.template && cliOptions.projectName);
+
+  if (cliOptions.nonInteractive && !hasRequiredOptions) {
+    const missing = [
+      !cliOptions.template ? 'template' : null,
+      !cliOptions.projectName ? 'project name' : null
+    ].filter(Boolean);
+
+    throw new Error(`Missing required option${missing.length > 1 ? 's' : ''} for non-interactive mode: ${missing.join(', ')}`);
+  }
+
+  if (hasRequiredOptions) {
+    return {
+      template: cliOptions.template,
+      projectName: cliOptions.projectName,
+      apiKey: cliOptions.apiKey || ''
+    };
+  }
+
+  const questions = [];
+
+  if (!cliOptions.template) {
+    questions.push({
       type: 'select',
       name: 'template',
       message: 'Select a template:',
@@ -79,20 +218,63 @@ async function createProject() {
         title: `${t.display} - ${t.description}`,
         value: t.name
       }))
-    },
-    {
+    });
+  }
+
+  if (!cliOptions.projectName) {
+    questions.push({
       type: 'text',
       name: 'projectName',
       message: 'Project name:',
       validate: validateProjectName
-    },
-    {
+    });
+  }
+
+  if (cliOptions.apiKey === undefined) {
+    questions.push({
       type: 'password',
       name: 'apiKey',
       message: 'BrowserPod API key (get one at https://console.browserpod.io):',
       hint: 'You can add this later in the .env file'
-    }
-  ]);
+    });
+  }
+
+  const response = await prompts(questions);
+
+  return {
+    template: cliOptions.template || response.template,
+    projectName: cliOptions.projectName || response.projectName,
+    apiKey: cliOptions.apiKey !== undefined ? cliOptions.apiKey : response.apiKey
+  };
+}
+
+async function createProject(argv = process.argv.slice(2)) {
+  let cliOptions;
+
+  try {
+    cliOptions = parseArgs(argv);
+  } catch (error) {
+    console.error(chalk.red(error.message));
+    printHelp();
+    process.exit(1);
+  }
+
+  if (cliOptions.help) {
+    printHelp();
+    return;
+  }
+
+  console.log(chalk.blue.bold('🚀 Create Browserpod Quickstart\n'));
+
+  let response;
+
+  try {
+    response = await resolveProjectOptions(cliOptions);
+  } catch (error) {
+    console.error(chalk.red(error.message));
+    printHelp();
+    process.exit(1);
+  }
 
   if (!response.template || !response.projectName) {
     console.log(chalk.red('Setup cancelled'));
