@@ -18,6 +18,11 @@ const templates = [
     name: 'vite-web',
     display: 'Web Server',
     description: 'A simple project running a web server'
+  },
+  {
+    name: 'bash',
+    display: 'Bash shell',
+    description: 'An interactive Bash shell'
   }
 ];
 
