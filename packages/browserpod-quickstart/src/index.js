@@ -241,8 +241,7 @@ async function resolveProjectOptions(cliOptions) {
     questions.push({
       type: 'password',
       name: 'apiKey',
-      message: 'BrowserPod API key (get one at https://console.browserpod.io):',
-      hint: 'You can add this later in the .env file'
+      message: 'BrowserPod API key (leave blank to add it later in .env, get one at https://console.browserpod.io):'
     });
   }
 
