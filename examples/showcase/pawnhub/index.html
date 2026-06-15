@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PawnHub</title>
+    <link rel="icon" type="image/png" href="/project/assets/logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap"
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div class="launcher-overlay" id="launcher">
+      <div class="launcher-shell">
+        <div class="launcher-brand">
+          <img src="/project/assets/logo.png" alt="PawnHub" class="launcher-logo" />
+          <div>
+            <div class="launcher-eyebrow">PawnHub</div>
+            <h1 class="launcher-title">Choose your game</h1>
+            <p class="launcher-copy">Pick how you want to play before the game environment starts.</p>
+          </div>
+        </div>
+
+        <div class="launcher-modes" id="modePicker">
+          <button class="mode-card selected" type="button" data-mode="single" id="singleModeButton">
+            <span class="mode-title">Single Player</span>
+            <span class="mode-copy">Play against the AI immediately.</span>
+          </button>
+          <button class="mode-card" type="button" data-mode="multiplayer" id="multiModeButton">
+            <span class="mode-title">Multiplayer Online</span>
+            <span class="mode-copy">Create a game link and invite another player.</span>
+          </button>
+        </div>
+
+        <div class="launcher-panel" id="singleOptions">
+          <div class="launcher-section-title">Single Player Setup</div>
+          <label class="launcher-field">
+            <span>Play as</span>
+            <select id="launchAiRole">
+              <option value="black">White</option>
+              <option value="white">Black</option>
+            </select>
+          </label>
+          <label class="launcher-field">
+            <span>AI depth</span>
+            <select id="launchAiDepth"></select>
+          </label>
+          <label class="launcher-field">
+            <span>AI think time (ms)</span>
+            <input id="launchAiThinkingTime" type="number" min="1" max="100" value="50" />
+            <div class="launcher-field-hint">Enter a value from 1 to 100 ms.</div>
+          </label>
+        </div>
+
+        <div class="launcher-panel hidden" id="multiOptions">
+          <div class="launcher-section-title">Online Multiplayer Setup</div>
+          <p class="launcher-note">Start an online match and share a clear invite link with your opponent.</p>
+        </div>
+
+        <p class="launcher-status" id="launchStatus">Choose your game type and timer, then launch.</p>
+
+        <div class="launcher-footer">
+          <label class="launcher-field timer-field">
+            <span>Clock per side (minutes)</span>
+            <input id="launchTimerMinutes" type="number" min="1" max="120" value="10" />
+          </label>
+          <button class="launcher-start" type="button" id="launchGameButton">Launch Game</button>
+        </div>
+      </div>
+    </div>
+    <div id="hostStatus" class="host-status checking">Host: Checking...</div>
+    <div id="url" class="url-bar">Waiting for portal...</div>
+    <iframe id="portal" class="portal-hidden" title="Built with BrowserPod"></iframe>
+    <pre id="console" aria-hidden="true"></pre>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

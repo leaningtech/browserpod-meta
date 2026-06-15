@@ -1,0 +1,64 @@
+openapi: "3.0.3"
+info:
+  title: Petstore API
+  version: "1.0.0"
+paths:
+  /pets:
+    get:
+      summary: List all pets
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                example:
+                  - id: 1
+                    name: Fido
+                    species: dog
+                  - id: 2
+                    name: Whiskers
+                    species: cat
+    post:
+      summary: Create a pet
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                example:
+                  id: 3
+                  name: Buddy
+                  species: dog
+                  created: true
+  /pets/{id}:
+    get:
+      summary: Get a pet by ID
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                example:
+                  id: 1
+                  name: Fido
+                  species: dog
+    delete:
+      summary: Delete a pet
+      responses:
+        "204":
+          description: No Content
+  /health:
+    get:
+      summary: Health check
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                example:
+                  status: ok
+                  uptime: 3600

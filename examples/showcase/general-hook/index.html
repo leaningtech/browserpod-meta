@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GENERAL HOOK — Free In-Browser Mock API Server & Webhook Inspector</title>
+    <meta name="description" content="General Hook is a free mock API server and webhook inspector that runs entirely in your browser via WebAssembly. Instantly build and test APIs, import OpenAPI or Postman specs, or capture live webhooks — no account, no backend, no setup required." />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/style.css" />
+  <script>if(localStorage.getItem('general-hook:theme')==='light')document.body.classList.add('light');</script>
+  </head>
+  <body class="scene-page">
+    <div id="starfield" aria-hidden="true"></div>
+    <canvas id="poop-canvas" aria-hidden="true"></canvas>
+    <div class="app">
+
+      <div class="spectrum-stripe"></div>
+
+      <div class="app-header">
+        <div class="maker-credit">
+          Made with <a href="https://browserpod.io" target="_blank" rel="noopener">BrowserPod</a>
+        </div>
+        <div class="ship-controls">
+          <button class="btn-primary btn-run" id="start-btn">RUN</button>
+          <div class="settings-wrapper">
+            <button class="btn-settings" id="settings-btn">&#x2630;</button>
+            <div class="settings-dropdown hidden" id="settings-dropdown">
+              <button id="toggle-ambience-btn">SEA SOUND: OFF</button>
+              <button id="toggle-terminal-btn">SEE TERMINAL</button>
+              <button id="notebook-btn">NOTEBOOK</button>
+              <a href="/docs.html" target="_blank" rel="noopener">DOCS</a>
+            </div>
+            <div class="notebook-panel hidden" id="notebook-panel">
+              <div class="notebook-header drag-handle">
+                <span class="notebook-title">Notebook</span>
+                <div class="notebook-actions">
+                  <button class="notebook-download" id="notebook-download">DOWNLOAD</button>
+                  <button class="notebook-close" id="notebook-close" aria-label="Close notebook">CLOSE</button>
+                </div>
+              </div>
+              <div class="notebook-page">
+                <div class="notebook-margin" aria-hidden="true"></div>
+                <textarea class="notebook-textarea" id="notebook-textarea" placeholder="Write your notes here..." spellcheck="true"></textarea>
+              </div>
+            </div>
+          </div>
+          <button id="theme-btn" class="btn-theme" role="switch" aria-checked="false" aria-label="Toggle day/night mode">
+            <span class="theme-moon">☽</span>
+            <span class="theme-track"><span class="theme-thumb"></span></span>
+            <span class="theme-sun">☀</span>
+          </button>
+        </div>
+      </div>
+
+        <div class="card" id="config-card">
+            <div class="config-card-title drag-handle">
+              <div class="config-card-title-text">GENERAL HOOK</div>
+              <div class="status-strip" aria-live="polite">
+                <span class="status-label" id="status-label">API</span>
+                <div id="status" class="status status-idle">
+                  <span class="status-dot" aria-hidden="true"></span>
+                  <span id="status-text">OFFLINE</span>
+                </div>
+                <button class="btn-view-portal hidden" id="view-portal-btn" title="View server details">&#x2139;</button>
+              </div>
+            </div>
+            <div class="tabs">
+              <button class="tab active" data-tab="builder">CREATE API</button>
+              <button class="tab" data-tab="upload">UPLOAD API</button>
+              <button class="tab" data-tab="spec">OPENAPI YAML</button>
+              <button class="tab" data-tab="webhooks">LAUNCH WEBHOOK</button>
+            </div>
+            <div class="tab-panel" id="tab-builder">
+              <div class="tab-panel-inner">
+                <p class="tab-desc">
+                  Define your API routes manually. Set the HTTP method, path, and status code for each endpoint.
+                  Click <strong>Edit body</strong> on any route to set the JSON response it will return.
+                </p>
+                <div class="section-header">
+                  <span class="section-title">ROUTES</span>
+                  <div class="section-actions">
+                    <button class="btn-icon" id="download-routes-btn" title="Download routes.json">
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><rect x="1" y="12" width="12" height="2"/><path d="M7 11 L1 5 H4.5 V1 H9.5 V5 H13 Z"/></svg>
+                    </button>
+                    <button class="btn-ghost" id="add-btn">+ ADD</button>
+                  </div>
+                </div>
+                <div id="routes-list"></div>
+                <div id="new-route-form" class="new-route-form hidden">
+                  <select id="nr-method" class="input input-method">
+                    <option>GET</option><option>POST</option><option>PUT</option>
+                    <option>PATCH</option><option>DELETE</option>
+                  </select>
+                  <input id="nr-path" class="input input-path" type="text" placeholder="/PATH" />
+                  <input id="nr-status" class="input input-status" type="number" value="200" min="100" max="599" />
+                  <button class="btn-secondary" id="nr-save">ADD</button>
+                  <button class="btn-ghost" id="nr-cancel">CANCEL</button>
+                </div>
+              </div>
+            </div>
+            <div class="tab-panel hidden" id="tab-upload">
+              <div class="tab-panel-inner">
+                <p class="tab-desc">
+                  Upload an existing API spec or export file. Routes are extracted automatically.
+                </p>
+                <div class="dropzone" id="dropzone">
+                  <div class="dropzone-icon">&#x2913;</div>
+                  <div class="dropzone-text">DROP FILE OR CLICK TO BROWSE</div>
+                  <div class="dropzone-hint">
+                    OPENAPI 3.X &middot; SWAGGER 2.0 &middot; POSTMAN &middot; INSOMNIA &middot; HAR &middot; ROUTES.JSON &middot; SERVER.JS
+                  </div>
+                  <input type="file" id="file-input" accept=".json,.yaml,.yml,.js,.har" hidden />
+                </div>
+                <div id="upload-result" class="hidden"></div>
+              </div>
+            </div>
+            <div class="tab-panel hidden" id="tab-spec">
+              <div class="tab-panel-inner">
+                <p class="tab-desc">
+                  Build an OpenAPI 3.0 spec from scratch. Add endpoints, set status codes, and edit response bodies.
+                  The YAML updates live — copy or download it to share with your team or import into other tools.
+                </p>
+                <div class="spec-info-row">
+                  <input class="input spec-input-title" id="spec-title" type="text" placeholder="API TITLE" />
+                  <input class="input spec-input-version" id="spec-version" type="text" placeholder="VERSION" />
+                </div>
+                <div class="spec-two-col">
+                  <div class="spec-left">
+                    <div class="section-header">
+                      <span class="section-title">ENDPOINTS</span>
+                      <button class="btn-ghost" id="spec-add-btn">+ ADD</button>
+                    </div>
+                    <div id="spec-endpoints-list"></div>
+                    <div id="spec-new-form" class="new-route-form hidden">
+                      <select id="sp-method" class="input input-method">
+                        <option>GET</option><option>POST</option><option>PUT</option>
+                        <option>PATCH</option><option>DELETE</option>
+                      </select>
+                      <input id="sp-path" class="input input-path" type="text" placeholder="/PATH" />
+                      <input id="sp-status" class="input input-status" type="number" value="200" min="100" max="599" />
+                      <input id="sp-summary" class="input input-summary" type="text" placeholder="SUMMARY" />
+                      <button class="btn-secondary" id="sp-save">ADD</button>
+                      <button class="btn-ghost" id="sp-cancel">CANCEL</button>
+                    </div>
+                  </div>
+                  <div class="spec-right">
+                    <div class="section-header">
+                      <span class="section-title">YAML</span>
+                      <div class="spec-preview-actions">
+                        <button class="btn-icon" id="spec-copy-btn" title="Copy YAML">
+                          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="4" width="9" height="9"/><rect x="1" y="1" width="8" height="8" fill="var(--panel)" stroke="currentColor" stroke-width="1.5"/></svg>
+                        </button>
+                        <a class="btn-icon" id="spec-download-btn" href="#" download="openapi.yaml" title="Download YAML">
+                          <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><rect x="1" y="12" width="12" height="2"/><path d="M7 11 L1 5 H4.5 V1 H9.5 V5 H13 Z"/></svg>
+                        </a>
+                      </div>
+                    </div>
+                    <pre class="spec-preview" id="spec-preview"></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-panel hidden" id="tab-webhooks">
+              <div class="tab-panel-inner">
+                <p class="tab-desc">
+                  Boots a server that captures every incoming HTTP request and displays it in a live dashboard.
+                  Paste the public URL into any service's webhook settings to inspect payloads in real time —
+                  no configuration needed.
+                </p>
+                <div class="webhook-info">
+                  <p>COMPATIBLE WITH:</p>
+                  <p class="webhook-services">GITHUB &nbsp; STRIPE &nbsp; SLACK &nbsp; SHOPIFY &nbsp; TWILIO &nbsp; SENDGRID</p>
+                </div>
+              </div>
+            </div>
+            <div class="config-hint">
+              This server runs inside this browser tab. Closing or refreshing this page will immediately stop any running API or webhook. To start a new server, refresh the tab.
+            </div>
+          </div>
+        </div>
+
+      <!-- Body editor -->
+      <div class="card hidden" id="body-editor-card">
+        <div class="section-header drag-handle">
+          <span class="section-title">RESPONSE BODY: <code id="body-editor-label"></code></span>
+          <button class="btn-ghost" id="body-editor-close">CLOSE</button>
+        </div>
+        <textarea id="body-editor-textarea" class="body-editor" spellcheck="false"></textarea>
+        <div class="body-editor-actions">
+          <button class="btn-secondary" id="body-editor-save">SAVE</button>
+          <select id="body-editor-ct" class="input" style="width:auto">
+            <option value="application/json">application/json</option>
+            <option value="text/plain">text/plain</option>
+            <option value="text/html">text/html</option>
+            <option value="application/xml">application/xml</option>
+            <option value="image/png">image/png</option>
+            <option value="image/jpeg">image/jpeg</option>
+            <option value="application/pdf">application/pdf</option>
+            <option value="application/octet-stream">application/octet-stream</option>
+          </select>
+          <button class="btn-ghost" id="body-upload-btn">UPLOAD FILE</button>
+          <input type="file" id="body-file-input" hidden />
+          <span class="body-editor-hint" id="body-editor-hint">VALID JSON — { }, [ ], "string", 42, true</span>
+        </div>
+      </div>
+
+      <!-- Portal URL -->
+      <div class="card hidden" id="portal-card">
+        <div class="portal-label drag-handle">PUBLIC URL</div>
+        <div class="portal-row">
+          <div class="portal-url" id="portal-url">WAITING...</div>
+          <button class="btn-secondary" id="copy-btn">COPY</button>
+          <a class="btn-secondary" id="open-btn" href="#" target="_blank" rel="noopener">OPEN</a>
+        </div>
+        <div class="hint">
+          SHARE THIS URL. OPEN TO SEE ROUTES.<br />
+          TRY: <code id="example-route"></code>
+        </div>
+      </div>
+
+      <!-- ASCII success (visible when server is running) -->
+      <div class="card hidden" id="ascii-success">
+        <pre class="ascii-art" id="ascii-art-text"></pre>
+      </div>
+
+      <!-- Terminal output (hidden, toggled via settings) -->
+      <div class="card hidden" id="console-card">
+        <div class="terminal-label drag-handle">TERMINAL OUTPUT</div>
+        <div id="console" class="terminal"></div>
+      </div>
+
+    </div>
+    <!-- ZX Spectrum tape-load overlay: borders frame page, modal loads in centre -->
+    <div id="spectrum-overlay">
+      <div id="sov-screen-curtain"></div>
+      <div id="sov-screen-scanner"></div>
+      <div class="sov-border sov-top"></div>
+      <div class="sov-border sov-bottom"></div>
+      <div class="sov-border sov-left"></div>
+      <div class="sov-border sov-right"></div>
+      <div id="sov-modal">
+        <div id="sov-curtain"></div>
+        <div id="sov-scanner"></div>
+        <div class="sov-inner drag-handle">
+          <div class="sov-loading" id="sov-loading">LOADING<span id="sov-dots">...</span></div>
+          <pre class="sov-art" id="sov-art"></pre>
+          <div class="sov-url-row hidden" id="sov-url-row">
+            <div class="sov-url" id="sov-url"></div>
+            <button class="btn-secondary" id="sov-copy">COPY</button>
+            <a class="btn-secondary" id="sov-open" href="#" target="_blank" rel="noopener">OPEN</a>
+          </div>
+          <div class="sov-actions hidden" id="sov-actions">
+            <button class="btn-ghost" id="sov-dismiss">DISMISS</button>
+            <span class="sov-meta" id="sov-meta"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <canvas id="water-canvas"></canvas>
+    <img class="boat-img" src="/pixel_boat_detailed.svg" alt="" aria-hidden="true" />
+
+    <!-- Welcome screen -->
+    <div id="welcome-screen">
+      <div class="welcome-card">
+        <div class="welcome-logo">GENERAL HOOK</div>
+        <p class="welcome-lead">Build and test APIs instantly — no account, no backend, no setup.</p>
+        <p class="welcome-body">
+          General Hook is a free mock API server and webhook inspector that runs entirely in your browser.
+          Define custom endpoints with JSON responses, import an OpenAPI or Postman spec, or spin up a
+          public webhook receiver to inspect live payloads — all without installing anything or creating an account.
+        </p>
+        <p class="welcome-body">
+          Powered by WebAssembly, your server runs directly inside this browser tab.
+          Nothing is sent to an external server and no data leaves your device.
+        </p>
+        <div class="welcome-notice">
+          <strong>Your server only lives as long as this tab is open.</strong>
+          Closing or refreshing this page will immediately shut down any running API or webhook.
+          To start a fresh server with a new configuration, simply refresh the tab.
+        </div>
+        <button class="btn-primary" id="welcome-start-btn">GET STARTED</button>
+      </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" role="alert"></div>
+    <script type="module" src="/src/stars.js"></script>
+    <script type="module" src="/src/clouds.js"></script>
+    <script type="module" src="/src/water.js"></script>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

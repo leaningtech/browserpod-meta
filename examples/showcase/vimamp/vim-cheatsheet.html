@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vim Cheat Sheet</title>
+    <link rel="icon" type="image/svg+xml" href="/VimPod.svg" />
+    <link rel="stylesheet" href="/src/vim-cheatsheet.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <div>
+          <h1>Vim Cheat Sheet</h1>
+          <p>
+            Built from the examples in <code>examples/Vim_cheat_sheets</code> to give a clean,
+            fast in-app reference.
+          </p>
+        </div>
+        <a class="link-btn" href="/">Back to Vim</a>
+      </header>
+
+      <section class="toolbar" aria-label="Cheat sheet tools">
+        <label class="search-wrap" for="cheatSearch">
+          <span>Filter commands</span>
+          <input
+            id="cheatSearch"
+            type="search"
+            autocomplete="off"
+            placeholder="w, dd, :wq, split, macro"
+          />
+        </label>
+        <p id="searchMeta" class="search-meta" aria-live="polite"></p>
+      </section>
+
+      <section id="cheatGrid" class="cheat-grid">
+        <article class="cheat-card" data-card-title="Global and files">
+          <h2>Global and Files</h2>
+          <table class="cheat-table">
+            <tbody>
+              <tr data-command>
+                <td><code>:h[elp] keyword</code></td>
+                <td>Open help for keyword.</td>
+              </tr>
+              <tr data-command>
+                <td><code>:e file</code></td>
+                <td>Edit or open a file.</td>
+              </tr>
+              <tr data-command>
+                <td><code>:sav[eas] file</code></td>
+                <td>Save current buffer as another filename.</td>
+              </tr>
+              <tr data-command>
+                <td><code>:w</code></td>
+                <td>Save.</td>
+              </tr>
+              <tr data-command>
+                <td><code>:wq</code> / <code>:x</code></td>
+                <td>Save and quit.</td>
+              </tr>
+              <tr data-command>
+                <td><code>:q</code></td>
+                <td>Quit current file/window.</td>
+              </tr>
+              <tr data-command>
+                <td><code>:q!</code></td>
+                <td>Quit without saving changes.</td>
+              </tr>
+              <tr data-command>
+                <td><code>:qa</code></td>
+                <td>Quit all files.</td>
+              </tr>
+              <tr data-command>
+                <td><code>ZZ</code> / <code>ZQ</code></td>
+                <td>Save+quit / quit without saving.</td>
+              </tr>
+              <tr data-command>
+                <td><code>:ter[minal]</code></td>
+                <td>Open a terminal window.</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="cheat-card" data-card-title="Movement">
+          <h2>Movement</h2>
+          <table class="cheat-table">
+            <tbody>
+              <tr data-command>
+                <td><code>h j k l</code></td>
+                <td>Move left, down, up, right.</td>
+              </tr>
+              <tr data-command>
+                <td><code>w</code> <code>W</code></td>
+                <td>Next word start (normal / punctuation-aware).</td>
+              </tr>
+              <tr data-command>
+                <td><code>e</code> <code>E</code></td>
+                <td>Next word end.</td>
+              </tr>
+              <tr data-command>
+                <td><code>b</code> <code>B</code></td>
+                <td>Previous word start.</td>
+              </tr>
+              <tr data-command>
+                <td><code>0</code> <code>^</code> <code>$</code></td>
+                <td>Line start / first non-blank / line end.</td>
+              </tr>
+              <tr data-command>
+                <td><code>gg</code> <code>G</code> <code>nG</code></td>
+                <td>Top / bottom / go to line n.</td>
+              </tr>
+              <tr data-command>
+                <td><code>f{char}</code> <code>t{char}</code></td>
+                <td>Find character on line (to / before).</td>
+              </tr>
+              <tr data-command>
+                <td><code>F{char}</code> <code>T{char}</code></td>
+                <td>Find backward on line.</td>
+              </tr>
+              <tr data-command>
+                <td><code>;</code> <code>,</code></td>
+                <td>Repeat last find forward / backward.</td>
+              </tr>
+              <tr data-command>
+                <td><code>%</code></td>
+                <td>Jump to matching bracket/brace/paren.</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="cheat-card" data-card-title="Insert and replace">
+          <h2>Insert and Replace</h2>
+          <table class="cheat-table">
+            <tbody>
+              <tr data-command>
+                <td><code>i</code> <code>I</code></td>
+                <td>Insert at cursor / at start of line.</td>
+              </tr>
+              <tr data-command>
+                <td><code>a</code> <code>A</code></td>
+                <td>Append after cursor / at end of line.</td>
+              </tr>
+              <tr data-command>
+                <td><code>o</code> <code>O</code></td>
+                <td>Open line below / above.</td>
+              </tr>
+              <tr data-command>
+                <td><code>s</code> <code>S</code> <code>C</code></td>
+                <td>Change character / line / to end-of-line.</td>
+              </tr>
+              <tr data-command>
+                <td><code>r</code> <code>R</code></td>
+                <td>Replace one character / enter replace mode.</td>
+              </tr>
+              <tr data-command>
+                <td><code>Esc</code> or <code>&lt;C-c&gt;</code></td>
+                <td>Exit insert mode.</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="cheat-card" data-card-title="Editing and clipboard">
+          <h2>Editing and Clipboard</h2>
+          <table class="cheat-table">
+            <tbody>
+              <tr data-command>
+                <td><code>x</code></td>
+                <td>Delete character.</td>
+              </tr>
+              <tr data-command>
+                <td><code>dd</code></td>
+                <td>Delete (cut) line.</td>
+              </tr>
+              <tr data-command>
+                <td><code>yy</code></td>
+                <td>Yank (copy) line.</td>
+              </tr>
+              <tr data-command>
+                <td><code>p</code> <code>P</code></td>
+                <td>Paste after / before cursor.</td>
+              </tr>
+              <tr data-command>
+                <td><code>dw</code> <code>d$</code> <code>D</code></td>
+                <td>Delete word / to end of line / to end of line.</td>
+              </tr>
+              <tr data-command>
+                <td><code>cc</code></td>
+                <td>Change entire line.</td>
+              </tr>
+              <tr data-command>
+                <td><code>&gt;&gt;</code> <code>&lt;&lt;</code></td>
+                <td>Indent / de-indent line.</td>
+              </tr>
+              <tr data-command>
+                <td><code>u</code> <code>&lt;C-r&gt;</code></td>
+                <td>Undo / redo.</td>
+              </tr>
+              <tr data-command>
+                <td><code>.</code></td>
+                <td>Repeat last change.</td>
+              </tr>
+              <tr data-command>
+                <td><code>"*y</code> <code>"+y</code></td>
+                <td>Copy to system clipboard (if supported).</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="cheat-card" data-card-title="Visual mode">
+          <h2>Visual Mode</h2>
+          <table class="cheat-table">
+            <tbody>
+              <tr data-command>
+                <td><code>v</code> <code>V</code> <code>&lt;C-v&gt;</code></td>
+                <td>Visual / line visual / block visual mode.</td>
+              </tr>
+              <tr data-command>
+                <td><code>o</code></td>
+                <td>Switch to opposite end of selection.</td>
+              </tr>
+              <tr data-command>
+                <td><code>y</code> <code>d</code> <code>c</code></td>
+                <td>Yank / delete / change selection.</td>
+              </tr>
+              <tr data-command>
+                <td><code>&gt;</code> <code>&lt;</code></td>
+                <td>Indent / de-indent selected lines.</td>
+              </tr>
+              <tr data-command>
+                <td><code>gv</code></td>
+                <td>Reselect last visual selection.</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="cheat-card" data-card-title="Search and replace">
+          <h2>Search and Replace</h2>
+          <table class="cheat-table">
+            <tbody>
+              <tr data-command>
+                <td><code>/pattern</code> <code>?pattern</code></td>
+                <td>Search forward / backward.</td>
+              </tr>
+              <tr data-command>
+                <td><code>n</code> <code>N</code></td>
+                <td>Next / previous search result.</td>
+              </tr>
+              <tr data-command>
+                <td><code>*</code> <code>#</code></td>
+                <td>Search next/prev exact word under cursor.</td>
+              </tr>
+              <tr data-command>
+                <td><code>:%s/foo/bar/g</code></td>
+                <td>Replace in whole file.</td>
+              </tr>
+              <tr data-command>
+                <td><code>:%s/foo/bar/gc</code></td>
+                <td>Replace in whole file with confirmation.</td>
+              </tr>
+              <tr data-command>
+                <td><code>:noh</code></td>
+                <td>Clear highlighted search matches.</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="cheat-card" data-card-title="Windows and tabs">
+          <h2>Windows and Tabs</h2>
+          <table class="cheat-table">
+            <tbody>
+              <tr data-command>
+                <td><code>:split</code> <code>:vsplit</code></td>
+                <td>Horizontal or vertical split.</td>
+              </tr>
+              <tr data-command>
+                <td><code>&lt;C-w&gt;h/j/k/l</code></td>
+                <td>Move between splits.</td>
+              </tr>
+              <tr data-command>
+                <td><code>&lt;C-w&gt;w</code></td>
+                <td>Cycle through windows.</td>
+              </tr>
+              <tr data-command>
+                <td><code>&lt;C-w&gt;q</code></td>
+                <td>Close current window.</td>
+              </tr>
+              <tr data-command>
+                <td><code>:tabnew</code></td>
+                <td>Open new tab.</td>
+              </tr>
+              <tr data-command>
+                <td><code>:tabn</code> <code>:tabp</code></td>
+                <td>Next / previous tab.</td>
+              </tr>
+              <tr data-command>
+                <td><code>:tabclose</code></td>
+                <td>Close tab.</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="cheat-card" data-card-title="Macros and registers">
+          <h2>Macros, Registers, and Marks</h2>
+          <table class="cheat-table">
+            <tbody>
+              <tr data-command>
+                <td><code>:reg</code></td>
+                <td>List register contents.</td>
+              </tr>
+              <tr data-command>
+                <td><code>"ayy</code> <code>"ap</code></td>
+                <td>Yank / paste using register <code>a</code>.</td>
+              </tr>
+              <tr data-command>
+                <td><code>qa</code> ... <code>q</code></td>
+                <td>Record macro into register <code>a</code>.</td>
+              </tr>
+              <tr data-command>
+                <td><code>@a</code> <code>@@</code></td>
+                <td>Play macro <code>a</code> / repeat last macro.</td>
+              </tr>
+              <tr data-command>
+                <td><code>ma</code></td>
+                <td>Set mark <code>a</code> at current position.</td>
+              </tr>
+              <tr data-command>
+                <td><code>'a</code> <code>`a</code></td>
+                <td>Jump to mark <code>a</code> (line / exact column).</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="cheat-card" data-card-title="Text objects">
+          <h2>Operators and Text Objects</h2>
+          <table class="cheat-table">
+            <tbody>
+              <tr data-command>
+                <td><code>d{motion}</code> <code>c{motion}</code> <code>y{motion}</code></td>
+                <td>Delete, change, or yank using a motion.</td>
+              </tr>
+              <tr data-command>
+                <td><code>diw</code> <code>ciw</code> <code>yiw</code></td>
+                <td>Inner word operations.</td>
+              </tr>
+              <tr data-command>
+                <td><code>da(</code> <code>ci(</code> <code>yi(</code></td>
+                <td>Around/inside parentheses.</td>
+              </tr>
+              <tr data-command>
+                <td><code>ci"</code> <code>ci'</code> <code>ci`</code></td>
+                <td>Change inside quotes.</td>
+              </tr>
+              <tr data-command>
+                <td><code>&gt;ap</code> <code>=ip</code></td>
+                <td>Indent or reformat paragraph text object.</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="cheat-card" data-card-title="Starter habits">
+          <h2>Starter Habits</h2>
+          <table class="cheat-table">
+            <tbody>
+              <tr data-command>
+                <td><code>vimtutor</code></td>
+                <td>Run in terminal for guided Vim practice.</td>
+              </tr>
+              <tr data-command>
+                <td><code>K</code></td>
+                <td>Open man page/help for word under cursor.</td>
+              </tr>
+              <tr data-command>
+                <td><code>:set number</code></td>
+                <td>Show line numbers.</td>
+              </tr>
+              <tr data-command>
+                <td><code>:set relativenumber</code></td>
+                <td>Show relative line numbers for motions.</td>
+              </tr>
+              <tr data-command>
+                <td><code>:set paste</code> / <code>:set nopaste</code></td>
+                <td>Paste mode on/off to avoid auto-indent issues.</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+      </section>
+    </main>
+
+    <script type="module" src="/src/vim-cheatsheet-page.js"></script>
+  </body>
+</html>

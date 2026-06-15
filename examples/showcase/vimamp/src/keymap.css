@@ -1,0 +1,317 @@
+@import "./ui-base.css";
+
+.layout {
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(420px, 1fr) minmax(420px, 1fr);
+  grid-template-areas:
+    "keyboard macro"
+    "mappings commands"
+    "preview commands";
+}
+
+.panel {
+  padding: 12px;
+}
+
+.keyboard-panel {
+  grid-area: keyboard;
+}
+
+.macro-panel {
+  grid-area: macro;
+}
+
+.mapping-panel {
+  grid-area: mappings;
+}
+
+.command-panel {
+  grid-area: commands;
+}
+
+.preview-panel {
+  grid-area: preview;
+}
+
+.keyboard-layout {
+  margin-top: 10px;
+  display: grid;
+  gap: 7px;
+}
+
+.key-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.key {
+  width: calc(var(--u, 1) * 42px);
+  min-width: calc(var(--u, 1) * 42px);
+  min-height: 36px;
+  border: 1px solid #3b3b3b;
+  background: #111111;
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  position: relative;
+}
+
+.key:hover {
+  border-color: #666666;
+}
+
+.key.is-selected {
+  border-color: var(--accent);
+  background: #1a1a1a;
+}
+
+.key.is-mapped::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #9be89f;
+}
+
+.key:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.selected-key {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.selected-key code {
+  color: var(--fg);
+  font-size: 0.95rem;
+}
+
+.live-detect {
+  margin-top: 10px;
+  border: 1px solid #272727;
+  background: #0a0a0a;
+  padding: 10px;
+  display: grid;
+  gap: 6px;
+}
+
+.live-line {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #d6d6d6;
+}
+
+.live-line.is-match {
+  color: var(--ok);
+  font-weight: 700;
+}
+
+.live-line.is-progress {
+  color: #f0dda0;
+}
+
+.live-line.is-miss {
+  color: var(--error);
+}
+
+.live-cooldown {
+  color: var(--muted);
+}
+
+.live-settings {
+  margin-top: 4px;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(140px, 1fr));
+}
+
+.live-settings label {
+  display: grid;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.live-settings input {
+  border: 1px solid #3f3f3f;
+  background: #111;
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 6px 8px;
+}
+
+.macro-form {
+  margin-top: 10px;
+  display: grid;
+  gap: 10px;
+}
+
+.macro-form label {
+  display: grid;
+  gap: 5px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.macro-form input,
+.macro-form select {
+  border: 1px solid #3f3f3f;
+  background: var(--panel-2);
+  color: var(--fg);
+  font: inherit;
+  padding: 7px 8px;
+}
+
+.macro-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(90px, 1fr));
+  gap: 8px;
+}
+
+.macro-actions button {
+  border: 1px solid #3f3f3f;
+  background: #141414;
+  color: var(--fg);
+  font: inherit;
+  padding: 7px 9px;
+  cursor: pointer;
+}
+
+.macro-status {
+  margin: 10px 0 0;
+  font-size: 0.84rem;
+  min-height: 1.2em;
+  color: var(--muted);
+}
+
+.macro-status.is-error {
+  color: var(--error);
+}
+
+.macro-status.is-ok {
+  color: var(--ok);
+}
+
+.mapping-scroll,
+.command-scroll {
+  margin-top: 10px;
+  border: 1px solid #252525;
+  max-height: 320px;
+  overflow: auto;
+}
+
+.mapping-table,
+.command-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mapping-table th,
+.mapping-table td,
+.command-table th,
+.command-table td {
+  padding: 7px 8px;
+  border-bottom: 1px solid #1c1c1c;
+  text-align: left;
+  font-size: 0.82rem;
+  vertical-align: top;
+}
+
+.mapping-table th,
+.command-table th {
+  position: sticky;
+  top: 0;
+  background: #111111;
+  z-index: 1;
+  font-size: 0.74rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.mapping-table code,
+.command-table code {
+  color: #f1f1f1;
+}
+
+.mini-btn {
+  border: 1px solid #3f3f3f;
+  background: #131313;
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.78rem;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.command-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.search-wrap {
+  display: grid;
+  gap: 4px;
+  min-width: 250px;
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+.search-wrap input {
+  border: 1px solid #3f3f3f;
+  background: var(--panel-2);
+  color: var(--fg);
+  font: inherit;
+  padding: 7px 8px;
+}
+
+.vimrc-preview {
+  margin: 10px 0 0;
+  border: 1px solid #252525;
+  background: #0a0a0a;
+  padding: 10px;
+  font-size: 0.83rem;
+  line-height: 1.55;
+  min-height: 150px;
+  max-height: 260px;
+  overflow: auto;
+}
+
+@media (max-width: 1180px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "keyboard"
+      "macro"
+      "mappings"
+      "commands"
+      "preview";
+  }
+
+  .search-wrap {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .command-head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .live-settings {
+    grid-template-columns: 1fr;
+  }
+}

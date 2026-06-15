@@ -1,0 +1,19 @@
+{
+  "name": "browserpod-pdf-editor",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "pages:dev": "npx wrangler pages dev dist",
+    "pages:deploy": "npx wrangler pages deploy dist"
+  },
+  "dependencies": {
+    "@leaningtech/browserpod": "2.10.0"
+  },
+  "devDependencies": {
+    "vite": "^7.2.4"
+  }
+}

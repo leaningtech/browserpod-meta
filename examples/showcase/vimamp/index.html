@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VimAmp</title>
+    <link rel="icon" type="image/svg+xml" href="/VimPod.svg" />
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section id="helper" class="helper" tabindex="0">
+        <div class="dos-launch">
+          <img class="launch-logo" src="/VimPod.svg" alt="VimPod" />
+          <section class="dos-screen">
+            <header class="dos-window-head">
+              <img class="dos-window-wordmark" src="/VimAmp_Text.webp" alt="VimAmp" />
+            </header>
+            <p class="intro">Main menu. Use arrows and Enter. Esc closes submenus.</p>
+            <nav class="dos-menu" aria-label="VimAmp entry menu">
+              <button id="entryEditorBtn" type="button" class="dos-option">
+                Editor
+              </button>
+              <button id="entryHelpBtn" type="button" class="dos-option" aria-expanded="false">
+                Help
+              </button>
+              <ul id="entryHelpMenu" class="dos-submenu" hidden>
+                <li>
+                  <button id="entryLearnBtn" type="button" class="dos-option">
+                    Tutorial
+                  </button>
+                </li>
+                <li>
+                  <a id="entryCheatLink" class="dos-option dos-link" href="/vim-cheatsheet.html">
+                    Cheat Sheet
+                  </a>
+                </li>
+                <li>
+                  <a id="entryAskAiBtn" class="dos-option dos-link" href="/ask-ai.html">
+                    Ask AI
+                  </a>
+                </li>
+                <li>
+                  <button id="entryDocsBtn" type="button" class="dos-option">
+                    Docs
+                  </button>
+                </li>
+              </ul>
+              <button
+                id="entrySettingsBtn"
+                type="button"
+                class="dos-option"
+                aria-expanded="false"
+              >
+                Settings
+              </button>
+              <ul id="entrySettingsMenu" class="dos-submenu" hidden>
+                <li>
+                  <a id="entryMacrosLink" class="dos-option dos-link" href="/keyboard.html">
+                    Macros
+                  </a>
+                </li>
+                <li>
+                  <a id="entryThemeLink" class="dos-option dos-link" href="/theme-editor.html">
+                    Theme
+                  </a>
+                </li>
+              </ul>
+              <button id="entryAboutBtn" type="button" class="dos-option">
+                About
+              </button>
+            </nav>
+            <div class="dos-bottomline">
+              <p id="status" class="dos-status">Select an option to continue.</p>
+            </div>
+            <p id="error" class="error dos-error" hidden></p>
+          </section>
+        </div>
+      </section>
+
+      <section class="surface">
+        <header class="gvim-frame">
+          <div class="menu-bar">
+            <div class="menu-group">
+              <button id="menuFileBtn" class="menu-trigger" type="button">File</button>
+              <div id="menuFilePanel" class="menu-panel" hidden>
+                <button id="menuFileNewBtn" type="button">New...</button>
+                <button id="menuFileOpenBtn" type="button">Open...</button>
+                <button id="menuFileImportFilesBtn" type="button">Import Files...</button>
+                <button id="menuFileImportFolderBtn" type="button">Import Folder...</button>
+                <button id="menuFileSaveBtn" type="button">Save</button>
+                <button id="menuFileSaveAsBtn" type="button">Save As...</button>
+                <button id="menuFileExitBtn" type="button">Exit</button>
+              </div>
+            </div>
+            <div class="menu-group">
+              <button id="menuEditBtn" class="menu-trigger" type="button">Edit</button>
+              <div id="menuEditPanel" class="menu-panel" hidden>
+                <button type="button" disabled>Undo (placeholder)</button>
+                <button type="button" disabled>Redo (placeholder)</button>
+                <button type="button" disabled>Copy (placeholder)</button>
+                <button type="button" disabled>Paste (placeholder)</button>
+              </div>
+            </div>
+            <div class="menu-group">
+              <button id="menuViewBtn" class="menu-trigger" type="button">View</button>
+              <div id="menuViewPanel" class="menu-panel" hidden>
+                <button id="menuViewToggleTreeBtn" type="button">Show Filetree</button>
+                <button id="menuViewToggleAiBtn" type="button">Show AI Panel</button>
+                <button id="menuViewToggleCheatSheetBtn" type="button">
+                  Show Cheat Sheet
+                </button>
+                <button id="menuViewToggleTerminalBtn" type="button">Show Terminal</button>
+                <button id="menuViewOpenPortalBtn" type="button" disabled>
+                  Open Last Portal
+                </button>
+                <button id="menuViewToggleSyntaxBtn" type="button">
+                  Disable Syntax Highlighting
+                </button>
+                <button id="menuViewOpenLessonsBtn" type="button">Learn Panel</button>
+              </div>
+            </div>
+            <div class="menu-group">
+              <button id="menuHelpBtn" class="menu-trigger" type="button">Help</button>
+              <div id="menuHelpPanel" class="menu-panel" hidden>
+                <button type="button" disabled>Vim Help (placeholder)</button>
+                <button type="button" disabled>Keyboard Cheatsheet (placeholder)</button>
+              </div>
+            </div>
+            <div class="menu-bar-brand" aria-hidden="true">
+              <img src="/VimPod.svg" alt="VimAmp logo" />
+            </div>
+          </div>
+          <nav id="tabBar" class="tab-bar" aria-label="Open files"></nav>
+        </header>
+
+        <div class="workspace">
+          <section
+            id="filesystemPanel"
+            class="filesystem-panel is-docked"
+            aria-label="BrowserPod filesystem"
+            hidden
+          >
+            <div class="filesystem-head">
+              <strong>BrowserPod Files</strong>
+              <div class="filesystem-head-tools">
+                <span id="filesystemStatus">Waiting for BrowserPod...</span>
+                <button id="filesystemCollapseBtn" type="button">Hide</button>
+              </div>
+            </div>
+            <p id="filesystemCurrentDir" class="filesystem-current-dir">/vimamp</p>
+            <div class="filesystem-actions">
+              <button id="filesystemOpenBtn" type="button">Open</button>
+              <button id="filesystemRefreshBtn" type="button">Refresh</button>
+              <button id="filesystemDownloadBtn" type="button">Download</button>
+              <button id="filesystemNewFileBtn" type="button">New File</button>
+              <button id="filesystemNewDirBtn" type="button">New Folder</button>
+              <button id="filesystemRenameBtn" type="button">Rename</button>
+              <button id="filesystemDeleteBtn" type="button">Delete</button>
+            </div>
+            <ul id="filesystemList" class="filesystem-list"></ul>
+          </section>
+
+          <section class="editor-shell">
+            <canvas id="vimCanvas"></canvas>
+            <input id="vimInput" aria-label="Vim keyboard input" autocomplete="off" />
+
+            <section id="lessonPanel" class="lesson-panel" hidden>
+              <div class="lesson-head">
+                <strong>Learn Vim</strong>
+                <span id="lessonProgress"></span>
+              </div>
+              <div class="lesson-scoreboard" aria-label="Lesson scoreboard">
+                <div class="score-card">
+                  <span>Lesson Accuracy</span>
+                  <strong id="lessonAccuracy">100%</strong>
+                </div>
+                <div class="score-card">
+                  <span>Session Accuracy</span>
+                  <strong id="sessionAccuracy">100%</strong>
+                </div>
+                <div class="score-card">
+                  <span>Total Keys</span>
+                  <strong id="sessionKeys">0</strong>
+                </div>
+                <div class="score-card">
+                  <span>Session Errors</span>
+                  <strong id="sessionErrors">0</strong>
+                </div>
+              </div>
+              <h2 id="lessonTitle"></h2>
+              <p id="lessonMission" class="lesson-mission"></p>
+              <pre id="lessonBoard" class="lesson-board" hidden></pre>
+              <p id="lessonState" class="lesson-state">Waiting for input...</p>
+              <div class="lesson-actions">
+                <button id="lessonPrevBtn" type="button">Previous Lesson</button>
+                <button id="lessonRestartBtn" type="button">Restart Lesson</button>
+                <button id="lessonNextBtn" type="button">Next Lesson</button>
+                <button id="lessonExitBtn" type="button">Exit Learn</button>
+              </div>
+            </section>
+          </section>
+
+          <aside id="aiPanel" class="ai-panel" aria-label="AI assistant panel" hidden>
+            <div class="ai-panel-head">
+              <div>
+                <strong>AI Assistant</strong>
+                <p id="aiPanelMeta" class="ai-panel-meta">Initializing...</p>
+              </div>
+              <div class="ai-panel-head-actions">
+                <details id="aiSettingsDetails" class="ai-settings-details">
+                  <summary class="ai-icon-btn" aria-label="AI settings" title="AI settings">
+                    <span aria-hidden="true">&#9881;</span>
+                  </summary>
+                  <section class="ai-settings-popover" aria-label="AI settings">
+                    <label class="ai-field">
+                      System Prompt
+                      <textarea
+                        id="aiSystemPromptInput"
+                        rows="6"
+                        placeholder="You are helping someone learn Vim and Node projects."
+                      ></textarea>
+                    </label>
+                    <label class="ai-field">
+                      Temperature
+                      <input
+                        id="aiTemperatureInput"
+                        type="number"
+                        min="0"
+                        max="2"
+                        step="0.1"
+                        value="0.7"
+                      />
+                    </label>
+                  </section>
+                </details>
+                <button id="aiPanelNewChatBtn" type="button">New</button>
+                <button id="aiPanelCloseBtn" type="button">Hide</button>
+              </div>
+            </div>
+
+            <div id="aiPanelTranscript" class="ai-panel-transcript" aria-live="polite"></div>
+
+            <div class="ai-panel-context">
+              <button id="aiPanelUseFileBtn" type="button">Use Current File</button>
+              <span id="aiPanelFileLabel" class="ai-panel-file-label">No file attached</span>
+            </div>
+
+            <form id="aiPanelForm" class="ai-panel-composer">
+              <textarea
+                id="aiPanelPromptInput"
+                rows="3"
+                autocomplete="off"
+                placeholder="Ask about the current file, Vim commands, or Node errors."
+                required
+              ></textarea>
+              <div class="ai-panel-composer-footer">
+                <p id="aiPanelStatus" class="ai-panel-status" aria-live="polite">
+                  Enter to send. Shift+Enter for newline.
+                </p>
+                <button id="aiPanelSendBtn" type="submit">Send</button>
+              </div>
+            </form>
+          </aside>
+
+          <aside
+            id="cheatSheetPanel"
+            class="cheatsheet-panel"
+            aria-label="Vim cheat sheet panel"
+            hidden
+          >
+            <div class="cheatsheet-panel-head">
+              <strong>Vim Cheat Sheet</strong>
+              <button id="cheatSheetCloseBtn" type="button">Hide</button>
+            </div>
+            <p id="cheatSheetPanelMeta" class="cheatsheet-panel-meta">Loading commands...</p>
+            <div id="cheatSheetPanelList" class="cheatsheet-panel-list" aria-live="polite"></div>
+          </aside>
+        </div>
+
+        <section id="consolePanel" class="console-panel" aria-hidden="true" hidden>
+          <div class="console-head">
+            <strong>Project Terminal</strong>
+            <button id="closeConsoleBtn" type="button">Hide</button>
+          </div>
+          <p class="console-help">
+            Supported commands: <code>help</code>, <code>pwd</code>, <code>cd</code>,
+            <code>ls</code>, <code>cat</code>, <code>open</code>, <code>save</code>,
+            <code>mkdir</code>, <code>touch</code>, <code>mv</code>, <code>rm</code>,
+            <code>npm ...</code>, <code>node file.js</code>.
+          </p>
+          <div class="terminal-shell">
+            <div id="shellTerminal" class="terminal-surface" aria-label="Command terminal"></div>
+            <div id="browserpodTerminalHost" class="browserpod-terminal-host" aria-hidden="true"></div>
+          </div>
+        </section>
+
+        <section id="fileDialog" class="file-dialog" hidden>
+          <div class="file-dialog-card">
+            <div class="file-dialog-head">
+              <strong>Open From BrowserPod</strong>
+              <span id="fileDialogStatus">Waiting for BrowserPod...</span>
+            </div>
+            <p id="fileDialogCurrentDir" class="file-dialog-dir">/vimamp</p>
+            <div class="file-dialog-actions">
+              <button id="fileDialogUpBtn" type="button">Parent</button>
+              <button id="fileDialogRefreshBtn" type="button">Refresh</button>
+            </div>
+            <ul id="fileDialogList" class="file-dialog-list"></ul>
+            <div class="file-dialog-footer">
+              <button id="fileDialogOpenBtn" type="button">Open</button>
+              <button id="fileDialogCancelBtn" type="button">Cancel</button>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <input id="importFilesInput" type="file" multiple hidden aria-hidden="true" />
+    <input
+      id="importFolderInput"
+      type="file"
+      multiple
+      webkitdirectory
+      directory
+      hidden
+      aria-hidden="true"
+    />
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - SaySomething</title>
+  <link rel="icon" href="/sslogo.svg" type="image/svg+xml">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .header {
+      background: white;
+      color: #262626;
+      padding: 24px 48px;
+      margin-bottom: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e8e8e8;
+      gap: 16px;
+    }
+    
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    
+    .header-logo {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+    }
+    
+    .header h1 { 
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin: 0;
+    }
+    
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .btn {
+      padding: 10px 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.2s ease;
+      font-size: 14px;
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      color: #262626;
+      border: 1px solid #e0e0e0;
+    }
+    
+    .btn-secondary:hover {
+      background: #f8f8f8;
+      border-color: #d0d0d0;
+    }
+    
+    .btn-primary {
+      background: #262626;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #000;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 48px;
+    }
+    
+    .loading,
+    .error {
+      background: white;
+      padding: 48px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      border: 1px solid #e8e8e8;
+    }
+    
+    .error {
+      background: #fff5f5;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+    }
+    
+    .survey-info {
+      background: white;
+      padding: 32px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      border: 1px solid #e8e8e8;
+    }
+    
+    .survey-info h2 {
+      color: #262626;
+      margin-bottom: 8px;
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    
+    .survey-info p {
+      color: #666;
+      margin-bottom: 15px;
+      font-size: 1rem;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .stat-card {
+      background: #262626;
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid #3a3a3a;
+    }
+    
+    .stat-card .number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: white;
+    }
+    
+    .stat-card .label {
+      font-size: 0.9rem;
+      color: #e0e0e0;
+      margin-top: 8px;
+    }
+    
+    .qr-section {
+      background: #fafafa;
+      padding: 24px;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 24px;
+      border: 1px solid #e8e8e8;
+    }
+    
+    .qr-code {
+      max-width: 200px;
+      margin: 16px auto;
+    }
+    
+    .copy-link {
+      background: transparent;
+      border: 1px solid #e0e0e0;
+      color: #262626;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      margin-top: 12px;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+    
+    .copy-link:hover {
+      background: #262626;
+      color: white;
+      border-color: #262626;
+    }
+    
+    .results-section {
+      background: white;
+      padding: 32px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      border: 1px solid #e8e8e8;
+    }
+    
+    .results-section h3 {
+      color: #262626;
+      margin-bottom: 24px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      border-bottom: 1px solid #e8e8e8;
+      padding-bottom: 12px;
+    }
+    
+    .question-results {
+      margin-bottom: 30px;
+    }
+    
+    .question-results h4 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+    
+    .question-type-badge {
+      background: #667eea;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      margin-left: 10px;
+      font-weight: 600;
+    }
+    
+    .option-result {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 10px;
+    }
+    
+    .option-label {
+      width: 150px;
+      font-weight: 500;
+      color: #333;
+    }
+    
+    .option-bar {
+      flex: 1;
+      background: #f0f0f0;
+      border-radius: 6px;
+      height: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .option-bar-fill {
+      background: #262626;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+      color: white;
+      font-weight: 500;
+      font-size: 0.875rem;
+      transition: width 0.3s ease;
+    }
+    
+    .option-count {
+      min-width: 60px;
+      text-align: right;
+      color: #666;
+      font-weight: 500;
+    }
+    
+    .scale-results {
+      background: #f9fafb;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    
+    .scale-stat {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    
+    .text-responses {
+      background: #f9fafb;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    
+    .text-response {
+      background: white;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-left: 4px solid #667eea;
+      border-radius: 4px;
+      color: #333;
+      line-height: 1.5;
+    }
+    
+    .no-data {
+      text-align: center;
+      color: #999;
+      padding: 30px;
+      background: #f9fafb;
+      border-radius: 8px;
+    }
+    
+    .refresh-btn {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    
+    .refresh-btn:hover {
+      background: #5568d3;
+    }
+    
+    /* Edit Form Styles */
+    .edit-section {
+      display: none;
+      background: white;
+      padding: 32px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      border: 1px solid #e8e8e8;
+    }
+    
+    .edit-section.active {
+      display: block;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .form-group input[type="text"],
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: border-color 0.2s ease;
+    }
+    
+    .form-group textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #262626;
+    }
+    
+    .question-edit {
+      background: #fafafa;
+      padding: 20px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      border: 1px solid #e8e8e8;
+    }
+    
+    .question-edit-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .question-edit-controls {
+      display: flex;
+      gap: 5px;
+    }
+    
+    .btn-small {
+      padding: 5px 10px;
+      font-size: 0.85rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      background: #e5e7eb;
+      color: #333;
+    }
+    
+    .btn-small:hover {
+      background: #d1d5db;
+    }
+    
+    .btn-small.danger {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+    
+    .btn-small.danger:hover {
+      background: #fca5a5;
+    }
+    
+    .edit-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      justify-content: flex-end;
+    }
+    
+    .btn-cancel {
+      background: #e5e7eb;
+      color: #333;
+    }
+    
+    .btn-cancel:hover {
+      background: #d1d5db;
+    }
+    
+    .btn-save {
+      background: #262626;
+      color: white;
+    }
+    
+    .btn-save:hover {
+      background: #000;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-left">
+      <img class="header-logo" src="/sslogo.svg" alt="SaySomething Logo">
+      <h1>Admin Dashboard</h1>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary" onclick="refreshData()">🔄 Refresh</button>
+      <a class="btn btn-primary" href="#" id="exportBtn">📥 Export CSV</a>
+    </div>
+  </div>
+  
+  <div class="container">
+    <div id="content">
+      <div class="loading">Loading survey...</div>
+    </div>
+  </div>
+  
+  <script>
+    let surveyId = null;
+    let adminToken = null;
+    let survey = null;
+    
+    // Extract survey ID and token from URL
+    const urlParts = window.location.pathname.split('/');
+    surveyId = urlParts[urlParts.length - 1];
+    adminToken = new URLSearchParams(window.location.search).get('token');
+    
+    if (!adminToken) {
+      document.getElementById('content').innerHTML = '<div class="error">Access denied: Invalid or missing admin token</div>';
+    }
+    
+    async function loadSurvey() {
+      try {
+        const response = await fetch(`/api/surveys/${surveyId}/admin?token=${adminToken}`);
+        if (!response.ok) {
+          if (response.status === 403) {
+            throw new Error('Unauthorized access');
+          }
+          throw new Error('Survey not found');
+        }
+        
+        survey = await response.json();
+        renderDashboard();
+      } catch (error) {
+        document.getElementById('content').innerHTML = `<div class="error">Error: ${error.message}</div>`;
+      }
+    }
+    
+    async function renderDashboard() {
+      try {
+        const resultsResponse = await fetch(`/api/surveys/${surveyId}/results?token=${adminToken}`);
+        const results = await resultsResponse.json();
+        
+        let html = `
+          <div class="survey-info">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+              <div>
+                <h2>${escapeHtml(survey.title)}</h2>
+                ${survey.description ? `<p>${escapeHtml(survey.description)}</p>` : ''}
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <button class="btn btn-primary" onclick="openSurvey()" title="View the survey as a respondent">👥 Open Survey</button>
+                <button class="btn btn-primary" onclick="toggleEditMode()" title="Edit survey questions and settings" id="editBtn">✏️ Edit Survey</button>
+              </div>
+            </div>
+            
+            <div class="stats">
+              <div class="stat-card">
+                <div class="number">${results.totalResponses}</div>
+                <div class="label">Responses</div>
+              </div>
+              <div class="stat-card">
+                <div class="number">${survey.questions.length}</div>
+                <div class="label">Questions</div>
+              </div>
+            </div>
+            
+            <div class="qr-section">
+              <p>Scan to take survey:</p>
+              <div id="qrCode" class="qr-code"></div>
+              <button class="copy-link" onclick="copySurveyLink()">📋 Copy Survey Link</button>
+            </div>
+          </div>
+          
+          <div class="edit-section" id="editSection">
+            <h3 style="margin-bottom: 20px;">✏️ Edit Survey</h3>
+            
+            <div class="form-group">
+              <label>Survey Title</label>
+              <input type="text" id="editTitle" placeholder="Enter survey title" required>
+            </div>
+            
+            <div class="form-group">
+              <label>Description (optional)</label>
+              <textarea id="editDescription" placeholder="Enter survey description"></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label>Questions</label>
+              <div id="editQuestions"></div>
+              <button class="btn btn-primary" onclick="addNewEditQuestion()" style="margin-top: 10px;">➕ Add Question</button>
+            </div>
+            
+            <div class="edit-actions">
+              <button class="btn btn-cancel" onclick="toggleEditMode()">Cancel</button>
+              <button class="btn btn-save" onclick="saveEditedSurvey()">💾 Save Changes</button>
+            </div>
+          </div>
+          
+          <div class="results-section">
+            <h3>Results</h3>
+        `;
+        
+        if (results.totalResponses === 0) {
+          html += '<div class="no-data">No responses yet. Share your survey link to start collecting responses!</div>';
+        } else {
+          results.questions.forEach(question => {
+            html += `
+              <div class="question-results">
+                <h4>${escapeHtml(question.text)} <span class="question-type-badge">${question.type}</span></h4>
+            `;
+            
+            switch (question.type) {
+              case 'text':
+                html += '<div class="text-responses">';
+                if (question.responses.length === 0) {
+                  html += '<div class="no-data">No responses</div>';
+                } else {
+                  question.responses.forEach(response => {
+                    html += `<div class="text-response">${escapeHtml(response)}</div>`;
+                  });
+                }
+                html += '</div>';
+                break;
+              
+              case 'single-choice':
+              case 'multiple-choice':
+                const totalVotes = question.options.reduce((sum, opt) => sum + opt.count, 0);
+                html += '<div>';
+                question.options.forEach(option => {
+                  const percentage = totalVotes > 0 ? ((option.count / totalVotes) * 100).toFixed(1) : 0;
+                  html += `
+                    <div class="option-result">
+                      <div class="option-label">${escapeHtml(option.label)}</div>
+                      <div class="option-bar">
+                        <div class="option-bar-fill" style="width: ${percentage}%">${percentage}%</div>
+                      </div>
+                      <div class="option-count">${option.count} votes</div>
+                    </div>
+                  `;
+                });
+                html += '</div>';
+                break;
+              
+              case 'scale':
+                html += '<div class="scale-results">';
+                if (question.average !== null) {
+                  html += `
+                    <div class="scale-stat">
+                      <span>Average:</span>
+                      <strong>${question.average} / ${question.values.length > 0 ? Math.max(...question.values) : question.maxValue}</strong>
+                    </div>
+                    <div class="scale-stat">
+                      <span>Total Responses:</span>
+                      <strong>${question.values.length}</strong>
+                    </div>
+                  `;
+                } else {
+                  html += '<div class="no-data">No responses</div>';
+                }
+                html += '</div>';
+                break;
+            }
+            
+            html += '</div>';
+          });
+        }
+        
+        html += `
+          </div>
+        `;
+        
+        document.getElementById('content').innerHTML = html;
+        updateExportLink();
+      } catch (error) {
+        document.getElementById('content').innerHTML = `<div class="error">Error loading results: ${error.message}</div>`;
+      }
+    }
+    
+    function updateExportLink() {
+      document.getElementById('exportBtn').href = `/api/surveys/${surveyId}/export/csv?token=${adminToken}`;
+    }
+    
+    function copySurveyLink() {
+      const link = `${window.location.origin}/survey/${surveyId}`;
+      navigator.clipboard.writeText(link).then(() => {
+        alert('Survey link copied to clipboard!');
+      }).catch(err => {
+        // Fallback for when clipboard API fails
+        const textArea = document.createElement('textarea');
+        textArea.value = link;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+          document.execCommand('copy');
+          alert('Survey link copied to clipboard!');
+        } catch (e) {
+          alert('Copy failed. Survey link: ' + link);
+        }
+        document.body.removeChild(textArea);
+      });
+    }
+    
+    function refreshData() {
+      loadSurvey();
+    }
+    
+    function openSurvey() {
+      const surveyUrl = `${window.location.origin}/survey/${surveyId}`;
+      window.open(surveyUrl, '_blank');
+    }
+    
+    let editMode = false;
+    
+    function toggleEditMode() {
+      editMode = !editMode;
+      const editSection = document.getElementById('editSection');
+      const editBtn = document.getElementById('editBtn');
+      
+      if (editMode) {
+        editSection.classList.add('active');
+        editBtn.textContent = '❌ Cancel Edit';
+        populateEditForm();
+      } else {
+        editSection.classList.remove('active');
+        editBtn.textContent = '✏️ Edit Survey';
+      }
+    }
+    
+    function populateEditForm() {
+      document.getElementById('editTitle').value = survey.title;
+      document.getElementById('editDescription').value = survey.description || '';
+      
+      const questionsContainer = document.getElementById('editQuestions');
+      questionsContainer.innerHTML = '';
+      
+      survey.questions.forEach((question, index) => {
+        addQuestionToEditForm(question, index);
+      });
+    }
+    
+    function addQuestionToEditForm(question = null, index = null) {
+      const questionsContainer = document.getElementById('editQuestions');
+      const questionDiv = document.createElement('div');
+      questionDiv.className = 'question-edit';
+      
+      const questionIndex = index !== null ? index : questionsContainer.children.length;
+      
+      questionDiv.innerHTML = `
+        <div class="question-edit-header">
+          <strong>Question ${questionIndex + 1}</strong>
+          <div class="question-edit-controls">
+            <button class="btn-small danger" onclick="removeEditQuestion(this)">🗑️ Remove</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Question Text</label>
+          <input type="text" class="edit-question-text" value="${question ? escapeHtml(question.text) : ''}" placeholder="Enter your question" required>
+        </div>
+        <div class="form-group">
+          <label>Question Type</label>
+          <select class="edit-question-type" onchange="updateEditQuestionOptions(this)">
+            <option value="text" ${question && question.type === 'text' ? 'selected' : ''}>Text</option>
+            <option value="single-choice" ${question && question.type === 'single-choice' ? 'selected' : ''}>Single Choice</option>
+            <option value="multiple-choice" ${question && question.type === 'multiple-choice' ? 'selected' : ''}>Multiple Choice</option>
+            <option value="scale" ${question && question.type === 'scale' ? 'selected' : ''}>Scale</option>
+          </select>
+        </div>
+        <div class="edit-question-options"></div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" class="edit-question-required" ${question && question.required ? 'checked' : ''}> Required
+          </label>
+        </div>
+      `;
+      
+      questionsContainer.appendChild(questionDiv);
+      
+      // Initialize options if question has them
+      if (question) {
+        updateEditQuestionOptionsWithData(questionDiv.querySelector('.edit-question-options'), question);
+      }
+    }
+    
+    function updateEditQuestionOptions(selectElement) {
+      const questionDiv = selectElement.closest('.question-edit');
+      const optionsContainer = questionDiv.querySelector('.edit-question-options');
+      updateEditQuestionOptionsWithData(optionsContainer, { type: selectElement.value });
+    }
+    
+    function updateEditQuestionOptionsWithData(container, question) {
+      container.innerHTML = '';
+      
+      if (question.type === 'single-choice' || question.type === 'multiple-choice') {
+        container.innerHTML = `
+          <div class="form-group">
+            <label>Options (one per line)</label>
+            <textarea class="edit-question-choice-options" placeholder="Option 1\nOption 2\nOption 3" rows="4">${question.options ? question.options.map(o => o.label).join('\n') : ''}</textarea>
+          </div>
+        `;
+      } else if (question.type === 'scale') {
+        container.innerHTML = `
+          <div class="form-group">
+            <label>Min Value</label>
+            <input type="number" class="edit-question-min" value="${question.minValue || 1}" min="0">
+          </div>
+          <div class="form-group">
+            <label>Max Value</label>
+            <input type="number" class="edit-question-max" value="${question.maxValue || 5}" min="1">
+          </div>
+        `;
+      }
+    }
+    
+    function removeEditQuestion(button) {
+      const questionDiv = button.closest('.question-edit');
+      questionDiv.remove();
+      
+      // Renumber remaining questions
+      const questions = document.querySelectorAll('.question-edit');
+      questions.forEach((q, index) => {
+        q.querySelector('.question-edit-header strong').textContent = `Question ${index + 1}`;
+      });
+    }
+    
+    function addNewEditQuestion() {
+      addQuestionToEditForm(null, null);
+    }
+    
+    async function saveEditedSurvey() {
+      try {
+        const title = document.getElementById('editTitle').value.trim();
+        const description = document.getElementById('editDescription').value.trim();
+        
+        if (!title) {
+          alert('Please enter a survey title');
+          return;
+        }
+        
+        const questionDivs = document.querySelectorAll('.question-edit');
+        const questions = [];
+        
+        for (const div of questionDivs) {
+          const text = div.querySelector('.edit-question-text').value.trim();
+          const type = div.querySelector('.edit-question-type').value;
+          const required = div.querySelector('.edit-question-required').checked;
+          
+          if (!text) {
+            alert('All questions must have text');
+            return;
+          }
+          
+          const question = {
+            id: `q_${questions.length}`,
+            text,
+            type,
+            required
+          };
+          
+          if (type === 'single-choice' || type === 'multiple-choice') {
+            const optionsText = div.querySelector('.edit-question-choice-options').value.trim();
+            if (!optionsText) {
+              alert(`Question "${text}" needs at least one option`);
+              return;
+            }
+            
+            question.options = optionsText.split('\n')
+              .map(o => o.trim())
+              .filter(o => o)
+              .map((label, idx) => ({ id: `opt_${idx}`, label }));
+              
+            if (question.options.length === 0) {
+              alert(`Question "${text}" needs at least one option`);
+              return;
+            }
+          } else if (type === 'scale') {
+            const min = parseInt(div.querySelector('.edit-question-min').value);
+            const max = parseInt(div.querySelector('.edit-question-max').value);
+            
+            if (isNaN(min) || isNaN(max) || min >= max) {
+              alert(`Question "${text}" has invalid scale values`);
+              return;
+            }
+            
+            question.minValue = min;
+            question.maxValue = max;
+          }
+          
+          questions.push(question);
+        }
+        
+        if (questions.length === 0) {
+          alert('Survey must have at least one question');
+          return;
+        }
+        
+        // Submit update
+        const response = await fetch(`/api/surveys/${surveyId}?token=${adminToken}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, description, questions })
+        });
+        
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Failed to update survey');
+        }
+        
+        alert('Survey updated successfully!');
+        toggleEditMode();
+        loadSurvey(); // Reload to show updated data
+      } catch (error) {
+        console.error('Update error:', error);
+        alert(`Error updating survey: ${error.message}`);
+      }
+    }
+    
+    function escapeHtml(text) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+    
+    loadSurvey();
+  </script>
+</body>
+</html>

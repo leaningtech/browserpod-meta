@@ -1,0 +1,41 @@
+[
+  {
+    "method": "GET",
+    "path": "/users",
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "Alice Pirate", "role": "admin" },
+      { "id": 2, "name": "Bob Hook",    "role": "user"  }
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/users",
+    "status": 201,
+    "body": { "id": 3, "name": "New User", "role": "user", "created": true }
+  },
+  {
+    "method": "GET",
+    "path": "/users/1",
+    "status": 200,
+    "body": { "id": 1, "name": "Alice Pirate", "role": "admin", "email": "alice@example.com" }
+  },
+  {
+    "method": "PUT",
+    "path": "/users/1",
+    "status": 200,
+    "body": { "id": 1, "name": "Alice Pirate Updated", "updated": true }
+  },
+  {
+    "method": "DELETE",
+    "path": "/users/1",
+    "status": 204,
+    "body": {}
+  },
+  {
+    "method": "GET",
+    "path": "/health",
+    "status": 200,
+    "body": { "status": "ok", "version": "1.0.0", "uptime": 9999 }
+  }
+]

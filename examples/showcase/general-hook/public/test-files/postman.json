@@ -1,0 +1,120 @@
+{
+  "info": {
+    "name": "Todo API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Todos",
+      "item": [
+        {
+          "name": "Get all todos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "https://api.example.com/todos",
+              "host": ["api", "example", "com"],
+              "path": ["todos"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "code": 200,
+              "body": "[{\"id\":1,\"title\":\"Buy groceries\",\"done\":false},{\"id\":2,\"title\":\"Walk the dog\",\"done\":true}]"
+            }
+          ]
+        },
+        {
+          "name": "Create todo",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "https://api.example.com/todos",
+              "host": ["api", "example", "com"],
+              "path": ["todos"]
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "code": 201,
+              "body": "{\"id\":3,\"title\":\"New task\",\"done\":false,\"created\":true}"
+            }
+          ]
+        },
+        {
+          "name": "Get todo by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "https://api.example.com/todos/1",
+              "host": ["api", "example", "com"],
+              "path": ["todos", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "code": 200,
+              "body": "{\"id\":1,\"title\":\"Buy groceries\",\"done\":false}"
+            }
+          ]
+        },
+        {
+          "name": "Update todo",
+          "request": {
+            "method": "PATCH",
+            "url": {
+              "raw": "https://api.example.com/todos/1",
+              "host": ["api", "example", "com"],
+              "path": ["todos", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "code": 200,
+              "body": "{\"id\":1,\"title\":\"Buy groceries\",\"done\":true,\"updated\":true}"
+            }
+          ]
+        },
+        {
+          "name": "Delete todo",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "https://api.example.com/todos/1",
+              "host": ["api", "example", "com"],
+              "path": ["todos", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "https://api.example.com/health",
+              "host": ["api", "example", "com"],
+              "path": ["health"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "code": 200,
+              "body": "{\"status\":\"ok\",\"version\":\"1.0.0\"}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

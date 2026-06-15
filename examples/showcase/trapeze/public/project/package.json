@@ -1,0 +1,12 @@
+{
+  "name": "browserpod-pdf-studio-inner",
+  "version": "1.0.0",
+  "main": "main.js",
+  "private": true,
+  "dependencies": {
+    "express": "^5.1.0",
+    "multer": "^2.0.2",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^5.4.296"
+  }
+}

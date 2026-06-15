@@ -1,0 +1,84 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Bookstore API",
+    "version": "2.1.0"
+  },
+  "basePath": "/api",
+  "paths": {
+    "/books": {
+      "get": {
+        "summary": "List books",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": [
+                { "id": 1, "title": "Clean Code", "author": "Robert Martin" },
+                { "id": 2, "title": "The Pragmatic Programmer", "author": "Hunt & Thomas" }
+              ]
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a book",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "examples": {
+              "application/json": { "id": 3, "title": "New Book", "created": true }
+            }
+          }
+        }
+      }
+    },
+    "/books/{id}": {
+      "get": {
+        "summary": "Get book by ID",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "example": { "id": 1, "title": "Clean Code", "author": "Robert Martin", "isbn": "978-0132350884" }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a book",
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "examples": {
+              "application/json": { "id": 1, "title": "Clean Code", "updated": true }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a book",
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          }
+        }
+      }
+    },
+    "/authors": {
+      "get": {
+        "summary": "List authors",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": [
+                { "id": 1, "name": "Robert Martin", "books": 5 }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

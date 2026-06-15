@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Survey - SaySomething</title>
+  <link rel="icon" href="/sslogo.svg" type="image/svg+xml">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      background: #ffffff;
+      min-height: 100vh;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .container {
+      max-width: 650px;
+      margin: 0 auto;
+      background: white;
+      padding: 48px 24px;
+    }
+    
+    .survey-header {
+      margin-bottom: 40px;
+      border-bottom: 1px solid #e8e8e8;
+      padding-bottom: 24px;
+      padding-top: 32px;
+      text-align: center;
+    }
+    
+    .survey-header-logo {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 16px auto;
+      display: block;
+    }
+    
+    .survey-header-content {
+      text-align: center;
+    }
+    
+    .survey-header-content h1 {
+      color: #262626;
+      margin-bottom: 4px;
+      margin-top: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    
+    .survey-header-content p {
+      color: #666;
+      font-size: 0.875rem;
+      margin: 0;
+      opacity: 0.6;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+    
+    .error {
+      background: #fee2e2;
+      border: 1px solid #fca5a5;
+      color: #7f1d1d;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+    
+    .question-group {
+      margin-bottom: 30px;
+    }
+    
+    .question-label {
+      display: flex;
+      align-items: start;
+      margin-bottom: 12px;
+    }
+    
+    .question-label label {
+      flex: 1;
+      color: #333;
+      font-weight: 600;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    
+    .required {
+      color: #ef4444;
+      margin-left: 4px;
+    }
+    
+    textarea,
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 1rem;
+      margin-bottom: 5px;
+      transition: border-color 0.2s ease;
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    textarea:focus,
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #262626;
+      box-shadow: 0 0 0 3px rgba(38, 38, 38, 0.05);
+    }
+    
+    .options-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .option-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .option-item input[type="checkbox"],
+    .option-item input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    
+    .option-item label {
+      margin: 0;
+      flex: 1;
+      cursor: pointer;
+      font-weight: normal;
+    }
+    
+    .scale-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .scale-group label {
+      min-width: 50px;
+    }
+    
+    .scale-group input[type="radio"] {
+      width: auto;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: #666;
+      padding: 0 5px;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 30px;
+    }
+    
+    .btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+    
+    .btn-submit {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .success-message {
+      background: #d1fae5;
+      border: 1px solid #6ee7b7;
+      color: #065f46;
+      padding: 20px;
+      border-radius: 6px;
+      text-align: center;
+      margin-top: 20px;
+      display: none;
+    }
+    
+    .success-message.show {
+      display: block;
+    }
+    
+    .success-message h3 {
+      margin-bottom: 10px;
+      font-size: 1.3rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="content">
+      <div class="loading">Loading survey...</div>
+    </div>
+  </div>
+  
+  <script>
+    let surveyId = null;
+    let survey = null;
+    
+    // Extract survey ID from URL
+    const urlParts = window.location.pathname.split('/');
+    surveyId = urlParts[urlParts.length - 1];
+    
+    async function loadSurvey() {
+      try {
+        const response = await fetch(`/api/surveys/${surveyId}`);
+        if (!response.ok) throw new Error('Survey not found');
+        
+        survey = await response.json();
+        renderSurvey();
+      } catch (error) {
+        document.getElementById('content').innerHTML = `<div class="error">Error loading survey: ${error.message}</div>`;
+      }
+    }
+    
+    function renderSurvey() {
+      let html = `
+        <div class="survey-header">
+          <h1>${escapeHtml(survey.title)}</h1>
+          ${survey.description ? `<p>${escapeHtml(survey.description)}</p>` : ''}
+        </div>
+        
+        <form id="responseForm">
+      `;
+      
+      survey.questions.forEach(question => {
+        const required = question.required ? '<span class="required">*</span>' : '';
+        
+        html += `<div class="question-group">`;
+        html += `<div class="question-label"><label>${escapeHtml(question.text)}${required}</label></div>`;
+        
+        switch (question.type) {
+          case 'text':
+            html += `<textarea name="${question.id}" placeholder="Enter your answer" ${question.required ? 'required' : ''}></textarea>`;
+            break;
+          
+          case 'single-choice':
+            html += `<div class="options-group">`;
+            question.options.forEach(option => {
+              html += `
+                <div class="option-item">
+                  <input type="radio" id="opt_${question.id}_${option.id}" name="${question.id}" value="${option.id}" ${question.required ? 'required' : ''}>
+                  <label for="opt_${question.id}_${option.id}">${escapeHtml(option.label)}</label>
+                </div>
+              `;
+            });
+            html += `</div>`;
+            break;
+          
+          case 'multiple-choice':
+            html += `<div class="options-group">`;
+            question.options.forEach(option => {
+              html += `
+                <div class="option-item">
+                  <input type="checkbox" id="opt_${question.id}_${option.id}" name="${question.id}" value="${option.id}">
+                  <label for="opt_${question.id}_${option.id}">${escapeHtml(option.label)}</label>
+                </div>
+              `;
+            });
+            html += `</div>`;
+            break;
+          
+          case 'scale':
+            const minLabel = question.minValue;
+            const maxLabel = question.maxValue;
+            html += `<div class="scale-group">`;
+            for (let i = question.minValue; i <= question.maxValue; i++) {
+              html += `
+                <label style="min-width: auto; margin: 0 5px;">
+                  <input type="radio" name="${question.id}" value="${i}" ${question.required ? 'required' : ''}>
+                  ${i}
+                </label>
+              `;
+            }
+            html += `</div>`;
+            html += `<div class="scale-labels"><span>Low</span><span>High</span></div>`;
+            break;
+        }
+        
+        html += `</div>`;
+      });
+      
+      html += `
+        <div class="button-group">
+          <button type="submit" class="btn btn-submit">Submit Survey</button>
+        </div>
+      </form>
+      
+      <div class="success-message" id="successMessage">
+        <h3>✓ Thank You!</h3>
+        <p>Your response has been submitted successfully.</p>
+      </div>
+      `;
+      
+      document.getElementById('content').innerHTML = html;
+      
+      document.getElementById('responseForm').addEventListener('submit', submitResponse);
+    }
+    
+    async function submitResponse(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(document.getElementById('responseForm'));
+      const responseData = {};
+      
+      // Handle regular inputs and single-choice
+      for (const [key, value] of formData.entries()) {
+        if (responseData[key]) {
+          // For multiple-choice, convert to array
+          if (!Array.isArray(responseData[key])) {
+            responseData[key] = [responseData[key]];
+          }
+          responseData[key].push(value);
+        } else {
+          responseData[key] = value;
+        }
+      }
+      
+      try {
+        const response = await fetch(`/api/surveys/${surveyId}/responses`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(responseData)
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+          const errors = result.errors || [result.error || 'Failed to submit response'];
+          throw new Error(errors.join(', '));
+        }
+        
+        document.getElementById('responseForm').style.display = 'none';
+        document.getElementById('successMessage').classList.add('show');
+      } catch (error) {
+        alert('Error: ' + error.message);
+      }
+    }
+    
+    function escapeHtml(text) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+    
+    loadSurvey();
+  </script>
+</body>
+</html>

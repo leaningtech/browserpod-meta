@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BrowserPod PDF Studio</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="siteShell" class="site-shell">
+      <header id="liveHeader" class="app-header is-hidden">
+        <div class="header-brand">
+          <img class="header-logo" src="/image.png" alt="Trapeze" />
+          <p class="eyebrow">Powered by BrowserPod</p>
+        </div>
+      </header>
+
+      <main class="app-main">
+        <section id="launchScreen" class="launch-screen">
+          <div class="launch-card">
+            <div class="brand-lockup">
+              <img class="brand-logo" src="/image.png" alt="Trapeze" />
+              <p class="eyebrow">Powered by BrowserPod</p>
+            </div>
+
+            <p class="lede">
+              Launch a BrowserPod-backed PDF editor, keep drafts in this browser with
+              IndexedDB, and export composed PDFs without a traditional backend.
+            </p>
+
+            <div class="launch-actions">
+              <button id="launchButton" class="primary" type="button">Launch Studio</button>
+            </div>
+
+            <div id="launchProgress" class="launch-progress" aria-hidden="true">
+              <div id="launchProgressBar" class="launch-progress-bar"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="portalSection" class="portal-stage is-hidden">
+          <p id="portalText" class="sr-only">Portal will appear here after the pod starts.</p>
+          <iframe id="portal" class="portal" title="BrowserPod PDF Studio"></iframe>
+        </section>
+      </main>
+
+      <div class="sr-only" aria-live="polite">
+        <span id="statusPill">Ready</span>
+        <span id="statusDot"></span>
+        <span id="statusHeadline">Status</span>
+        <span id="statusText">Ready to launch.</span>
+      </div>
+
+      <div id="console" class="console-mount" aria-hidden="true"></div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

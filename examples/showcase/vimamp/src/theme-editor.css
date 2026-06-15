@@ -1,0 +1,326 @@
+@import "./ui-base.css";
+
+.topbar p {
+  max-width: 72ch;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(380px, 470px) 1fr;
+  gap: 12px;
+  padding: 12px;
+  min-height: 0;
+}
+
+.controls-panel {
+  display: grid;
+  grid-template-rows: auto auto auto auto auto auto;
+  gap: 10px;
+  overflow: auto;
+  padding: 12px;
+}
+
+.preview-panel {
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
+  gap: 10px;
+  padding: 12px;
+  min-height: 0;
+}
+
+.panel {
+  min-height: 0;
+}
+
+.status-text {
+  color: var(--ok);
+}
+
+.status-text[data-tone="warn"] {
+  color: #f0dda0;
+}
+
+.status-text[data-tone="error"] {
+  color: var(--error);
+}
+
+.group {
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  padding: 10px;
+}
+
+.group h3 {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  color: #cfd7d5;
+}
+
+.template-picker {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: end;
+}
+
+.template-picker label {
+  display: grid;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.template-picker select {
+  border: 1px solid var(--line-strong);
+  background: #121212;
+  color: var(--fg);
+  font: inherit;
+  padding: 6px 8px;
+}
+
+.template-picker button {
+  border: 1px solid var(--line-strong);
+  background: #141414;
+  color: var(--fg);
+  font: inherit;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.template-picker button:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.template-info {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+.field-grid label,
+.check-grid label {
+  display: grid;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.field-grid input,
+.field-grid select {
+  border: 1px solid var(--line-strong);
+  background: #121212;
+  color: var(--fg);
+  font: inherit;
+  padding: 6px 8px;
+}
+
+.field-grid input[type="color"] {
+  min-height: 34px;
+  padding: 4px;
+}
+
+.check-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(160px, 1fr));
+  gap: 7px;
+}
+
+.check-grid input {
+  margin-right: 6px;
+}
+
+.button-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(100px, 1fr));
+  gap: 8px;
+}
+
+.button-row button {
+  border: 1px solid var(--line-strong);
+  background: #141414;
+  color: var(--fg);
+  font: inherit;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.button-row button:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.vim-preview {
+  --vim-bg: #0c0c0c;
+  --vim-fg: #e5e5e5;
+  --vim-accent: var(--accent);
+  --vim-cursor: #9fc3ff;
+  --vim-visual: #293648;
+  --vim-cursorline: #161b22;
+  --vim-linenr: #6f7681;
+  --vim-linenr-current: #d2dae4;
+  --vim-status-bg: #17201d;
+  --vim-status-fg: #e5ecf4;
+  --vim-status-nc-bg: #11161d;
+  --vim-status-nc-fg: #8a94a2;
+  --vim-split: #2a2f2e;
+  --vim-keyword: #c586c0;
+  --vim-string: #ce9178;
+  --vim-number: #b5cea8;
+  --vim-function: #dcdcaa;
+  --vim-type: #4ec9b0;
+  --vim-comment: #6a9955;
+  border: 1px solid var(--line-strong);
+  background: var(--vim-bg);
+  color: var(--vim-fg);
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+.preview-code-area {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  min-height: 0;
+  border-bottom: 1px solid var(--vim-split);
+}
+
+.preview-numbers {
+  margin: 0;
+  padding: 10px 8px;
+  background: color-mix(in srgb, var(--vim-bg) 88%, #000 12%);
+  color: var(--vim-linenr);
+  text-align: right;
+  line-height: var(--preview-line-height, 1.5);
+  user-select: none;
+  white-space: pre;
+}
+
+.preview-number {
+  color: var(--vim-linenr);
+}
+
+.preview-number-current {
+  color: var(--vim-linenr-current);
+}
+
+.preview-code {
+  margin: 0;
+  padding: 10px 12px;
+  line-height: var(--preview-line-height, 1.5);
+  white-space: pre;
+  overflow: auto;
+  font-size: var(--preview-font-size, 14px);
+  font-family: var(--preview-font-family, "IBM Plex Mono", monospace);
+}
+
+.preview-code.is-wrap {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.preview-line {
+  display: block;
+}
+
+.preview-line.is-current {
+  background: var(--vim-cursorline);
+}
+
+.preview-line.is-visual {
+  background: var(--vim-visual);
+}
+
+.preview-statusline {
+  padding: 7px 10px;
+  background: var(--vim-status-bg);
+  color: var(--vim-status-fg);
+  font-size: 0.82rem;
+  border-top: 1px solid color-mix(in srgb, var(--vim-status-bg) 70%, #000 30%);
+}
+
+.tok-keyword {
+  color: var(--vim-keyword);
+}
+
+.tok-string {
+  color: var(--vim-string);
+}
+
+.tok-number {
+  color: var(--vim-number);
+}
+
+.tok-function {
+  color: var(--vim-function);
+}
+
+.tok-type {
+  color: var(--vim-type);
+}
+
+.tok-comment {
+  color: var(--vim-comment);
+  font-style: italic;
+}
+
+.tok-search {
+  background: var(--vim-accent);
+  color: var(--vim-bg);
+}
+
+.vimrc-head {
+  margin-top: 4px;
+}
+
+.vimrc-preview {
+  border: 1px solid var(--line);
+  background: #0a0a0a;
+  margin: 0;
+  padding: 10px;
+  overflow: auto;
+  min-height: 180px;
+  color: #d6d6d6;
+}
+
+.pod-terminal-host {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+@media (max-width: 1060px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .controls-panel {
+    max-height: 52vh;
+  }
+}
+
+@media (max-width: 760px) {
+  .topbar {
+    flex-direction: column;
+  }
+
+  .template-picker {
+    grid-template-columns: 1fr;
+  }
+
+  .field-grid,
+  .check-grid,
+  .button-row {
+    grid-template-columns: 1fr;
+  }
+}

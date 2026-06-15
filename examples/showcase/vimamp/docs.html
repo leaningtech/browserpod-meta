@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VimAmp Docs</title>
+    <link rel="icon" type="image/svg+xml" href="/VimPod.svg" />
+    <link rel="stylesheet" href="/src/docs.css" />
+  </head>
+  <body>
+    <main class="page docs-page">
+      <header class="topbar">
+        <div>
+          <h1>VimAmp Docs</h1>
+          <p>
+            Practical docs for the BrowserPod-powered Vim editor, filesystem, terminal bridge, AI
+            panel, and learning tools.
+          </p>
+        </div>
+        <a class="link-btn" href="/">Back to Vim</a>
+      </header>
+
+      <section class="docs-toolbar panel">
+        <label class="docs-search-wrap" for="docsSearch">
+          <span>Filter sections</span>
+          <input
+            id="docsSearch"
+            type="search"
+            autocomplete="off"
+            placeholder="terminal, portal, :BPSave, theme, AI..."
+          />
+        </label>
+        <p id="docsMeta" class="docs-meta" aria-live="polite"></p>
+      </section>
+
+      <section class="docs-layout">
+        <aside class="panel docs-nav-panel" aria-label="Documentation navigation">
+          <h2>On This Page</h2>
+          <nav id="docsToc" class="docs-toc"></nav>
+        </aside>
+
+        <article class="panel docs-content">
+          <section id="overview" class="docs-section" data-doc-section>
+            <h2>Overview</h2>
+            <p>
+              VimAmp is a browser-based Vim workflow built on <code>vim-wasm</code> and
+              BrowserPod. The editor is rendered on a canvas, files are stored in BrowserPod under
+              <code>/vimamp</code>, and terminal commands are translated through a controlled shell
+              layer.
+            </p>
+            <ul>
+              <li>Vim engine: <code>vim-wasm</code> running in-browser.</li>
+              <li>Runtime and filesystem: BrowserPod.</li>
+              <li>Default workspace root: <code>/vimamp</code>.</li>
+              <li>Training file: <code>/vimamp/vim-training.txt</code>.</li>
+              <li>Default note file: <code>/vimamp/note.txt</code>.</li>
+            </ul>
+          </section>
+
+          <section id="quick-start" class="docs-section" data-doc-section>
+            <h2>Quick Start</h2>
+            <ol>
+              <li>Open VimAmp and choose <code>Editor</code> from the entry menu.</li>
+              <li>Open <code>View > Show Filetree</code> and select a file.</li>
+              <li>Edit in Vim, then run <code>:BPSave</code> to sync to BrowserPod.</li>
+              <li>Use <code>View > Show Terminal</code> to run Node/npm commands.</li>
+              <li>Use <code>File > Save As...</code> for explicit filename saves.</li>
+            </ol>
+          </section>
+
+          <section id="entry-menu" class="docs-section" data-doc-section>
+            <h2>Entry Menu</h2>
+            <p>The entry screen supports keyboard-first navigation.</p>
+            <ul>
+              <li><code>Editor</code>: starts full editor mode.</li>
+              <li><code>Help > Tutorial</code>: opens Learn mode.</li>
+              <li><code>Help > Cheat Sheet</code>: opens command reference page.</li>
+              <li><code>Help > Ask AI</code>: opens OpenRouter chat page.</li>
+              <li><code>Help > Docs</code>: opens this documentation page.</li>
+              <li><code>Settings > Macros</code>: opens macro/keymap page.</li>
+              <li><code>Settings > Theme</code>: opens theme editor page.</li>
+            </ul>
+          </section>
+
+          <section id="filesystem" class="docs-section" data-doc-section>
+            <h2>Filesystem Model</h2>
+            <p>
+              VimAmp manages files in BrowserPod at <code>/vimamp</code>. The filetree and commands
+              enforce this root to avoid path escapes.
+            </p>
+            <ul>
+              <li>Root is fixed to <code>/vimamp</code>.</li>
+              <li>Filetree is a left docked panel, not overlay.</li>
+              <li>
+                File operations (<code>mkdir</code>, <code>touch</code>, <code>mv</code>,
+                <code>rm</code>) trigger refresh and keep tabs synchronized.
+              </li>
+              <li>Imports write into BrowserPod using binary-safe file handling.</li>
+            </ul>
+          </section>
+
+          <section id="vim-sync" class="docs-section" data-doc-section>
+            <h2>Vim Buffer Sync</h2>
+            <p>
+              Vim buffers and BrowserPod files are synced by explicit commands to avoid accidental
+              writes.
+            </p>
+            <ul>
+              <li><code>:BPSave</code> writes active buffer to BrowserPod path.</li>
+              <li><code>:BPEdit /absolute/path</code> opens BrowserPod files by path.</li>
+              <li>Save actions in menu call the same sync pipeline.</li>
+            </ul>
+          </section>
+
+          <section id="terminal" class="docs-section" data-doc-section>
+            <h2>Terminal Behavior</h2>
+            <p>
+              The visible terminal is a VimAmp shell UI that routes commands into BrowserPod. It is
+              intended for project commands without requiring users to learn BrowserPod internals.
+            </p>
+            <h3>Supported command families</h3>
+            <ul>
+              <li>
+                Native UI commands: <code>help</code>, <code>pwd</code>, <code>cd</code>,
+                <code>ls</code>, <code>cat</code>, <code>open</code>, <code>save</code>,
+                <code>mkdir</code>, <code>touch</code>, <code>mv</code>, <code>rm</code>.
+              </li>
+              <li>Pass-through commands: <code>npm ...</code>, <code>node &lt;file.js&gt;</code>.</li>
+            </ul>
+            <h3>Intentional guardrails</h3>
+            <ul>
+              <li><code>node -e</code> is blocked in this command path.</li>
+              <li><code>npm exec</code> is blocked in this command path.</li>
+              <li>Paths are constrained to <code>/vimamp</code>.</li>
+            </ul>
+          </section>
+
+          <section id="node-projects" class="docs-section" data-doc-section>
+            <h2>Running Node Projects</h2>
+            <p>Typical project flow in VimAmp terminal:</p>
+            <pre><code>cd my-project
+npm install
+npm run dev -- --host 0.0.0.0 --port 4173</code></pre>
+            <p>
+              Some packages with native binaries can fail on WASM platform targets. If this happens,
+              use package-specific WASM settings or alternate tooling that supports wasm32.
+            </p>
+          </section>
+
+          <section id="portal-preview" class="docs-section" data-doc-section>
+            <h2>Portal Preview URLs</h2>
+            <p>
+              BrowserPod app servers are exposed through portal URLs, not your host
+              <code>localhost</code>.
+            </p>
+            <ul>
+              <li>When a portal is emitted, VimAmp logs <code>[portal] https://...</code>.</li>
+              <li>
+                Use <code>View &gt; Open Last Portal</code> to open the latest BrowserPod app URL.
+              </li>
+              <li>The menu item stays disabled until a portal has been discovered.</li>
+            </ul>
+          </section>
+
+          <section id="ai-panel" class="docs-section" data-doc-section>
+            <h2>Ask AI and Editor AI Panel</h2>
+            <ul>
+              <li><code>Help &gt; Ask AI</code> opens standalone chat page.</li>
+              <li>
+                In-editor AI panel opens from <code>View &gt; Show AI Panel</code> and can attach
+                current file context.
+              </li>
+              <li>System prompt and temperature are configurable from settings cog.</li>
+              <li>Markdown responses are rendered for readability.</li>
+            </ul>
+          </section>
+
+          <section id="theme" class="docs-section" data-doc-section>
+            <h2>Theme and Appearance</h2>
+            <ul>
+              <li>Theme editor page provides templates and per-token colors.</li>
+              <li>Theme profile is stored in session and in BrowserPod config when available.</li>
+              <li>Syntax highlighting can be toggled in <code>View</code>.</li>
+              <li>Default font rendering is constrained to safe monospace settings.</li>
+            </ul>
+          </section>
+
+          <section id="learn-mode" class="docs-section" data-doc-section>
+            <h2>Learn Mode and Cheat Sheet</h2>
+            <ul>
+              <li>Learn mode tracks session accuracy, keys, and errors.</li>
+              <li>Lesson controls: previous, restart, next, exit.</li>
+              <li>Cheat sheet page offers quick command filtering.</li>
+            </ul>
+          </section>
+
+          <section id="storage" class="docs-section" data-doc-section>
+            <h2>Storage and Reset Notes</h2>
+            <ul>
+              <li>BrowserPod files are persisted in browser storage, scoped per origin.</li>
+              <li>Clearing site data for the active origin resets files and runtime state.</li>
+              <li>Theme/session settings use browser session/local storage.</li>
+            </ul>
+          </section>
+
+          <section id="troubleshooting" class="docs-section" data-doc-section>
+            <h2>Troubleshooting</h2>
+            <h3>Terminal output missing for npm/node</h3>
+            <ul>
+              <li>Refresh the page once after updates to shell bridge logic.</li>
+              <li>Verify command is pass-through safe (<code>npm ...</code>, <code>node file.js</code>).</li>
+            </ul>
+            <h3>Dev server runs but localhost is empty</h3>
+            <ul>
+              <li>Use portal URL reported by VimAmp.</li>
+              <li>Open it via <code>View &gt; Open Last Portal</code>.</li>
+            </ul>
+            <h3>Vim canvas text looks distorted</h3>
+            <ul>
+              <li>Refresh so latest theme/font settings apply.</li>
+              <li>Re-open editor from entry menu if needed.</li>
+            </ul>
+          </section>
+        </article>
+      </section>
+    </main>
+
+    <script type="module" src="/src/docs-page.js"></script>
+  </body>
+</html>

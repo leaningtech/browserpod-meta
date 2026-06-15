@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF Studio</title>
+    <link rel="stylesheet" href="/editor.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-chrome">
+        <div class="command-bar">
+          <div class="toolbar-strip">
+            <details class="toolbar-menu">
+              <summary class="menu-trigger">
+                <span class="menu-trigger-icon" aria-hidden="true">
+                  <svg viewBox="0 0 20 20">
+                    <path d="M10 4v12"></path>
+                    <path d="M4 10h12"></path>
+                  </svg>
+                </span>
+                <span>New</span>
+              </summary>
+              <div class="menu-panel">
+                <button id="importPdfButton" type="button">Import PDF</button>
+                <button id="addBlankButton" type="button">Add Blank Page</button>
+              </div>
+            </details>
+
+            <details class="toolbar-menu">
+              <summary class="menu-trigger">
+                <span class="menu-trigger-icon" aria-hidden="true">
+                  <svg viewBox="0 0 20 20">
+                    <path d="M4 5h12"></path>
+                    <path d="M4 10h12"></path>
+                    <path d="M4 15h8"></path>
+                  </svg>
+                </span>
+                <span>Insert</span>
+              </summary>
+              <div class="menu-panel">
+                <button id="addTextButton" type="button">Text</button>
+                <button id="addRectButton" type="button">Rectangle</button>
+                <button id="addEllipseButton" type="button">Ellipse</button>
+                <button id="addLineButton" type="button">Line</button>
+                <button id="addArrowButton" type="button">Arrow</button>
+                <button id="addStampButton" type="button">Stamp</button>
+                <button id="importImageButton" type="button">Image</button>
+                <button id="signatureButton" type="button">Draw Signature</button>
+                <button id="addLogoButton" type="button">Logo</button>
+                <button id="addSignatureImageButton" type="button">Signature Asset</button>
+                <button id="addHeaderButton" type="button">Header</button>
+                <button id="addFooterButton" type="button">Footer</button>
+                <button id="addWatermarkButton" type="button">Watermark</button>
+              </div>
+            </details>
+
+            <details class="toolbar-menu">
+              <summary class="menu-trigger">
+                <span class="menu-trigger-icon" aria-hidden="true">
+                  <svg viewBox="0 0 20 20">
+                    <rect x="4" y="4" width="5" height="5" rx="1"></rect>
+                    <rect x="11" y="4" width="5" height="5" rx="1"></rect>
+                    <rect x="4" y="11" width="5" height="5" rx="1"></rect>
+                    <rect x="11" y="11" width="5" height="5" rx="1"></rect>
+                  </svg>
+                </span>
+                <span>Templates</span>
+              </summary>
+              <div class="menu-panel">
+                <button id="templatesButton" type="button">Templates</button>
+                <button id="saveTemplateButton" type="button">Save Template</button>
+              </div>
+            </details>
+          </div>
+
+          <div class="toolbar-spacer"></div>
+
+          <div class="zoom-controls">
+            <button id="zoomOutButton" type="button">-</button>
+            <span id="zoomLabel" class="zoom-label">100%</span>
+            <button id="zoomInButton" type="button">+</button>
+          </div>
+
+          <button id="exportButton" class="toolbar-accent" type="button">
+            <span class="button-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20">
+                <path d="M10 3v9"></path>
+                <path d="M6.5 8.5L10 12l3.5-3.5"></path>
+                <path d="M4 15h12"></path>
+              </svg>
+            </span>
+            <span>Export PDF</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="workspace-frame">
+        <nav class="tool-rail" aria-label="Workspace Sections">
+          <button id="pagesTabButton" class="rail-button is-active" type="button" aria-label="Pages">
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+              <rect x="4" y="3" width="12" height="14" rx="2"></rect>
+              <path d="M7 7h6M7 10h6M7 13h4"></path>
+            </svg>
+          </button>
+          <button id="brandAssetsTabButton" class="rail-button" type="button" aria-label="Brand Assets">
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+              <circle cx="10" cy="10" r="4"></circle>
+              <path d="M10 2v3M10 15v3M2 10h3M15 10h3"></path>
+            </svg>
+          </button>
+          <button id="imageLibraryTabButton" class="rail-button" type="button" aria-label="Image Library">
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+              <rect x="3" y="4" width="14" height="12" rx="2"></rect>
+              <path d="M6 12l2-2 2 2 3-4 1 1"></path>
+              <circle cx="8" cy="8" r="1"></circle>
+            </svg>
+          </button>
+        </nav>
+
+        <aside class="nav-dock">
+          <section id="pagesPanel" class="dock-panel is-active">
+            <div class="dock-header">
+              <h1>Pages</h1>
+              <span id="pageCount">0</span>
+            </div>
+            <div id="pageList" class="dock-list page-list"></div>
+          </section>
+
+          <section id="brandAssetsPanel" class="dock-panel is-hidden">
+            <div class="dock-header">
+              <h2>Brand Assets</h2>
+            </div>
+            <div id="brandAssetList" class="dock-list asset-list"></div>
+          </section>
+
+          <section id="imageLibraryPanel" class="dock-panel is-hidden">
+            <div class="dock-header">
+              <h2>Image Library</h2>
+            </div>
+            <div id="assetLibraryList" class="dock-list asset-list"></div>
+          </section>
+        </aside>
+
+        <main class="document-workspace">
+          <div id="messageBar" class="message-bar" aria-live="polite"></div>
+          <div id="stageViewport" class="stage-viewport">
+            <div id="stageCanvasHost" class="stage-canvas-host"></div>
+          </div>
+        </main>
+
+        <aside class="inspector-pane">
+          <div class="dock-header">
+            <h2>Inspector</h2>
+          </div>
+          <div id="inspectorContent" class="inspector-content"></div>
+        </aside>
+      </div>
+    </div>
+
+    <input id="pdfInput" type="file" accept="application/pdf" multiple hidden />
+    <input id="imageInput" type="file" accept="image/png,image/jpeg" hidden />
+
+    <div id="signatureModal" class="signature-modal hidden">
+      <div class="signature-card">
+        <div class="sidebar-header">
+          <h2>Capture Signature</h2>
+          <button id="closeSignatureButton" type="button">Close</button>
+        </div>
+        <canvas id="signatureCanvas" width="480" height="180"></canvas>
+        <div class="toolbar-group">
+          <button id="clearSignatureButton" type="button">Clear</button>
+          <button id="saveSignatureButton" class="primary" type="button">Insert Signature</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="templateModal" class="template-modal hidden">
+      <div class="template-card">
+        <div class="sidebar-header">
+          <h2>Reusable Templates</h2>
+          <div class="toolbar-group">
+            <button id="closeTemplateButton" type="button">Close</button>
+          </div>
+        </div>
+
+        <div class="template-layout">
+          <aside class="template-sidebar">
+            <div class="toolbar-group">
+              <button id="templateBuiltInTab" class="primary" type="button">Built-in</button>
+              <button id="templateSavedTab" type="button">Saved</button>
+            </div>
+            <div id="templateList" class="template-list"></div>
+          </aside>
+
+          <section class="template-detail">
+            <div id="templateDetail" class="template-detail-content"></div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/editor.js"></script>
+  </body>
+</html>

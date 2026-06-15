@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VimAmp Ask AI</title>
+    <link rel="icon" type="image/svg+xml" href="/VimPod.svg" />
+    <link rel="stylesheet" href="/src/ask-ai.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <div>
+          <h1>Ask AI</h1>
+          <p>Chat with OpenRouter from inside VimAmp.</p>
+        </div>
+        <a class="link-btn" href="/">Back to Vim</a>
+      </header>
+
+      <section class="chat-layout">
+        <section class="panel chat-panel">
+          <div class="chat-toolbar">
+            <p id="metaStatus" class="meta-status" aria-live="polite">Initializing...</p>
+            <div class="toolbar-actions">
+              <details id="settingsDetails" class="settings-details">
+                <summary class="icon-btn" aria-label="Open AI settings" title="AI settings">
+                  <span aria-hidden="true">&#9881;</span>
+                </summary>
+                <section class="settings-popover" aria-label="AI settings">
+                  <label class="field">
+                    System Prompt
+                    <textarea
+                      id="systemPromptInput"
+                      rows="6"
+                      placeholder="You are helping someone learn Vim and Node projects."
+                    ></textarea>
+                  </label>
+                  <label class="field">
+                    Temperature
+                    <input
+                      id="temperatureInput"
+                      type="number"
+                      min="0"
+                      max="2"
+                      step="0.1"
+                      value="0.7"
+                    />
+                  </label>
+                </section>
+              </details>
+              <button id="newChatBtn" type="button">New Chat</button>
+            </div>
+          </div>
+
+          <div id="chatTranscript" class="chat-transcript" aria-live="polite"></div>
+
+          <form id="chatForm" class="composer">
+            <textarea
+              id="promptInput"
+              rows="3"
+              autocomplete="off"
+              placeholder="Ask about Vim motions, commands, macros, or your Node project."
+              required
+            ></textarea>
+            <div class="composer-footer">
+              <p id="chatStatus" class="chat-status" aria-live="polite">
+                Enter to send. Shift+Enter for newline.
+              </p>
+              <button id="sendBtn" type="submit">Send</button>
+            </div>
+          </form>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="/src/ask-ai-page.js"></script>
+  </body>
+</html>

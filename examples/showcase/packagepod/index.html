@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PackagePod - install and test npm packages in-browser with BrowserPod.</title>
+  <link rel="stylesheet" href="/src/style.css">
+  <script src="https://webvm.io/latest.js" async></script>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-top">
+        <div class="logo-section">
+          <img src="/PackageNormal.png" alt="Package Logo" class="logo-image" id="package-status-icon">
+          <h1>PackagePod</h1>
+        </div>
+        <div class="theme-switch">
+          <input type="checkbox" id="theme-toggle" class="theme-checkbox">
+          <label for="theme-toggle" class="theme-label"></label>
+        </div>
+        <div class="social-links-header">
+          <a href="https://github.com/Liamoscarmccaffrey/PackagePod" target="_blank" rel="noopener noreferrer" title="GitHub" class="social-icon-header">
+            <img src="/GitHub_Invertocat_Light.svg" alt="GitHub" class="social-logo social-logo-light">
+            <img src="/GitHub_Invertocat_Dark.svg" alt="GitHub" class="social-logo social-logo-dark">
+          </a>
+          <a href="https://discord.com/invite/7K3tkvxKB3#:~:text=The%20home%20of%20WebVM%2C%20Browserpod%2C%20Cheerp%2C%20CheerpJ%2C,machines%2C%20compilers%2C%20and%20WebAssembly!%20%7C%201899%20members" target="_blank" rel="noopener noreferrer" title="Discord" class="social-icon-header">
+            <img src="/discord-icon.svg" alt="Discord" class="social-logo">
+          </a>
+        </div>
+      </div>
+      <p class="subtitle">Peek into npm packages in-browser in a virtualised node.js environment.</p>
+      <a href="https://browserpod.io" target="_blank" rel="noopener noreferrer" class="powered-by-browserpod" title="Powered by BrowserPod">
+        <span>Powered by BrowserPod</span>
+        <img src="/browserpod-logo.png" alt="BrowserPod" class="browserpod-logo-small">
+      </a>
+    </div>
+
+    <div class="main-panel">
+      <div class="search-section">
+        <input type="text" id="search-keyword" placeholder="Search by keyword (e.g., utility, testing, database)" />
+        <button id="search-btn">Search Packages</button>
+      </div>
+
+      <div id="search-results" style="display: none; margin-top: 12px; margin-bottom: 50px; max-height: 300px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px;">
+        <div id="search-results-list"></div>
+      </div>
+
+      <div class="controls-section">
+        <input type="text" id="package-input" placeholder="Package name (e.g., lodash, axios, react)" />
+        <button id="test-btn">Test Package</button>
+      </div>
+
+      <div class="status-section" style="display: none;">
+        <div class="status-box">
+          <h3>Status</h3>
+          <div id="server-status" class="status-indicator">Ready</div>
+          <div id="server-info" class="info-text">Enter a package name to test</div>
+        </div>
+      </div>
+
+      <div class="console-section">
+        <h3>Terminal</h3>
+        <div id="console"></div>
+      </div>
+
+      <div class="console-section">
+        <h3>Console</h3>
+        <div id="app-console"></div>
+      </div>
+
+      <div id="results-section" class="results-section" style="display: none;">
+        <div class="results-grid">
+          <div class="result-card">
+            <h3>Package Info</h3>
+            <div id="package-info" class="result-content"></div>
+          </div>
+          <div class="result-card">
+            <h3>Security</h3>
+            <div id="security-info" class="result-content"></div>
+          </div>
+        </div>
+      </div>
+
+    <footer class="footer">
+      <p><a href="https://browserpod.io" target="_blank" rel="noopener noreferrer">BrowserPod</a> by <a href="https://leaningtech.com" target="_blank" rel="noopener noreferrer">Leaning Technologies</a></p>
+    </footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

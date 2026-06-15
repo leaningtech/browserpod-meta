@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vim Keyboard + Macros</title>
+    <link rel="icon" type="image/svg+xml" href="/VimPod.svg" />
+    <link rel="stylesheet" href="/src/keymap.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <div>
+          <h1>Keyboard + Macro Mapper</h1>
+          <p>
+            Browse Vim commands, map keys to macros, and save custom mappings for this app.
+          </p>
+        </div>
+        <a class="link-btn" href="/">Back to Vim</a>
+      </header>
+
+      <section class="layout">
+        <section class="panel keyboard-panel">
+          <div class="panel-head">
+            <h2>Keyboard Layout</h2>
+            <p>Click a key to map it. You can also press a key on your keyboard to jump.</p>
+          </div>
+          <div id="keyboardLayout" class="keyboard-layout" aria-label="Keyboard layout"></div>
+          <p class="selected-key">
+            Selected key: <code id="selectedKeyToken">none</code>
+          </p>
+          <section class="live-detect" aria-live="polite">
+            <p id="liveKeys" class="live-line"></p>
+            <p id="liveCommand" class="live-line"></p>
+            <p id="liveCooldown" class="live-line live-cooldown"></p>
+            <div class="live-settings">
+              <label>
+                Sequence cooldown (ms)
+                <input id="sequenceCooldownInput" type="number" min="200" max="5000" step="50" />
+              </label>
+              <label>
+                Hold repeat delay (ms)
+                <input id="holdRepeatDelayInput" type="number" min="100" max="3000" step="25" />
+              </label>
+            </div>
+          </section>
+        </section>
+
+        <section class="panel macro-panel">
+          <div class="panel-head">
+            <h2>Macro Mapping</h2>
+            <p>Mappings are saved locally and loaded into Vim when it boots.</p>
+          </div>
+          <form id="macroForm" class="macro-form">
+            <label>
+              Mode
+              <select id="macroMode">
+                <option value="normal">Normal</option>
+                <option value="visual">Visual</option>
+                <option value="insert">Insert</option>
+              </select>
+            </label>
+            <label>
+              Macro (Vim RHS)
+              <input id="macroBody" type="text" autocomplete="off" placeholder=":w&lt;CR&gt;" />
+            </label>
+            <label>
+              Label (optional)
+              <input id="macroLabel" type="text" autocomplete="off" placeholder="Save file" />
+            </label>
+            <div class="macro-actions">
+              <button type="submit">Save Mapping</button>
+              <button id="removeMappingBtn" type="button">Remove Selected</button>
+              <button id="clearMappingsBtn" type="button">Clear All</button>
+            </div>
+          </form>
+          <p id="macroStatus" class="macro-status" aria-live="polite"></p>
+        </section>
+
+        <section class="panel mapping-panel">
+          <div class="panel-head">
+            <h2>Saved Mappings</h2>
+            <p>Edit any mapping directly from this list.</p>
+          </div>
+          <div class="mapping-scroll">
+            <table class="mapping-table">
+              <thead>
+                <tr>
+                  <th>Mode</th>
+                  <th>Key</th>
+                  <th>Macro</th>
+                  <th>Label</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="mappingTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel command-panel">
+          <div class="panel-head command-head">
+            <div>
+              <h2>Command Reference</h2>
+              <p>Scroll the list to review commands and what each one does.</p>
+            </div>
+            <label class="search-wrap">
+              <span>Search</span>
+              <input
+                id="commandSearch"
+                type="search"
+                autocomplete="off"
+                placeholder="w, dw, copy line, search"
+              />
+            </label>
+          </div>
+          <div class="command-scroll">
+            <table class="command-table">
+              <thead>
+                <tr>
+                  <th>Keys</th>
+                  <th>Command</th>
+                  <th>What It Does</th>
+                  <th>Mode</th>
+                  <th>Use</th>
+                </tr>
+              </thead>
+              <tbody id="commandTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel preview-panel">
+          <div class="panel-head">
+            <h2>Generated Vim Mapping Lines</h2>
+            <p>Preview of mappings injected into Vim when the editor starts.</p>
+          </div>
+          <pre id="vimrcPreview" class="vimrc-preview"></pre>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="/src/keymap-page.js"></script>
+  </body>
+</html>

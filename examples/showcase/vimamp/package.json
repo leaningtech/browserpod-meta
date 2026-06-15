@@ -1,0 +1,20 @@
+{
+  "name": "browserpod-vim-root",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@leaningtech/browserpod": "2.10.0",
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/xterm": "^6.0.0",
+    "vim-wasm": "^0.0.13"
+  },
+  "devDependencies": {
+    "vite": "^7.1.12"
+  }
+}

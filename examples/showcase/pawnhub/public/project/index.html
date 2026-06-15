@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PawnHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap"
+    />
+    <link rel="stylesheet" href="/assets/chessground.base.css" />
+    <link rel="stylesheet" href="/assets/chessground.brown.css" />
+    <link rel="stylesheet" href="/assets/chessground.cburnett.css" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="icon" type="image/png" href="/assets/logo.png" />
+  </head>
+  <body>
+    <div id="plasma" aria-hidden="true"></div>
+    <header class="topbar">
+      <div class="topbar-center">
+        <div class="brand">
+          <span class="brand-mark"><img src="/assets/logo.png" alt="cm" /></span>
+          <div>
+            <div class="eyebrow">Built with BrowserPod</div>
+            <h1>PawnHub</h1>
+          </div>
+        </div>
+        <div class="status-pill" id="connectionStatus">Connecting...</div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="board-panel">
+        <div id="board"></div>
+        <div class="hint">Auto-promote to queen · Shift-drag to draw arrows</div>
+      </section>
+
+      <aside class="side-panel">
+        <div class="panel-row">
+          <div class="card role-card">
+            <div class="label" id="roleCardLabel">Mode</div>
+            <div class="role" id="roleLabel">Spectator</div>
+            <div class="sub" id="roleSub">Waiting for assignment...</div>
+          </div>
+          <div class="card status">
+            <div class="label">Game Status</div>
+            <div class="status-text" id="gameStatus">Waiting for players</div>
+            <div class="status-sub" id="turnStatus">-</div>
+            <div class="error-text" id="errorStatus"></div>
+          </div>
+        </div>
+
+        <div class="card clocks compact">
+          <div class="player" id="whiteCard">
+            <div class="player-name">White</div>
+            <div class="player-status" id="whiteStatus">Open seat</div>
+            <div class="clock" id="whiteClock">10:00</div>
+          </div>
+          <div class="divider"></div>
+          <div class="player" id="blackCard">
+            <div class="player-name">Black</div>
+            <div class="player-status" id="blackStatus">Open seat</div>
+            <div class="clock" id="blackClock">10:00</div>
+          </div>
+        </div>
+
+        <div class="card stats-card">
+          <div class="stats-block score-block">
+            <div class="label">Match Score</div>
+            <div class="score-grid">
+              <div>
+                <div class="score-name">White</div>
+                <div class="score-value" id="scoreWhite">0</div>
+              </div>
+              <div>
+                <div class="score-name">Draws</div>
+                <div class="score-value" id="scoreDraws">0</div>
+              </div>
+              <div>
+                <div class="score-name">Black</div>
+                <div class="score-value" id="scoreBlack">0</div>
+              </div>
+            </div>
+          </div>
+          <div class="stats-block material-card">
+            <div class="label">Material</div>
+            <div class="material-row">
+              <span>White</span>
+              <span class="material-points" id="materialWhite">39</span>
+            </div>
+            <div class="material-row">
+              <span>Black</span>
+              <span class="material-points" id="materialBlack">39</span>
+            </div>
+            <div class="material-row diff" id="materialDiff">Equal</div>
+            <div class="material-legend">P=1 · N/B=3 · R=5 · Q=9</div>
+          </div>
+        </div>
+
+        <div class="card actions-card">
+          <div class="controls">
+            <button class="primary" id="newGame">New Game</button>
+            <button class="ghost" id="resign">Resign</button>
+          </div>
+          <button class="ghost secondary-action" id="returnToMenu">Return to Menu</button>
+          <div class="share" id="invitePanel">
+            <div class="label" id="shareLabel">Invite a Friend</div>
+            <div class="share-helper" id="shareHelper">Copy this invite link and send it to your opponent.</div>
+            <div class="share-row">
+              <input id="shareLink" readonly />
+              <button class="primary" id="copyLink">Copy Invite Link</button>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+    </main>
+
+    <div class="overlay hidden" id="gameOverlay" role="alert" aria-live="assertive">
+      <div class="overlay-card">
+        <div class="overlay-title" id="overlayTitle">Game Over</div>
+        <div class="overlay-sub" id="overlaySub">-</div>
+        <button class="primary" id="closeOverlay">Got it</button>
+      </div>
+    </div>
+
+    <script type="module" src="/client.js"></script>
+  </body>
+</html>

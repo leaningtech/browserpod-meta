@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Survey - SaySomething</title>
+  <link rel="icon" href="/sslogo.svg" type="image/svg+xml">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      background: #f8f8f6;
+      min-height: 100vh;
+      padding: 0;
+      margin: 0;
+      color: #262626;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 48px 32px;
+      text-align: center;
+    }
+
+    .header {
+      background: #EEEDE9;
+      color: #262626;
+      padding: 48px 24px;
+      margin-bottom: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 900px;
+      padding: 0 24px;
+      position: relative;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: absolute;
+      right: 24px;
+    }
+
+    .theme-switch {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .theme-checkbox {
+      display: none;
+    }
+
+    .theme-label {
+      width: 44px;
+      height: 24px;
+      background: #d1d5db;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.3s ease;
+    }
+
+    .theme-checkbox:checked + .theme-label {
+      background: #40ffc8;
+    }
+
+    .theme-label::after {
+      content: '';
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      left: 2px;
+      transition: left 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .theme-checkbox:checked + .theme-label::after {
+      left: 22px;
+    }
+
+    .social-links-header {
+      display: flex;
+      gap: 8px;
+    }
+
+    .social-icon-header {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border: 1.5px solid #d0d0d0;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      background: transparent;
+      padding: 4px;
+    }
+
+    .social-icon-header:hover {
+      border-color: #2EA681;
+      background: rgba(46, 166, 129, 0.1);
+    }
+
+    .social-logo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: brightness(0);
+    }
+
+    body.dark-mode .social-logo {
+      filter: brightness(0) invert(1);
+    }
+
+    .header-logo {
+      width: 200px;
+      height: 200px;
+      transition: transform 0.3s ease;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .header-logo:hover {
+      transform: scale(1.02);
+    }
+
+    .header-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+      margin: 0 auto;
+    }
+
+    .header-tagline {
+      font-size: 1rem;
+      color: #666;
+      margin: 0;
+      font-weight: 400;
+      max-width: 320px;
+    }
+
+    body.dark-mode .header-tagline {
+      color: #999;
+    }
+
+    .powered-by-browserpod {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      text-decoration: none;
+      color: #262626;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(64, 255, 200, 0.1) 0%, rgba(99, 211, 139, 0.1) 100%);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      animation: gradientBorder 3s ease infinite;
+    }
+
+    @keyframes gradientBorder {
+      0% {
+        border-color: #40ffc8;
+        box-shadow: 0 0 12px rgba(64, 255, 200, 0.3);
+      }
+      50% {
+        border-color: #63d38b;
+        box-shadow: 0 0 20px rgba(99, 211, 139, 0.4);
+      }
+      100% {
+        border-color: #40ffc8;
+        box-shadow: 0 0 12px rgba(64, 255, 200, 0.3);
+      }
+    }
+
+    @keyframes gradientBorderHover {
+      0% {
+        border-color: #40ffc8;
+        box-shadow: 0 0 20px rgba(64, 255, 200, 0.6), 0 0 40px rgba(64, 255, 200, 0.3);
+      }
+      50% {
+        border-color: #63d38b;
+        box-shadow: 0 0 30px rgba(99, 211, 139, 0.8), 0 0 60px rgba(99, 211, 139, 0.4);
+      }
+      100% {
+        border-color: #40ffc8;
+        box-shadow: 0 0 20px rgba(64, 255, 200, 0.6), 0 0 40px rgba(64, 255, 200, 0.3);
+      }
+    }
+
+    .powered-by-browserpod:hover {
+      transform: translateY(-2px);
+      animation: gradientBorderHover 1.5s ease infinite;
+    }
+
+    .browserpod-logo-small {
+      height: 18px;
+      width: auto;
+      object-fit: contain;
+      filter: brightness(0);
+    }
+
+    body.dark-mode .browserpod-logo-small {
+      filter: brightness(0) invert(1);
+    }
+
+    /* Dark mode styles */
+    body.dark-mode {
+      background: #0a0a0a;
+      color: #ffffff;
+    }
+
+    body.dark-mode .header {
+      background: #1a1a1a;
+      color: #ffffff;
+    }
+
+    body.dark-mode .social-icon-header {
+      border-color: #404040;
+    }
+
+    body.dark-mode .social-icon-header:hover {
+      border-color: #41FFC8;
+      background: rgba(65, 255, 200, 0.1);
+    }
+
+    body.dark-mode .powered-by-browserpod {
+      color: #ffffff;
+      background: linear-gradient(135deg, rgba(65, 255, 200, 0.15) 0%, rgba(99, 211, 139, 0.15) 100%);
+    }
+
+    body.dark-mode .form-section {
+      background: #1a1a1a;
+      border-color: #404040;
+    }
+
+    body.dark-mode .form-section h2 {
+      color: #ffffff;
+    }
+
+    body.dark-mode label {
+      color: #ffffff;
+    }
+
+    body.dark-mode input[type="text"],
+    body.dark-mode input[type="number"],
+    body.dark-mode textarea,
+    body.dark-mode select {
+      background: #3a3a3a;
+      border-color: #404040;
+      color: #ffffff;
+    }
+
+    body.dark-mode input:focus,
+    body.dark-mode textarea:focus,
+    body.dark-mode select:focus {
+      border-color: #41FFC8;
+      box-shadow: 0 0 0 3px rgba(65, 255, 200, 0.1);
+      background: #3a3a3a;
+    }
+
+    body.dark-mode input::placeholder,
+    body.dark-mode textarea::placeholder {
+      color: #c3c3c3;
+    }
+
+    body.dark-mode .question-card {
+      background: #2a2a2a;
+      border-color: #404040;
+    }
+
+    body.dark-mode .question-card.new {
+      border-color: #41FFC8;
+    }
+
+    body.dark-mode .btn-primary {
+      background: #41FFC8;
+      color: #000000;
+    }
+
+    body.dark-mode .btn-primary:hover {
+      background: #38e6b0;
+    }
+
+    body.dark-mode .btn-secondary {
+      background: #2a2a2a;
+      border-color: #404040;
+      color: #ffffff;
+    }
+
+    body.dark-mode .btn-secondary:hover {
+      border-color: #41FFC8;
+    }
+
+    body.dark-mode .remove-btn,
+    body.dark-mode .option-remove {
+      border-color: #404040;
+      color: #999;
+    }
+
+    body.dark-mode .add-option-btn,
+    body.dark-mode .add-question-btn {
+      border-color: #404040;
+      color: #ffffff;
+    }
+
+    body.dark-mode .add-option-btn:hover,
+    body.dark-mode .add-question-btn:hover {
+      background: #2a2a2a;
+      border-color: #41FFC8;
+    }
+
+    body.dark-mode .checkbox-group label {
+      color: #999;
+    }
+
+    body.dark-mode .result-details {
+      background: #1a1a1a;
+      border-color: #404040;
+    }
+
+    body.dark-mode .result-links a {
+      background: #2a2a2a;
+      border-color: #404040;
+      color: #ffffff;
+    }
+
+    body.dark-mode .result-links a:hover {
+      border-color: #41FFC8;
+    }
+
+    .header-content h1 {
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+      margin-top: 0;
+      font-weight: 700;
+      color: #262626;
+      letter-spacing: -0.3px;
+    }
+
+    .header-content p {
+      opacity: 0.6;
+      font-size: 0.875rem;
+      margin: 0;
+      color: #666;
+      font-weight: 400;
+    }
+
+    .form-section {
+      background: #ffffff;
+      padding: 32px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
+      text-align: left;
+    }
+
+    .form-section h2 {
+      color: #262626;
+      margin-bottom: 24px;
+      font-size: 1.25rem;
+      border-bottom: none;
+      padding-bottom: 0;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #262626;
+      font-weight: 500;
+      font-size: 0.875rem;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      transition: all 0.2s ease;
+      background: #fafafa;
+    }
+
+    input[type="text"]:hover,
+    input[type="number"]:hover,
+    textarea:hover,
+    select:hover {
+      border-color: #c0c0c0;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #262626;
+      box-shadow: 0 0 0 3px rgba(38, 38, 38, 0.08);
+      background-color: #ffffff;
+    }
+
+    .questions-list {
+      margin-top: 20px;
+    }
+
+    .question-card {
+      background: #fafafa;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 16px;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .question-card:hover {
+      border-color: #d0d0d0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .question-card.new {
+      border: 1.5px solid #262626;
+      background: #fafafa;
+    }
+
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 16px;
+      gap: 12px;
+    }
+
+    .question-header > div {
+      flex: 1;
+    }
+
+    .question-type {
+      background: #262626;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .remove-btn {
+      background: transparent;
+      color: #999;
+      border: 1.5px solid #e0e0e0;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .remove-btn:hover {
+      background: #fee2e2;
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    .options-list {
+      margin-top: 12px;
+      padding-left: 0;
+    }
+
+    .option-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+
+    .option-item input {
+      flex: 1;
+    }
+
+    .option-remove {
+      background: transparent;
+      color: #999;
+      border: 1.5px solid #e0e0e0;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .option-remove:hover {
+      background: #fee2e2;
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    .add-option-btn,
+    .add-question-btn {
+      background: transparent;
+      color: #262626;
+      border: 1.5px dashed #d0d0d0;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.875rem;
+      margin-top: 12px;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .add-option-btn:hover,
+    .add-question-btn:hover {
+      background: #f5f5f5;
+      border-color: #262626;
+      border-style: solid;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #262626;
+      cursor: pointer;
+    }
+
+    .checkbox-group label {
+      margin: 0;
+      font-size: 0.875rem;
+      color: #666;
+      cursor: pointer;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 32px;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      transition: all 0.2s ease;
+      text-transform: none;
+      letter-spacing: -0.2px;
+    }
+
+    .btn-primary {
+      background: #262626;
+      color: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary:hover {
+      background: #000;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: #262626;
+      border: 1.5px solid #e0e0e0;
+      font-weight: 500;
+    }
+
+    .btn-secondary:hover {
+      background: #f8f8f8;
+      border-color: #262626;
+    }
+
+    .success-message {
+      background: #ecfdf5;
+      border: 1.5px solid #a7f3d0;
+      color: #065f46;
+      padding: 16px 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: none;
+      font-weight: 500;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    .error-message {
+      background: #fef2f2;
+      border: 1.5px solid #fecaca;
+      color: #991b1b;
+      padding: 16px 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: none;
+      font-weight: 500;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    .result-details {
+      display: none;
+      background: #ffffff;
+      border: 1.5px solid #e0e0e0;
+      padding: 32px;
+      border-radius: 12px;
+      margin-top: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .result-details.show {
+      display: block;
+    }
+
+    .result-details h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+    }
+
+    .result-details p {
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .result-links {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .result-links a {
+      display: block;
+      padding: 14px 16px;
+      background: #fafafa;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #262626;
+      text-align: center;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .result-links a:hover {
+      background: #f0f0f0;
+      border-color: #262626;
+    }
+
+    .scale-inputs {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .scale-inputs input {
+      width: 100px;
+    }
+
+    .scale-inputs span {
+      color: #666;
+      font-size: 0.875rem;
+    }
+
+    /* Smooth scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #c0c0c0;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a0a0a0;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-top">
+      <div class="header-brand">
+        <img class="header-logo" src="/sslogo.svg" alt="SaySomething Logo">
+        <p class="header-tagline">Instant, ephemeral, flash surveys. <br><br>Served for free, serverlessly.</p>
+      </div>
+      <div class="header-controls">
+        <div class="theme-switch">
+          <input type="checkbox" id="theme-toggle" class="theme-checkbox">
+          <label for="theme-toggle" class="theme-label"></label>
+        </div>
+        <div class="social-links-header">
+          <a href="https://github.com/Liamoscarmccaffrey/say_something" target="_blank" rel="noopener noreferrer" title="GitHub" class="social-icon-header">
+            <img src="/project/public/GitHub_Invertocat_Light.svg" alt="GitHub" class="social-logo">
+          </a>
+          <a href="https://discord.com/invite/7K3tkvxKB3" target="_blank" rel="noopener noreferrer" title="Discord" class="social-icon-header">
+            <img src="/project/public/discord-icon.svg" alt="Discord" class="social-logo">
+          </a>
+        </div>
+      </div>
+    </div>
+    <a href="https://browserpod.io" target="_blank" rel="noopener noreferrer" class="powered-by-browserpod" title="Powered by BrowserPod">
+      <span>Powered by BrowserPod</span>
+      <img src="/project/public/browserpod-logo.png" alt="BrowserPod" class="browserpod-logo-small">
+    </a>
+  </div>
+  
+  <div class="container">
+    <div class="error-message" id="errorMessage"></div>
+    <div class="success-message" id="successMessage"></div>
+    
+    <form id="surveyForm">
+      <div class="form-section">
+        <h2>Survey Details</h2>
+        
+        <div class="form-group">
+          <label for="surveyTitle">Survey Title *</label>
+          <input type="text" id="surveyTitle" placeholder="e.g., Customer Satisfaction Survey" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="surveyDescription">Description</label>
+          <textarea id="surveyDescription" placeholder="Add a description to help respondents understand your survey..."></textarea>
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <h2>Questions</h2>
+        
+        <div class="questions-list" id="questionsList"></div>
+        
+        <button type="button" class="add-question-btn" onclick="addQuestion()">+ Add Question</button>
+      </div>
+      
+      <div class="buttons">
+        <button type="submit" class="btn btn-primary">Create Survey</button>
+        <button type="reset" class="btn btn-secondary">Clear</button>
+      </div>
+    </form>
+    
+    <div class="result-details" id="resultDetails">
+      <h3>Survey Created Successfully! 🎉</h3>
+      <p id="resultText"></p>
+      <div class="result-links">
+        <a href="#" id="clientLink" target="_blank">👥 Client View</a>
+        <a href="#" id="adminLink" target="_blank">📊 Admin Dashboard</a>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    let questionCount = 0;
+    
+    function addQuestion(type = 'text', existingData = null) {
+      const id = `q_${Date.now()}_${Math.random()}`;
+      const questionsList = document.getElementById('questionsList');
+      
+      const questionCard = document.createElement('div');
+      questionCard.className = 'question-card new';
+      questionCard.id = `question_${id}`;
+      
+      let optionsHTML = '';
+      if (type === 'single-choice' || type === 'multiple-choice') {
+        const options = existingData?.options || [{ id: 'opt_1', label: 'Option 1' }, { id: 'opt_2', label: 'Option 2' }];
+        optionsHTML = `
+          <div class="form-group">
+            <label>Options</label>
+            <div class="options-list" id="options_${id}">
+              ${options.map((opt, idx) => `
+                <div class="option-item">
+                  <input type="text" value="${opt.label}" placeholder="Option" onchange="updateOption('${id}', ${idx}, this.value)">
+                  <button type="button" class="option-remove" onclick="removeOption('${id}', ${idx})">Remove</button>
+                </div>
+              `).join('')}
+            </div>
+            <button type="button" class="add-option-btn" onclick="addOption('${id}')">+ Add Option</button>
+          </div>
+        `;
+      }
+      
+      let scaleHTML = '';
+      if (type === 'scale') {
+        const minValue = existingData?.minValue || 1;
+        const maxValue = existingData?.maxValue || 5;
+        scaleHTML = `
+          <div class="form-group">
+            <label>Scale Range</label>
+            <div class="scale-inputs">
+              <input type="number" value="${minValue}" placeholder="Min" onchange="updateScaleMin('${id}', this.value)">
+              <span>to</span>
+              <input type="number" value="${maxValue}" placeholder="Max" onchange="updateScaleMax('${id}', this.value)">
+            </div>
+          </div>
+        `;
+      }
+      
+      questionCard.innerHTML = `
+        <div class="question-header">
+          <div>
+            <input type="text" value="${existingData?.text || ''}" placeholder="Question text" onchange="updateQuestionText('${id}', this.value)">
+          </div>
+          <button type="button" class="remove-btn" onclick="removeQuestion('${id}')">Remove</button>
+        </div>
+        
+        <div class="form-group">
+          <label>Question Type</label>
+          <select onchange="changeQuestionType('${id}', this.value)">
+            <option value="text" ${type === 'text' ? 'selected' : ''}>Free Text</option>
+            <option value="single-choice" ${type === 'single-choice' ? 'selected' : ''}>Single Choice</option>
+            <option value="multiple-choice" ${type === 'multiple-choice' ? 'selected' : ''}>Multiple Choice</option>
+            <option value="scale" ${type === 'scale' ? 'selected' : ''}>Scale</option>
+          </select>
+        </div>
+        
+        ${optionsHTML}
+        ${scaleHTML}
+        
+        <div class="checkbox-group">
+          <input type="checkbox" id="required_${id}" ${existingData?.required ? 'checked' : ''} onchange="updateQuestionRequired('${id}', this.checked)">
+          <label for="required_${id}" style="margin: 0;">Make this question required</label>
+        </div>
+      `;
+      
+      questionsList.appendChild(questionCard);
+      questionCount++;
+    }
+    
+    function removeQuestion(id) {
+      document.getElementById(`question_${id}`).remove();
+    }
+    
+    function updateQuestionText(id, text) {
+      // Data is stored in form state
+    }
+    
+    function updateQuestionRequired(id, required) {
+      // Data is stored in form state
+    }
+    
+    function changeQuestionType(id, newType) {
+      const card = document.getElementById(`question_${id}`);
+      const text = card.querySelector('input[type="text"]').value;
+      const required = card.querySelector('input[type="checkbox"]').checked;
+      const existingData = { text, required, type: newType };
+      
+      // Get the position to insert the new question
+      const questionsList = document.getElementById('questionsList');
+      const oldIndex = Array.from(questionsList.children).indexOf(card);
+      
+      // Remove the old question
+      card.remove();
+      
+      // Create the new question with the new type
+      const newId = `q_${Date.now()}_${Math.random()}`;
+      const questionCard = document.createElement('div');
+      questionCard.className = 'question-card new';
+      questionCard.id = `question_${newId}`;
+      
+      let optionsHTML = '';
+      if (newType === 'single-choice' || newType === 'multiple-choice') {
+        const options = existingData?.options || [{ id: 'opt_1', label: 'Option 1' }, { id: 'opt_2', label: 'Option 2' }];
+        optionsHTML = `
+          <div class="form-group">
+            <label>Options</label>
+            <div class="options-list" id="options_${newId}">
+              ${options.map((opt, idx) => `
+                <div class="option-item">
+                  <input type="text" value="${opt.label}" placeholder="Option" onchange="updateOption('${newId}', ${idx}, this.value)">
+                  <button type="button" class="option-remove" onclick="removeOption('${newId}', ${idx})">Remove</button>
+                </div>
+              `).join('')}
+            </div>
+            <button type="button" class="add-option-btn" onclick="addOption('${newId}')">+ Add Option</button>
+          </div>
+        `;
+      }
+      
+      let scaleHTML = '';
+      if (newType === 'scale') {
+        const minValue = existingData?.minValue || 1;
+        const maxValue = existingData?.maxValue || 5;
+        scaleHTML = `
+          <div class="form-group">
+            <label>Scale Range</label>
+            <div class="scale-inputs">
+              <input type="number" value="${minValue}" placeholder="Min" onchange="updateScaleMin('${newId}', this.value)">
+              <span>to</span>
+              <input type="number" value="${maxValue}" placeholder="Max" onchange="updateScaleMax('${newId}', this.value)">
+            </div>
+          </div>
+        `;
+      }
+      
+      questionCard.innerHTML = `
+        <div class="question-header">
+          <div>
+            <input type="text" value="${existingData?.text || ''}" placeholder="Question text" onchange="updateQuestionText('${newId}', this.value)">
+          </div>
+          <button type="button" class="remove-btn" onclick="removeQuestion('${newId}')">Remove</button>
+        </div>
+        
+        <div class="form-group">
+          <label>Question Type</label>
+          <select onchange="changeQuestionType('${newId}', this.value)">
+            <option value="text" ${newType === 'text' ? 'selected' : ''}>Free Text</option>
+            <option value="single-choice" ${newType === 'single-choice' ? 'selected' : ''}>Single Choice</option>
+            <option value="multiple-choice" ${newType === 'multiple-choice' ? 'selected' : ''}>Multiple Choice</option>
+            <option value="scale" ${newType === 'scale' ? 'selected' : ''}>Scale</option>
+          </select>
+        </div>
+        
+        ${optionsHTML}
+        ${scaleHTML}
+        
+        <div class="checkbox-group">
+          <input type="checkbox" id="required_${newId}" ${existingData?.required ? 'checked' : ''} onchange="updateQuestionRequired('${newId}', this.checked)">
+          <label for="required_${newId}" style="margin: 0;">Make this question required</label>
+        </div>
+      `;
+      
+      // Insert at the same position
+      if (oldIndex >= 0 && oldIndex < questionsList.children.length) {
+        questionsList.insertBefore(questionCard, questionsList.children[oldIndex]);
+      } else {
+        questionsList.appendChild(questionCard);
+      }
+    }
+    
+    function addOption(questionId) {
+      const optionsList = document.getElementById(`options_${questionId}`);
+      const optionCount = optionsList.children.length;
+      const optionItem = document.createElement('div');
+      optionItem.className = 'option-item';
+      optionItem.innerHTML = `
+        <input type="text" placeholder="Option" onchange="updateOption('${questionId}', ${optionCount}, this.value)">
+        <button type="button" class="option-remove" onclick="removeOption('${questionId}', ${optionCount})">Remove</button>
+      `;
+      optionsList.appendChild(optionItem);
+    }
+    
+    function removeOption(questionId, optionIndex) {
+      const optionsList = document.getElementById(`options_${questionId}`);
+      optionsList.children[optionIndex].remove();
+    }
+    
+    function updateOption(questionId, optionIndex, value) {
+      // Data is stored in form state
+    }
+    
+    function updateScaleMin(questionId, value) {
+      // Data is stored in form state
+    }
+    
+    function updateScaleMax(questionId, value) {
+      // Data is stored in form state
+    }
+    
+    function getFormData() {
+      const title = document.getElementById('surveyTitle').value;
+      const description = document.getElementById('surveyDescription').value;
+      const questions = [];
+      
+      document.querySelectorAll('.question-card').forEach(card => {
+        const inputs = card.querySelectorAll('input[type="text"]');
+        const select = card.querySelector('select');
+        const checkbox = card.querySelector('input[type="checkbox"]');
+        
+        const questionText = inputs[0].value;
+        const questionType = select.value;
+        const required = checkbox.checked;
+        
+        const question = {
+          text: questionText,
+          type: questionType,
+          required
+        };
+        
+        if (questionType === 'single-choice' || questionType === 'multiple-choice') {
+          const optionsContainer = card.querySelector('.options-list');
+          question.options = Array.from(optionsContainer.querySelectorAll('input[type="text"]')).map((inp, idx) => ({
+            id: `opt_${idx}`,
+            label: inp.value
+          }));
+        }
+        
+        if (questionType === 'scale') {
+          const scaleInputs = card.querySelectorAll('.scale-inputs input[type="number"]');
+          question.minValue = parseInt(scaleInputs[0].value) || 1;
+          question.maxValue = parseInt(scaleInputs[1].value) || 5;
+        }
+        
+        questions.push(question);
+      });
+      
+      return { title, description, questions };
+    }
+    
+    document.getElementById('surveyForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const data = getFormData();
+      
+      if (!data.title) {
+        showError('Please enter a survey title');
+        return;
+      }
+      
+      if (data.questions.length === 0) {
+        showError('Please add at least one question');
+        return;
+      }
+      
+      for (const q of data.questions) {
+        if (!q.text) {
+          showError('All questions must have text');
+          return;
+        }
+        if ((q.type === 'single-choice' || q.type === 'multiple-choice') && q.options.length < 2) {
+          showError('Choice questions must have at least 2 options');
+          return;
+        }
+      }
+      
+      try {
+        const response = await fetch('/api/surveys', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Failed to create survey');
+        }
+        
+        const result = await response.json();
+        showSuccess(result);
+      } catch (error) {
+        showError(error.message);
+      }
+    });
+    
+    function showError(message) {
+      const errorDiv = document.getElementById('errorMessage');
+      if (errorDiv) {
+        errorDiv.textContent = message;
+        errorDiv.classList.add('show');
+        setTimeout(() => errorDiv.classList.remove('show'), 5000);
+      } else {
+        console.error('Error:', message);
+        alert(message);
+      }
+    }
+    
+    function showSuccess(result) {
+      document.getElementById('surveyForm').style.display = 'none';
+      const resultDiv = document.getElementById('resultDetails');
+      document.getElementById('resultText').textContent = `Your survey has been created! Share it using the links below.`;
+      document.getElementById('clientLink').href = result.clientUrl;
+      document.getElementById('adminLink').href = result.adminUrl;
+      resultDiv.classList.add('show');
+    }
+    
+    // Initialize with one empty question
+    addQuestion();
+
+    // Dark mode toggle
+    const themeToggle = document.getElementById('theme-toggle');
+
+    // Check for saved preference or system preference
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      document.body.classList.add('dark-mode');
+      themeToggle.checked = true;
+    }
+
+    themeToggle.addEventListener('change', function() {
+      if (this.checked) {
+        document.body.classList.add('dark-mode');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.body.classList.remove('dark-mode');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+  </script>
+</body>
+</html>

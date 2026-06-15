@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Survey Results - SaySomething</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f5f7fa;
+      padding: 20px;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    
+    .header h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    
+    .header p {
+      opacity: 0.9;
+      font-size: 1.1rem;
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .loading,
+    .error {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .error {
+      background: #fee2e2;
+      border: 1px solid #fca5a5;
+      color: #7f1d1d;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: white;
+      border: 2px solid #667eea;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .stat-card .number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #667eea;
+    }
+    
+    .stat-card .label {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 8px;
+    }
+    
+    .results-section {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .results-section h2 {
+      color: #333;
+      margin-bottom: 25px;
+      font-size: 1.5rem;
+      border-bottom: 3px solid #667eea;
+      padding-bottom: 15px;
+    }
+    
+    .question-results {
+      margin-bottom: 40px;
+    }
+    
+    .question-results h3 {
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .question-type-badge {
+      background: #667eea;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .option-result {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      gap: 15px;
+    }
+    
+    .option-label {
+      min-width: 150px;
+      font-weight: 500;
+      color: #333;
+      word-wrap: break-word;
+    }
+    
+    .option-bar {
+      flex: 1;
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 35px;
+      position: relative;
+      overflow: hidden;
+      min-width: 200px;
+    }
+    
+    .option-bar-fill {
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 12px;
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: width 0.3s ease;
+    }
+    
+    .option-count {
+      min-width: 80px;
+      text-align: right;
+      color: #666;
+      font-weight: 600;
+    }
+    
+    .scale-results {
+      background: #f9fafb;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+    
+    .scale-stat {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      color: #333;
+      font-size: 1.05rem;
+    }
+    
+    .scale-stat span:last-child {
+      font-weight: 600;
+      color: #667eea;
+    }
+    
+    .text-responses {
+      background: #f9fafb;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    
+    .text-response {
+      background: white;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-left: 4px solid #667eea;
+      border-radius: 4px;
+      color: #333;
+      line-height: 1.6;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    
+    .text-response:last-child {
+      margin-bottom: 0;
+    }
+    
+    .no-data {
+      text-align: center;
+      color: #999;
+      padding: 30px;
+      background: #f9fafb;
+      border-radius: 8px;
+      border: 2px dashed #ddd;
+    }
+    
+    .refresh-section {
+      text-align: center;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .refresh-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+    
+    .refresh-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    @media (max-width: 768px) {
+      .option-result {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .option-bar {
+        width: 100%;
+      }
+      
+      .option-label {
+        min-width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>📈 Survey Results</h1>
+    <p>Live results for your survey</p>
+  </div>
+  
+  <div class="container">
+    <div id="content">
+      <div class="loading">Loading results...</div>
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="refresh-section">
+      <button class="refresh-btn" onclick="refreshData()">🔄 Refresh Results</button>
+    </div>
+  </div>
+  
+  <script>
+    let surveyId = null;
+    let adminToken = null;
+    let autoRefresh = null;
+    
+    // Extract survey ID and token from URL
+    const urlParts = window.location.pathname.split('/');
+    surveyId = urlParts[urlParts.length - 1];
+    adminToken = new URLSearchParams(window.location.search).get('token');
+    
+    async function loadResults() {
+      try {
+        const url = adminToken
+          ? `/api/surveys/${surveyId}/results?token=${adminToken}`
+          : `/api/surveys/${surveyId}/results`;
+        
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error('Unable to load results');
+        }
+        
+        const results = await response.json();
+        renderResults(results);
+      } catch (error) {
+        document.getElementById('content').innerHTML = `<div class="error">Error: ${error.message}</div>`;
+      }
+    }
+    
+    function renderResults(results) {
+      let html = `
+        <div class="stats">
+          <div class="stat-card">
+            <div class="number">${results.totalResponses}</div>
+            <div class="label">Total Responses</div>
+          </div>
+          <div class="stat-card">
+            <div class="number">${results.questions.length}</div>
+            <div class="label">Questions</div>
+          </div>
+        </div>
+        
+        <div class="results-section">
+          <h2>${escapeHtml(results.title)}</h2>
+      `;
+      
+      if (results.totalResponses === 0) {
+        html += '<div class="no-data">📊 No responses yet. Share your survey link to start collecting data!</div>';
+      } else {
+        results.questions.forEach(question => {
+          html += `
+            <div class="question-results">
+              <h3>
+                ${escapeHtml(question.text)}
+                <span class="question-type-badge">${question.type}</span>
+              </h3>
+          `;
+          
+          switch (question.type) {
+            case 'text':
+              if (question.responses.length === 0) {
+                html += '<div class="no-data">No responses</div>';
+              } else {
+                html += '<div class="text-responses">';
+                question.responses.forEach(response => {
+                  html += `<div class="text-response">${escapeHtml(response)}</div>`;
+                });
+                html += '</div>';
+              }
+              break;
+            
+            case 'single-choice':
+            case 'multiple-choice':
+              const totalVotes = question.options.reduce((sum, opt) => sum + opt.count, 0);
+              if (totalVotes === 0) {
+                html += '<div class="no-data">No responses</div>';
+              } else {
+                html += '<div>';
+                question.options.forEach(option => {
+                  const percentage = ((option.count / totalVotes) * 100).toFixed(1);
+                  html += `
+                    <div class="option-result">
+                      <div class="option-label">${escapeHtml(option.label)}</div>
+                      <div class="option-bar">
+                        <div class="option-bar-fill" style="width: ${percentage}%">${percentage}%</div>
+                      </div>
+                      <div class="option-count">${option.count} vote${option.count !== 1 ? 's' : ''}</div>
+                    </div>
+                  `;
+                });
+                html += '</div>';
+              }
+              break;
+            
+            case 'scale':
+              if (question.average !== null) {
+                html += `
+                  <div class="scale-results">
+                    <div class="scale-stat">
+                      <span>Average Score:</span>
+                      <span>${question.average}</span>
+                    </div>
+                    <div class="scale-stat">
+                      <span>Total Responses:</span>
+                      <span>${question.values.length}</span>
+                    </div>
+                  </div>
+                `;
+              } else {
+                html += '<div class="no-data">No responses</div>';
+              }
+              break;
+          }
+          
+          html += '</div>';
+        });
+      }
+      
+      html += '</div>';
+      
+      document.getElementById('content').innerHTML = html;
+    }
+    
+    function refreshData() {
+      loadResults();
+    }
+    
+    function escapeHtml(text) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+    
+    // Initial load
+    loadResults();
+    
+    // Auto-refresh every 5 seconds
+    autoRefresh = setInterval(loadResults, 5000);
+    
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+      if (autoRefresh) clearInterval(autoRefresh);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+:root {
+  --app-bg: #6d6d6d;
+  --frame: #f3f0e9;
+  --surface: #ffffff;
+  --line: #cfc7bb;
+  --ink: #111111;
+  --muted: #58544f;
+  --accent: #c61d28;
+  --accent-dark: #a91620;
+  --danger-bg: #f5e6e8;
+  --danger-line: #d8afb5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--app-bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+button {
+  border: 1px solid transparent;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.site-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 18px;
+  padding: 18px;
+}
+
+.app-header {
+  display: none;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 18px;
+  min-height: 68px;
+  padding: 0 20px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--frame);
+}
+
+.site-shell.is-live .app-header {
+  display: flex;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.brand-lockup {
+  display: grid;
+  gap: 18px;
+  justify-items: start;
+}
+
+.header-logo {
+  width: 92px;
+  height: auto;
+  display: block;
+}
+
+.brand-logo {
+  width: min(320px, 100%);
+  height: auto;
+  display: block;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.app-main {
+  min-height: calc(100vh - 36px);
+  display: grid;
+}
+
+.site-shell.is-live .app-main {
+  min-height: 0;
+}
+
+.launch-screen {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.site-shell.is-live .launch-screen {
+  display: none;
+}
+
+.launch-card {
+  width: min(760px, 100%);
+  display: grid;
+  gap: 26px;
+  padding: 36px 40px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--frame);
+}
+
+.lede {
+  margin: 0;
+  max-width: 34rem;
+  color: #3c3834;
+  font-size: clamp(1.2rem, 2vw, 1.45rem);
+  line-height: 1.55;
+}
+
+.launch-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.launch-actions button {
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.launch-actions .primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.launch-actions .primary:hover {
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
+}
+
+.launch-actions .secondary:hover {
+  background: #f7f4ee;
+}
+
+.launch-actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.launch-progress {
+  width: min(360px, 100%);
+  height: 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  background: #ece7dd;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.launch-progress-bar {
+  width: 0;
+  height: 100%;
+  background: var(--accent);
+  transition: width 260ms ease, background-color 180ms ease;
+}
+
+body[data-launch-state='booting'] .launch-progress,
+body[data-launch-state='error'] .launch-progress {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+body[data-launch-state='error'] .launch-progress-bar {
+  background: #b3404a;
+}
+
+.portal-stage {
+  display: none;
+  min-height: 0;
+}
+
+.site-shell.is-live .portal-stage {
+  display: block;
+}
+
+.portal {
+  width: 100%;
+  min-height: calc(100vh - 122px);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--frame);
+}
+
+.console-mount {
+  display: none;
+}
+
+.is-hidden,
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 900px) {
+  .site-shell {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .app-main {
+    min-height: calc(100vh - 24px);
+  }
+
+  .launch-card {
+    padding: 28px 24px;
+    border-radius: 20px;
+  }
+
+  .brand-lockup,
+  .header-brand {
+    gap: 14px;
+  }
+
+  .header-logo {
+    width: 74px;
+  }
+
+  .brand-logo {
+    width: min(240px, 100%);
+  }
+
+  .app-header {
+    min-height: 60px;
+    padding: 0 14px;
+  }
+
+  .portal {
+    min-height: calc(100vh - 96px);
+    border-radius: 14px;
+  }
+}

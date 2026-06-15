@@ -1,0 +1,145 @@
+@import "./ui-base.css";
+
+.page {
+  grid-template-rows: auto auto 1fr;
+}
+
+.topbar {
+  padding: 18px 22px;
+}
+
+.topbar h1 {
+  letter-spacing: 0.02em;
+}
+
+.topbar p {
+  max-width: 70ch;
+}
+
+.topbar code {
+  color: var(--ok);
+}
+
+.toolbar {
+  border-bottom: 1px solid var(--line);
+  padding: 12px 22px;
+  display: flex;
+  gap: 16px;
+  align-items: end;
+  justify-content: space-between;
+  background: #0a0a0a;
+}
+
+.search-wrap {
+  display: grid;
+  gap: 6px;
+  min-width: min(100%, 420px);
+}
+
+.search-wrap span {
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.search-wrap input {
+  border: 1px solid var(--line-strong);
+  background: #101010;
+  color: var(--fg);
+  font: inherit;
+  padding: 8px 10px;
+}
+
+.search-wrap input:focus {
+  outline: 1px solid var(--accent);
+  border-color: var(--accent);
+}
+
+.search-meta {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.cheat-grid {
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  align-content: start;
+}
+
+.cheat-card {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.cheat-card h2 {
+  margin: 0;
+  padding: 12px 12px 10px;
+  border-bottom: 1px solid var(--line);
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+}
+
+.cheat-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.cheat-table tr {
+  border-bottom: 1px solid #1d1d1d;
+}
+
+.cheat-table tr:last-child {
+  border-bottom: none;
+}
+
+.cheat-table td {
+  vertical-align: top;
+  padding: 9px 12px;
+  line-height: 1.45;
+}
+
+.cheat-table td:first-child {
+  width: 44%;
+  color: #d8d8d8;
+}
+
+.cheat-table td:last-child {
+  color: #c3c3c3;
+}
+
+code {
+  color: var(--accent);
+  font-size: 0.94em;
+}
+
+tr[data-match="true"] {
+  background: var(--accent-soft);
+}
+
+@media (max-width: 860px) {
+  .topbar,
+  .toolbar {
+    padding: 14px;
+  }
+
+  .topbar {
+    flex-direction: column;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-wrap {
+    min-width: 0;
+  }
+
+  .cheat-grid {
+    padding: 12px;
+    grid-template-columns: 1fr;
+  }
+}

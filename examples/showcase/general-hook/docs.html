@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GENERAL HOOK — DOCS</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/style.css" />
+  <script>if(localStorage.getItem('general-hook:theme')==='light')document.body.classList.add('light');</script>
+  </head>
+  <body>
+    <div class="app">
+
+      <div class="spectrum-stripe"></div>
+
+      <header>
+        <div class="header-left">
+          <img src="/pirate.png" alt="" class="header-mascot" onerror="this.style.display='none'" />
+          <div class="header-title-block">
+            <h1>GENERAL HOOK</h1>
+            <p class="subtitle">DOCUMENTATION</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <a href="/" class="docs-back">&#x2190; BACK</a>
+        </div>
+      </header>
+
+      <!-- What is General Hook -->
+      <div class="card docs-section">
+        <h2>WHAT IS GENERAL HOOK?</h2>
+        <p>
+          General Hook runs a real Node.js server directly in your browser using WebAssembly.
+          No installs, no cloud accounts, no ports to forward. Click RUN and you get a live
+          public URL in seconds — share it, test against it, paste it into webhook settings.
+        </p>
+        <p>Use it when you need to:</p>
+        <ul>
+          <li>Mock an API your frontend talks to before the backend is built</li>
+          <li>Test webhook integrations without deploying anything</li>
+          <li>Prototype API shapes and generate an OpenAPI spec to hand off</li>
+          <li>Replay and inspect real traffic captured from a browser session</li>
+        </ul>
+      </div>
+
+      <!-- Builder -->
+      <div class="card docs-section">
+        <h2>BUILDER TAB</h2>
+        <p>
+          Define routes manually. Each route needs an HTTP method, a path, and a status code.
+          The response body defaults to an empty object — click <strong>Edit body</strong> to set
+          the exact JSON that endpoint will return.
+        </p>
+        <h3>Adding a route</h3>
+        <ul>
+          <li>Click <strong>+ ADD</strong> and fill in the method, path (must start with /), and status</li>
+          <li>Click <strong>ADD</strong> to save it to the list</li>
+          <li>Click <strong>Edit body</strong> on any row to open the JSON editor</li>
+          <li>Click <strong>&#x2715;</strong> to remove a route</li>
+        </ul>
+        <h3>Tips</h3>
+        <ul>
+          <li>Status 201 is conventional for POST routes that create resources</li>
+          <li>Status 204 means no response body (the server will still send one, but clients ignore it)</li>
+          <li>You can add multiple routes to the same path with different methods</li>
+        </ul>
+      </div>
+
+      <!-- Upload -->
+      <div class="card docs-section">
+        <h2>UPLOAD TAB</h2>
+        <p>
+          Got an existing spec or export? Drop it in. General Hook detects the format automatically
+          and extracts all routes — no manual entry needed.
+        </p>
+
+        <h3>Format Reference</h3>
+        <table class="docs-format-table">
+          <thead>
+            <tr>
+              <th>FORMAT</th>
+              <th>EXTENSIONS</th>
+              <th>NOTES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>OpenAPI 3.x</td>
+              <td>.yaml, .yml, .json</td>
+              <td>Extracts first 2xx response per operation. Uses <code>example</code> fields or <code>x-mock-response</code> for bodies.</td>
+            </tr>
+            <tr>
+              <td>Swagger 2.0</td>
+              <td>.json, .yaml</td>
+              <td>Respects <code>basePath</code>. Extracts response examples from the <code>examples</code> key or <code>schema.example</code>.</td>
+            </tr>
+            <tr>
+              <td>Postman Collection</td>
+              <td>.json</td>
+              <td>Supports v2.x collections including nested folders. Uses the first saved response example for the body and status.</td>
+            </tr>
+            <tr>
+              <td>Insomnia Export</td>
+              <td>.json</td>
+              <td>Supports v4 exports. Extracts method and path from each request resource. Bodies default to empty.</td>
+            </tr>
+            <tr>
+              <td>HAR</td>
+              <td>.har, .json</td>
+              <td>Captures real browser traffic. Deduplicates by method + path (first occurrence wins). Only JSON responses are used as bodies.</td>
+            </tr>
+            <tr>
+              <td>routes.json</td>
+              <td>.json</td>
+              <td>A plain JSON array of <code>{ method, path, status, body }</code> objects. Simplest format for hand-crafted mocks.</td>
+            </tr>
+            <tr>
+              <td>Server file</td>
+              <td>.js</td>
+              <td>A raw Express server file. Runs as-is inside the pod. Must listen on port 3000.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Test files</h3>
+        <p>
+          Sample files for every format are available in <code>/test-files/</code> on the dev server.
+          Download them to test the upload flow end-to-end.
+        </p>
+        <ul>
+          <li><a class="btn-ghost" href="/test-files/openapi3.yaml" download>openapi3.yaml</a> — OpenAPI 3.0.3 Petstore</li>
+          <li><a class="btn-ghost" href="/test-files/swagger2.json" download>swagger2.json</a> — Swagger 2.0 Bookstore</li>
+          <li><a class="btn-ghost" href="/test-files/postman.json" download>postman.json</a> — Postman Collection v2.1</li>
+          <li><a class="btn-ghost" href="/test-files/insomnia.json" download>insomnia.json</a> — Insomnia Export v4</li>
+          <li><a class="btn-ghost" href="/test-files/capture.har" download>capture.har</a> — HAR capture (Shop API)</li>
+          <li><a class="btn-ghost" href="/test-files/routes.json" download>routes.json</a> — Raw routes array</li>
+        </ul>
+      </div>
+
+      <!-- Gen Spec -->
+      <div class="card docs-section">
+        <h2>GEN SPEC TAB</h2>
+        <p>
+          Build an OpenAPI 3.0 YAML specification from scratch. The preview updates live as you
+          add endpoints and edit bodies. Use this to produce a spec you can hand off to your team,
+          import into Postman, or feed to code generators.
+        </p>
+        <h3>Workflow</h3>
+        <ul>
+          <li>Set your API title and version at the top</li>
+          <li>Add endpoints the same way as the Builder tab — method, path, status, optional summary</li>
+          <li>Click <strong>Edit body</strong> on any endpoint to set the example response JSON</li>
+          <li>The YAML preview on the right updates immediately</li>
+          <li>Click <strong>COPY</strong> to copy the YAML to your clipboard</li>
+          <li>Click <strong>DOWNLOAD</strong> to save it as <code>openapi.yaml</code></li>
+        </ul>
+        <h3>Running the spec</h3>
+        <p>
+          Clicking RUN while on the Gen Spec tab boots a mock server using the spec's routes.
+          Equivalent to building in the Builder tab then running — just with the extra YAML output.
+        </p>
+      </div>
+
+      <!-- Webhooks -->
+      <div class="card docs-section">
+        <h2>WEBHOOKS TAB</h2>
+        <p>
+          Boots a dedicated webhook receiver — a server that captures every incoming HTTP request
+          and logs it to a live dashboard. No routes to configure, no JSON to write.
+        </p>
+        <h3>How to use it</h3>
+        <ul>
+          <li>Switch to the Webhooks tab and click <strong>RUN</strong></li>
+          <li>Copy the public URL from the portal card</li>
+          <li>Paste it into the webhook settings of any service (GitHub, Stripe, Slack, etc.)</li>
+          <li>Open the URL in a browser to see the live request dashboard</li>
+          <li>Every request appears in real time — method, path, headers, body</li>
+        </ul>
+        <h3>Example: GitHub webhook</h3>
+        <code class="docs-code">1. Go to your repo → Settings → Webhooks → Add webhook
+2. Paste the General Hook URL into "Payload URL"
+3. Set Content type to application/json
+4. Choose which events to send
+5. Click Add webhook — GitHub will send a ping immediately
+6. Open the dashboard URL to see the ping payload</code>
+      </div>
+
+      <!-- How it works -->
+      <div class="card docs-section">
+        <h2>HOW IT WORKS</h2>
+        <p>
+          General Hook uses <strong>BrowserPod</strong> — a WebAssembly runtime that runs Node.js 22
+          directly in your browser tab. When you click RUN:
+        </p>
+        <ul>
+          <li>A Node.js environment boots inside your browser (via CheerpOS/WASM)</li>
+          <li>Your routes or server file are written into the pod's virtual filesystem</li>
+          <li>npm install runs inside the pod to fetch Express</li>
+          <li>The Express server starts on port 3000 inside the pod</li>
+          <li>BrowserPod tunnels that port to a public URL via its portal system</li>
+        </ul>
+        <p>
+          Nothing runs on an external server. The Node.js process lives inside your browser tab.
+          Closing the tab stops the server.
+        </p>
+      </div>
+
+      <div class="spectrum-footer">
+        (C) 1982 GENERAL HOOK LTD &nbsp;&nbsp; 48K RAM &nbsp;&nbsp; PRESS SPACE TO CONTINUE
+      </div>
+
+    </div>
+  </body>
+</html>

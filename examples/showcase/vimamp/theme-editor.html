@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vim Theme Editor</title>
+    <link rel="icon" type="image/svg+xml" href="/VimPod.svg" />
+    <link rel="stylesheet" href="/src/theme-editor.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <div>
+          <h1>Vim Theme Editor</h1>
+          <p>
+            Tune colors, typography, and editor flags, preview the result, then save the
+            session profile for Vim.
+          </p>
+        </div>
+        <div class="topbar-actions">
+          <a class="link-btn" href="/">Back to Vim</a>
+        </div>
+      </header>
+
+      <section class="layout">
+        <aside class="panel controls-panel">
+          <div class="panel-head">
+            <h2>Theme Controls</h2>
+            <p id="themeStatus" class="status-text">Initializing...</p>
+          </div>
+
+          <section class="group">
+            <h3>Era Templates</h3>
+            <div class="template-picker">
+              <label>
+                Choose template
+                <select id="themeTemplateSelect"></select>
+              </label>
+              <button id="applyThemeTemplateBtn" type="button">Apply Template</button>
+            </div>
+            <p id="themeTemplateInfo" class="template-info"></p>
+          </section>
+
+          <section class="group">
+            <h3>Core Palette</h3>
+            <div class="field-grid">
+              <label>Background <input data-theme-key="background" type="color" /></label>
+              <label>Foreground <input data-theme-key="foreground" type="color" /></label>
+              <label>Accent <input data-theme-key="accent" type="color" /></label>
+              <label>Cursor <input data-theme-key="cursor" type="color" /></label>
+              <label>Visual Select <input data-theme-key="visualBackground" type="color" /></label>
+              <label>Cursor Line <input data-theme-key="cursorLineBackground" type="color" /></label>
+              <label>Line Number <input data-theme-key="lineNumber" type="color" /></label>
+              <label>Current Line No. <input data-theme-key="lineNumberCurrent" type="color" /></label>
+              <label>Statusline BG <input data-theme-key="statusLineBackground" type="color" /></label>
+              <label>Statusline FG <input data-theme-key="statusLineForeground" type="color" /></label>
+              <label>StatuslineNC BG <input data-theme-key="statusLineNCBackground" type="color" /></label>
+              <label>StatuslineNC FG <input data-theme-key="statusLineNCForeground" type="color" /></label>
+              <label>Split Border <input data-theme-key="splitLine" type="color" /></label>
+            </div>
+          </section>
+
+          <section class="group">
+            <h3>Syntax Colors</h3>
+            <div class="field-grid">
+              <label>Keyword <input data-theme-key="keywordColor" type="color" /></label>
+              <label>String <input data-theme-key="stringColor" type="color" /></label>
+              <label>Number <input data-theme-key="numberColor" type="color" /></label>
+              <label>Function <input data-theme-key="functionColor" type="color" /></label>
+              <label>Type <input data-theme-key="typeColor" type="color" /></label>
+              <label>Comment <input data-theme-key="commentColor" type="color" /></label>
+            </div>
+          </section>
+
+          <section class="group">
+            <h3>Typography and Spacing</h3>
+            <div class="field-grid">
+              <label>
+                Font Family
+                <select data-theme-key="fontFamily" id="fontFamilySelect"></select>
+              </label>
+              <label>
+                Font Size
+                <input data-theme-key="fontSize" type="number" min="11" max="28" step="1" />
+              </label>
+              <label>
+                Line Height
+                <input data-theme-key="lineHeight" type="number" min="1" max="2.2" step="0.05" />
+              </label>
+              <label>
+                Tab Stop
+                <input data-theme-key="tabStop" type="number" min="1" max="12" step="1" />
+              </label>
+              <label>
+                Shift Width
+                <input data-theme-key="shiftWidth" type="number" min="1" max="12" step="1" />
+              </label>
+            </div>
+          </section>
+
+          <section class="group">
+            <h3>Editor Behavior</h3>
+            <div class="check-grid">
+              <label><input data-theme-key="number" type="checkbox" /> Show line numbers</label>
+              <label><input data-theme-key="relativeNumber" type="checkbox" /> Relative line numbers</label>
+              <label><input data-theme-key="cursorLine" type="checkbox" /> Highlight current line</label>
+              <label><input data-theme-key="wrap" type="checkbox" /> Wrap long lines</label>
+              <label><input data-theme-key="list" type="checkbox" /> Show whitespace markers</label>
+              <label><input data-theme-key="expandTab" type="checkbox" /> Expand tab to spaces</label>
+              <label><input data-theme-key="showMode" type="checkbox" /> Show mode text</label>
+              <label><input data-theme-key="showCommand" type="checkbox" /> Show command feedback</label>
+              <label><input data-theme-key="ignoreCase" type="checkbox" /> Ignore case in search</label>
+              <label><input data-theme-key="smartCase" type="checkbox" /> Smart case search</label>
+              <label><input data-theme-key="highlightSearch" type="checkbox" /> Highlight search matches</label>
+            </div>
+          </section>
+
+          <div class="button-row">
+            <button id="reloadThemeBtn" type="button">Reload Saved</button>
+            <button id="resetThemeBtn" type="button">Reset Defaults</button>
+            <button id="saveThemeBtn" type="button">Save Theme</button>
+          </div>
+        </aside>
+
+        <section class="panel preview-panel">
+          <div class="panel-head">
+            <h2>Live Vim Preview</h2>
+            <p>Changes render instantly. Save when you are happy with this look.</p>
+          </div>
+
+          <div id="vimPreview" class="vim-preview">
+            <div id="previewCodeArea" class="preview-code-area">
+              <div id="previewNumbers" class="preview-numbers" aria-hidden="true"></div>
+              <pre id="previewCode" class="preview-code"></pre>
+            </div>
+            <div id="previewStatusline" class="preview-statusline"></div>
+          </div>
+
+          <div class="panel-head vimrc-head">
+            <h2>Generated Vim Config</h2>
+            <p>This is what gets appended to runtime vimrc for this session.</p>
+          </div>
+          <pre id="vimrcPreview" class="vimrc-preview"></pre>
+        </section>
+      </section>
+
+      <div id="podTerminalHost" class="pod-terminal-host" aria-hidden="true"></div>
+    </main>
+
+    <script type="module" src="/src/theme-editor-page.js"></script>
+  </body>
+</html>

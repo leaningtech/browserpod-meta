@@ -1,0 +1,499 @@
+﻿Browserpod document
+BrowserPod: Development environments in your browser[a]
+Run Node.js projects in your browser, unmodified (Python, Ruby, and more coming in the future).[b]
+
+
+Access the local http server in the same page or from another tab to view, test, and iterate; or share it with others, thanks to Portals.
+
+
+See it in action in our SvelteKit+Vite demo: https://vitedemo.browserpod.io/
+What can it do
+Project showcase
+Run a demo of your project directly in the user's browser, without any explicit setup or installation, and secured by the browser's sandbox.
+Interactive documentation / tutorials
+Enrich your documentation and tutorials with interactive components, without the need for any server-side infrastructure.
+AI Agents environment
+Let AI assistants and Agents run loose on your project, but isolated from the rest of your system.
+How to use it
+BrowserPod has a simple yet powerful API.
+
+
+You can get up an running with few simple steps.
+
+
+First, you need to boot your pod:
+
+
+const pod = await BrowserPod.boot({ apiKey:"...", nodeVersion:"22", /*...*/});
+	
+
+Then, you need to add your project's files to the pod. Currently, you need to fetch the contents yourself, and re-create the directory structure inside the pod's filesystem. We will add more convenient setup methods in the future:
+
+
+
+
+
+
+await pod.createDirectory("/project");
+for await (const f of myfiles) {
+ const response = await fetch(f.url);
+ const buffer = await response.arrayBuffer();
+ const fd = await pod.createFile(f.path);
+ fd.write(buffer);
+ fd.close();
+}
+	
+
+
+
+Then, run any setup step required to initialize your project:
+
+
+await pod.run("npm", ["install"], { cwd: "/project" });
+	
+
+And finally, run the dev server (or whatever workload your project provides):
+await pod.run("npm", ["run", "dev"], { cwd: "/project" });
+	
+
+Listening ports are associated with a Portal, which you can embed in the page with an IFrame, or visit from another Tab, or even another device, anywhere in the World.
+To get notified when a portal is created, do:
+
+
+pod.onPortal(({url, port} => { /*...load iframe...*/ });
+	How does it work
+BrowserPod is built on top of CheerpOS, an Operating System interface that provides the Linux syscall interface to Wasm programs running in the Browser.
+
+
+BrowserPod ships with a build of Node.js that targets CheerpOS.
+
+
+Instead of using an embedded V8 engine to run JavaScript, the Browser's engine is used instead.
+
+
+This allows BrowserPod to run your JavaScript code at native speed.
+
+
+Everything else (Node's builtin JS modules, libuv, and Node's internal C++ code) stays the same, to guarantee maximum compatibility.
+
+
+Multiple versions of Node will be supported, and we plan to support new LTS versions in a timely manner.
+
+
+Using the same foundation, we plan to support other languages and frameworks, like Python and Ruby (including Ruby on Rails).
+FAQ
+Q: Who can use BrowserPod?[c]
+A:
+
+
+Q: What is BrowserPod's license?[d]
+A:
+
+
+Q: What are the differences between BrowserPod and WebContainers?
+A: Both BrowserPod and WebContainers are technologies that enable running Node.js code in the Browser.
+
+
+WebContainers also supports running WASI applications, and ships a build of `python`, and a handful of utility programs like `jq`.
+BrowserPod, while initially focusing on Node.js, will soon add support support for Python and Ruby, and we plan to include useful program like git and curl.
+
+
+While the general architecture of the two product is similar, BrowserPod has a secret weapon: CheerpOS.
+Like WASI, CheerpOS is a system interface that applications can target, but unlike WASI its goal is to provide the full Linux kernel APIs, and allow as much code as possible to compile for the Web without modifications.
+
+
+BrowserPod allows a local web server to be accessed from different tabs on the same browser without the need to change Browser settings. The server can actually be accessed from anywhere in the World by sharing its Portal URL.
+
+
+Another important difference is the licensing and pricing models.[e] For example there is no restriction on the usage of BrowserPod as part of AI products.
+
+
+Q: What is a Portal?[f]
+A: All listening HTTP sockets inside a Pod are associated with a Portal: a unique subdomain of browserpod.io that allows anyone to connect to the server from the Internet.
+Clodflare Workers are used to proxy the traffic and serve it over HTTPS to the Internet.
+API reference
+
+
+
+
+class BrowserPod {
+ static async boot(opts?: { nodeVersion?: string, apiKey: string}): Promise<BrowserPod>;
+ async run(executable: string, args: Array<string>, opts?: { env?: Array<string>, cwd?: string}): Promise<Process>;
+ onPortal(cb: ({url: string, port: int}) => void): void;
+ async createDirectory(path: string, opts?: {recursive: boolean}): Promise<void>;
+ async createFile(path: string): Promise<FileHandle>;
+ async openFile(path: string): Promise<FileHandle>;  
+}
+class File {
+ async write(data: Uint8Array): Promise<int>;
+ async close(): Promise<void>;
+}
+class Process {
+}
+	
+
+	
+
+WebContainers experiments
+WebContainers experiments
+
+
+instance.spawn('ls') does work
+
+
+some info dump:
+COLORTERM=truecolor
+TERM=xterm-256color
+LSCOLORS=ExGxBxDxCxEgEdxbxgExEx
+PATH=/bin:/usr/bin:/usr/local/bin
+HOME=/home
+SHELL=/bin/jsh
+HISTFILE=/home/.jsh_history
+TMPDIR=/tmp
+CHROME_BIN=/usr/local/bin/google-chrome
+PWD=/home/o6bxcsujjostd05u0uy3hy1hihftfj-251k
+NEXT_TELEMETRY_DISABLED=1
+ASTRO_TELEMETRY_DISABLED=1
+__NEXT_DISABLE_MEMORY_WATCHER=1
+NG_CLI_ANALYTICS=false
+EDITOR=code
+
+
+/bin:
+bash     cp       jsh      ls       ps       rmdir    zsh      
+cat      echo     kill     mkdir    pwd      sh       
+chmod    hostname ln       mv       rm       xxd      
+
+
+/usr/bin:
+alias   clear   env     getconf sort    touch   uptime  
+cd      curl    false   head    tail    true    which   
+
+
+/usr/local/bin:
+code          loadenv       npx           python3       yarn          
+google-chrome node          pnpm          wasm          
+jq            npm           pnpx          xdg-open    
+
+
+
+
+
+
+/usr/local/bin:
+code          loadenv       npx           python3       yarn          
+google-chrome node          pnpm          wasm          
+jq            npm           pnpx          xdg-open    
+The `wasm` binary runs WASI modules, so the environment is decently extensible by users.
+
+
+I am perplexed by the "google-chrome" and the "code" binaries.
+12 Aug 2025 | BrowserPod: product meeting
+12 Aug 2025 | BrowserPod: product meeting
+Attendees: Ana Gabriela Reyna Flores Stefano De Rossi Yuri Iozzelli Francesco Aru Alessandro Pignotti Gracjan Baryla
+
+
+Notes
+Webcontainers vs Stackblitz. We are making Webcontainers. our customers make the equivalent Stackblitz.
+
+
+This means that we are not concerned with the details of accessing github private repos. We will nonetheless add a tutorial/guide/faq about ways to do it (put ssh key or netrc file in the fs)
+
+
+This also means that our customers are going to expose their API keys to users. We need to think about this. The Webcontainers dashboard has a whitelist of allowed origins. localhost always allowed without any kind of auth (actually ONLY allowed without auth).
+We don't like the idea of having no auth on localhost, but this makes the API key leak issue more complex to handle.
+
+
+Webcontainers's filesystem seems quite simplistic and basic: just a json blob (or a binary post-processed version:a "snapshot") that you declare in your js (🤮). Also persistence is opt-in and manual (supposedly you can restore a "snapshot"? need to try it)
+Svelte and maybe others are integrated with this system though and the node deps are pre-packaged to speed things up.
+Also the node deps files are cached by the browser's http cache at least.
+They officially recommend to include the lock file in the fs to speed things up.
+
+
+We want to offer a snapshot feature of some kind ourselves.
+
+
+On Webcontainers you can only call boot() once at the start. this is the thing that is billed. All processes share the same instance. You mount the fs on the instance.
+Any use for multiple BrowserPod instances? unclear.
+
+
+We want to compile git for downloading repos. if that does not work, tar+unzip should do at least for github.
+
+
+For the dashboard we want to be quite similar to Webcontainers, but we want to show the EULA when creating a free api key.
+All the keys are tied to the account plan and are tied to a global metering system.
+
+
+
+
+
+
+
+
+
+
+TODOS
+* which commands can you run on Webcontainers? just node/npm or can I run utilities? Do some testing
+* Test the fs snapshot feature of Webcontainers
+* We did not talk about the service worker setup of Webcontainers
+* We did not speak about the APIs for spawning and interacting with processes. For next time.
+* We need to figure out pricing for the durable objects and what kind of persistent storage / database we can use from Cloudflare for user management etc
+* Figure out what our public API should be
+
+
+
+
+18 Aug 2025 | BrowserPod product meeting
+18 Aug 2025 | BrowserPod product meeting
+Attendees: Stefano De Rossi Yuri Iozzelli Alessandro Pignotti
+
+
+Notes
+* We expose a run() method from cheerpos to run processes.
+* We keep the terminal argument (maybe change name?)
+* We provide a console and an xterm terminal as defaults
+* run() currently returns a thenable object. so you don't have double await if you just want to wait for completion
+* node versions: which ones do we ship? what is the api for that? current build is 22, current LTS.
+* we add a boot parameter with the version and that selects a different system image
+* At launch just one version: 22 LTS, but we promise that we can support more
+* do we offer a shell at release? this jsh that webcontainers use? probably not. we wait until we have bash
+* the version is a parameter and we default to latest
+* ext2 images: ours is shipped by us, not a problem.
+* for the user ones? a 2gb image mounted in /home/user
+* empty blocks are not materialized
+* base image has some basic tools and node
+* how can one self-host browserpod?
+   * cloudflare workers are needed
+   * but actually ext2 can run on byte ranges and network on tailscale
+   * we do claim that it is self-hostable
+* open questions on the inner workings of the webcontainers service workers
+
+
+
+
+Action items
+* Yuri writes internal document to:
+   * describe browserpod (what it does, use cases...)
+   * comparison with webcontainers
+* Documentation (early September) for early adopters (not precise api signatures) (Yuri)
+* Follow up about pricing
+   * cost analysis of Cloudflare (Yuri)
+* Discuss  APIS to edit single files from JS
+
+
+
+
+22 Aug 2025 | BrowserPod product meeting
+j22 Aug 2025 | BrowserPod product meeting
+Attendees: Stefano De Rossi Yuri Iozzelli Alessandro Pignotti
+
+
+Notes
+* cost: careful about real time apps kept open for hours
+* cut the cord after 1h of continued DO activity
+
+
+Action items
+* confirm the browser support
+* 5 cent/boot: compare vs server side computing (Yuri)
+* public github project
+* 
+
+
+
+1 Sept 2025 | BrowserPod product meeting
+1 Sept 2025 | BrowserPod product meeting
+Attendees: Stefano De Rossi Yuri Iozzelli Alessandro Pignotti
+
+
+Notes
+* Cloudflare database is "free"
+* Byte ranges now are a problem for deployment (no CF pages for example), but tomorrow it will not: the runtime is hosted by us, and the user data goes into an ext2 created from scratch locally.
+* WebContaners python: does networking work? flask?
+
+
+Action items
+* Yuri: explain to Francesco how to do a staging demo 
+* Github codespaces: investigate: https://docs.github.com/en/billing/concepts/product-billing/github-codespaces
+* WebContainers flask: check if it works
+
+
+
+
+17 Oct 2025 | BrowserPod status update
+17 Oct 2025 | BrowserPod status update
+Attendees: Stefano De Rossi Yuri Iozzelli
+
+
+Notes
+* automatic transcription
+
+
+Action items
+* try faster demoes for the demo on the main browserpod.io
+* public github repo for issues and with readme
+* dashboard progress report
+* Ask Alessandro how to approach testing
+* Audit trail of origin that request api calls
+* Research "conceptual competitors" to understand model and price comparison:
+   * WebContainers
+   * Daytona Sandboxes
+   * Cloudflare Sandboxes
+   * Vercel something
+   * ...
+* Write some internal document with comparisons with these
+* Calculate token amounts for subscriptions
+
+
+
+
+
+
+23 Oct 2025 | BrowserPod status update
+23 Oct 2025 | BrowserPod status update
+Attendees: Stefano De Rossi Yuri Iozzelli
+
+
+Notes
+* Payments, Paddle, Dashboard
+   * Backend status is good
+   * Status of subscription comes from Paddle
+      * If not subscribed we know
+      * If in expiration, we know
+         * Empty expiration date
+      * If active, we know
+   * Update on authentication methods
+      * Popup and cookie-based are now available
+      * Can decide what to do in prod
+* Documentation
+   * Start docs effort
+   * Overview
+   * Reference
+   * Few tutorials using files individually
+   * Document how to use images
+* Early Adopter
+   * Requires Docs
+   * Requires dashboard to be live
+   * Move the free tier to 0 tokens on public dashboard
+   * Disable payments
+   * Grant 1M tokens manually after EA signature
+* Versioning
+   * Core is versioned by URL
+   * Images are versioned by macro versions of Node, Python and Ruby
+      * No full matrix available
+* Pricing and costing
+   * Proposal after checking with cloud compute solutions
+   * Leads to 0-1 order of magnitude range ‘cheaper’ compared to Dayton Sandboxes
+   * Daytona pricing for reference
+      * 1vCPU, 2GB, no storage == $0.08/h
+   * BrowserPod pricing
+      * Subscription $19.99 / month (license)
+         * Comes with 10,000 tokens == 1,000 boots
+         * $0.02/boot
+      * Tokens cost $10 / 10,000 
+         * $0.01/boot
+      * One boot lasts maximum one hour (creates equivalence with 1 boot == 1h compute)
+      * 10 tokens can extend duration (ie spend another boot)
+   * Sanity checks
+      * A product that has 1000 active daily users, using 1 to 5 boots per day (2.5 average)
+         * 50 boot/user/month == 500,000 tokens/month
+         * $20 + $480 = $500 month
+         * ~$6,000 ARR
+      * A product that has 10,000 active daily users, using 1 to 5 boots per day (2.5 average)
+         * 50 boot/user/month == 5,000,000 tokens/month
+         * $20 + $4,900 = $4,920 month
+         * ~$60,000 ARR
+   * Think of implications of Enterprise pricing
+      * E.g $50k + X per M token year
+      * Not measured / self-reported
+      * Stima quarterly sugli utenti
+
+
+Action items
+* Decide channel for bug reporting
+* Public repo for BrowserPod
+   * “It has to look nice”
+* try faster demoes for the demo on the main browserpod.io
+* public github repo for issues and with readme
+* Audit trail of origin that request api calls
+* Research "conceptual competitors" to understand model and price comparison:
+   * WebContainers
+   * Daytona Sandboxes
+   * Cloudflare Sandboxes
+   * Vercel Sandboxes
+   * Modal
+   * Northflank
+   * E2B.dev
+* Understand what Firecracker is
+* Write some internal document with comparisons with these
+* Calculate token amounts for subscriptions
+
+
+
+
+
+
+31 Oct 2025 | BrowserPod status update
+31 Oct 2025 | BrowserPod status update
+Attendees: Stefano De Rossi Yuri Iozzelli
+
+
+Notes
+* 
+
+Action items
+* Implement token charging in the bp worker
+* Implement session time limit in bp worker
+* Figure out how to use sandbox and production envs
+* depoy docs on docs.browserpod.io for now
+* figure out how to deploy to /docs
+* create browserpod-meta repo
+
+
+
+
+7 Nov 2025 | BrowserPod status update
+7 Nov 2025 | BrowserPod status update
+Attendees: Stefano De Rossi Yuri Iozzelli
+
+
+Notes
+* 
+
+Action items
+* enterprise call to action now is google form. update to something better
+* check setMonth(12+1) it does wrap around and go to next year as expected
+
+
+
+
+4 Dec 2025 | BrowserPod release plan
+4 Dec 2025 | BrowserPod release plan
+Attendees: Stefano De Rossi Yuri Iozzelli Liam McCaffrey Alessandro Pignotti
+
+
+Notes
+* Beta
+   * Network limited to npm
+* 1.0 ==
+   * Features
+      *  Next.js works and some in the wild testing has happened
+      * Network configuration and logging
+   * +1 Running GIT on CheerpOS
+   * +1 js shell
+* 2.0 == Python
+   * +1 Bash 
+* 3.00 == Rails
+
+
+Action items
+* 
+
+
+
+[a]very similar to the tagline of WebContainers. (Dev environments. In your web app.)
+[b]should we mention WebContainers early or not? so far I am relegating it to a FAQ
+[c]I need some lawyery wording for this answer
+[d]here as well, I assume that we have some prepared proper answer
+[e]add links here? further elaboration on what is different?
+[f]I point some links to this section. Not sure how in depth to go

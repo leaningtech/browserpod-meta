@@ -1,0 +1,65 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_source": "insomnia.desktop.app:v2023.5.8",
+  "resources": [
+    {
+      "_id": "wrk_001",
+      "_type": "workspace",
+      "name": "Weather API"
+    },
+    {
+      "_id": "req_001",
+      "_type": "request",
+      "parentId": "wrk_001",
+      "name": "Get current weather",
+      "method": "GET",
+      "url": "https://api.weather.example.com/current?city=London",
+      "headers": [
+        { "name": "Accept", "value": "application/json" }
+      ]
+    },
+    {
+      "_id": "req_002",
+      "_type": "request",
+      "parentId": "wrk_001",
+      "name": "Get forecast",
+      "method": "GET",
+      "url": "https://api.weather.example.com/forecast",
+      "headers": [
+        { "name": "Accept", "value": "application/json" }
+      ]
+    },
+    {
+      "_id": "req_003",
+      "_type": "request",
+      "parentId": "wrk_001",
+      "name": "Submit weather report",
+      "method": "POST",
+      "url": "https://api.weather.example.com/reports",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"city\":\"London\",\"temp\":18,\"condition\":\"cloudy\"}"
+      }
+    },
+    {
+      "_id": "req_004",
+      "_type": "request",
+      "parentId": "wrk_001",
+      "name": "Get weather stations",
+      "method": "GET",
+      "url": "https://api.weather.example.com/stations"
+    },
+    {
+      "_id": "req_005",
+      "_type": "request",
+      "parentId": "wrk_001",
+      "name": "Delete old report",
+      "method": "DELETE",
+      "url": "https://api.weather.example.com/reports/42"
+    }
+  ]
+}

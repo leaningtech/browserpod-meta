@@ -1,0 +1,11 @@
+{
+  "name": "pawnhub-runtime",
+  "version": "1.0.0",
+  "description": "BrowserPod chess server",
+  "main": "main.js",
+  "license": "MIT",
+  "dependencies": {
+    "chess.js": "^1.0.0",
+    "ws": "^8.17.1"
+  }
+}

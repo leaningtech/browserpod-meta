@@ -1,0 +1,18 @@
+{
+  "name": "pawn_hub",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^7.2.4"
+  },
+  "dependencies": {
+    "@leaningtech/browserpod": "2.10.0",
+    "@lichess-org/chessground": "^10.0.1",
+    "chess.js": "^1.4.0"
+  }
+}
