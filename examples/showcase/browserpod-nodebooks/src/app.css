@@ -1,18 +1,35 @@
 /* ── Tokens ────────────────────────────────────────────────────────────────── */
 :root {
-	--bg:          #000000;
-	--surface:     #0c0c0d;
-	--surface-2:   #16161a;
-	--border:      #232327;
-	--border-2:    #3a3a40;
-	--text:        #fafafa;
-	--text-2:      #d4d4d8;
-	--text-3:      #a1a1aa;
-	--text-4:      #71717a;
-	--green:       #34d399;
-	--green-dim:   rgba(52, 211, 153, 0.08);
-	--green-line:  rgba(52, 211, 153, 0.2);
-	--radius:      8px;
+	/* Goose-poster palette: vermilion red, chalk white, warm cream paper, ink */
+	--red:         #f0392b;
+	--red-deep:    #c8261b;
+	--red-ink:     #7d160f;
+	--cream:       #fbf3e4;
+	--paper:       #fffaf0;
+	--ink:         #2b2118;
+	--ink-2:       #5c4f42;
+	--ink-3:       #8c7d6c;
+	--line:        #e6d8be;
+	--line-2:      #d8c4a0;
+
+	/* Book-spine accents */
+	--spine-teal:  #2f9c8f;
+	--spine-gold:  #e8a91d;
+	--spine-pink:  #e86a92;
+	--spine-plum:  #7b5ea7;
+
+	/* Semantic */
+	--bg:          var(--cream);
+	--surface:     var(--paper);
+	--text:        var(--ink);
+	--text-2:      var(--ink-2);
+	--text-3:      var(--ink-3);
+	--accent:      var(--red);
+	--radius:      14px;
+
+	--font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+	--font-body:    'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	--font-mono:    'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
 }
 
 /* ── Reset ─────────────────────────────────────────────────────────────────── */
@@ -23,9 +40,7 @@
 }
 
 html {
-	font-family:
-		-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu,
-		Cantarell, 'Helvetica Neue', Arial, sans-serif;
+	font-family: var(--font-body);
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	text-rendering: optimizeLegibility;
@@ -33,27 +48,11 @@ html {
 
 body {
 	min-height: 100vh;
-	background: var(--bg);
 	color: var(--text);
-}
-
-/* ── Page header ───────────────────────────────────────────────────────────── */
-.page-header {
-	margin-bottom: 1.5rem;
-	padding-bottom: 1.25rem;
-	border-bottom: 1px solid var(--border);
-}
-
-.page-header h1 {
-	font-size: 16px;
-	font-weight: 600;
-	color: var(--text);
-	letter-spacing: -0.01em;
-	margin: 0 0 0.2rem 0;
-}
-
-.page-header p {
-	font-size: 14px;
-	color: var(--text-3);
-	margin: 0;
+	background-color: var(--cream);
+	/* Subtle paper warmth: a faint dotted grid + a soft red glow up top */
+	background-image:
+		radial-gradient(circle at 1px 1px, rgba(125, 22, 15, 0.05) 1px, transparent 0),
+		radial-gradient(120% 60% at 50% -10%, rgba(240, 57, 43, 0.12), transparent 60%);
+	background-size: 22px 22px, 100% 100%;
 }
