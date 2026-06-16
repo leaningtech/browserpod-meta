@@ -296,7 +296,7 @@
 			</p>
 		</div>
 		<div class="header-actions">
-			<button class="action-btn" type="button" on:click={openTemplatePicker}>
+			<button class="action-btn" type="button" onclick={openTemplatePicker}>
 				<Icon icon="mingcute:layout-grid-line" width="13" height="13" />
 				<span>Templates</span>
 			</button>
@@ -304,16 +304,16 @@
 				class="action-btn"
 				type="button"
 				disabled={!podReady || runningAll || cells.length === 0}
-				on:click={runAll}
+				onclick={runAll}
 			>
 				<Icon icon="mingcute:play-fill" width="13" height="13" />
 				<span>Run all</span>
 			</button>
-			<button class="action-btn" type="button" on:click={() => addCell('code')}>
+			<button class="action-btn" type="button" onclick={() => addCell('code')}>
 				<Icon icon="mingcute:add-line" width="13" height="13" />
 				<span>Add code cell</span>
 			</button>
-			<button class="action-btn" type="button" on:click={() => addCell('markdown')}>
+			<button class="action-btn" type="button" onclick={() => addCell('markdown')}>
 				<Icon icon="mingcute:text-line" width="13" height="13" />
 				<span>Add note</span>
 			</button>
@@ -359,7 +359,7 @@
 						class="template-card"
 						class:template-card--blank={t.id === 'blank'}
 						type="button"
-						on:click={() => pickTemplate(t)}
+						onclick={() => pickTemplate(t)}
 					>
 						<div class="template-card-icon">
 							<Icon icon={t.icon} width="22" height="22" />
@@ -380,7 +380,7 @@
 
 			{#if cells.length > 0}
 				<div class="template-picker-footer">
-					<button class="ghost-btn" type="button" on:click={() => (showTemplatePicker = false)}>
+					<button class="ghost-btn" type="button" onclick={() => (showTemplatePicker = false)}>
 						<Icon icon="mingcute:close-line" width="12" height="12" />
 						<span>Cancel</span>
 					</button>
@@ -404,7 +404,7 @@
 							type="button"
 							title="Move up"
 							disabled={idx === 0}
-							on:click={() => moveCell(cell.id, -1)}
+							onclick={() => moveCell(cell.id, -1)}
 						>
 							<Icon icon="mingcute:up-line" width="12" height="12" />
 						</button>
@@ -413,7 +413,7 @@
 							type="button"
 							title="Move down"
 							disabled={idx === cells.length - 1}
-							on:click={() => moveCell(cell.id, 1)}
+							onclick={() => moveCell(cell.id, 1)}
 						>
 							<Icon icon="mingcute:down-line" width="12" height="12" />
 						</button>
@@ -426,7 +426,7 @@
 									class="run-btn"
 									type="button"
 									disabled={!podReady || cell.status === 'running'}
-									on:click={() => runCell(cell)}
+									onclick={() => runCell(cell)}
 								>
 									<Icon
 										icon={cell.status === 'running' ? 'mingcute:loading-line' : 'mingcute:play-fill'}
@@ -440,23 +440,23 @@
 								</span>
 								<span class="toolbar-spacer"></span>
 								{#if cell.hasOutput}
-									<button class="ghost-btn" type="button" on:click={() => clearOutput(cell)}>
+									<button class="ghost-btn" type="button" onclick={() => clearOutput(cell)}>
 										<Icon icon="mingcute:eraser-line" width="12" height="12" />
 										<span>Clear output</span>
 									</button>
 								{/if}
-								<button class="ghost-btn" type="button" on:click={() => addCell('code', cell.id)}>
+								<button class="ghost-btn" type="button" onclick={() => addCell('code', cell.id)}>
 									<Icon icon="mingcute:add-line" width="12" height="12" />
 									<span>Code below</span>
 								</button>
-								<button class="ghost-btn" type="button" on:click={() => addCell('markdown', cell.id)}>
+								<button class="ghost-btn" type="button" onclick={() => addCell('markdown', cell.id)}>
 									<Icon icon="mingcute:text-line" width="12" height="12" />
 									<span>Note below</span>
 								</button>
 								<button
 									class="ghost-btn ghost-btn--danger"
 									type="button"
-									on:click={() => deleteCell(cell.id)}
+									onclick={() => deleteCell(cell.id)}
 								>
 									<Icon icon="mingcute:delete-2-line" width="12" height="12" />
 								</button>
@@ -495,7 +495,7 @@
 									<span>Note</span>
 								</span>
 								<span class="toolbar-spacer"></span>
-								<button class="ghost-btn" type="button" on:click={() => (cell.editing = !cell.editing)}>
+								<button class="ghost-btn" type="button" onclick={() => (cell.editing = !cell.editing)}>
 									<Icon
 										icon={cell.editing ? 'mingcute:check-line' : 'mingcute:edit-2-line'}
 										width="12"
@@ -503,18 +503,18 @@
 									/>
 									<span>{cell.editing ? 'Done' : 'Edit'}</span>
 								</button>
-								<button class="ghost-btn" type="button" on:click={() => addCell('code', cell.id)}>
+								<button class="ghost-btn" type="button" onclick={() => addCell('code', cell.id)}>
 									<Icon icon="mingcute:add-line" width="12" height="12" />
 									<span>Code below</span>
 								</button>
-								<button class="ghost-btn" type="button" on:click={() => addCell('markdown', cell.id)}>
+								<button class="ghost-btn" type="button" onclick={() => addCell('markdown', cell.id)}>
 									<Icon icon="mingcute:text-line" width="12" height="12" />
 									<span>Note below</span>
 								</button>
 								<button
 									class="ghost-btn ghost-btn--danger"
 									type="button"
-									on:click={() => deleteCell(cell.id)}
+									onclick={() => deleteCell(cell.id)}
 								>
 									<Icon icon="mingcute:delete-2-line" width="12" height="12" />
 								</button>
@@ -533,7 +533,7 @@ Write a note in markdown..."
 									class="md-rendered"
 									type="button"
 									title="Click to edit"
-									on:click={() => (cell.editing = true)}
+									onclick={() => (cell.editing = true)}
 								>
 									{@html renderMarkdown(cell.source || '_Empty note — click to edit._')}
 								</button>
@@ -544,11 +544,11 @@ Write a note in markdown..."
 			{/each}
 
 			<div class="add-cell-row">
-				<button class="add-cell-bottom" type="button" on:click={() => addCell('code')}>
+				<button class="add-cell-bottom" type="button" onclick={() => addCell('code')}>
 					<Icon icon="mingcute:add-line" width="14" height="14" />
 					<span>Add code cell</span>
 				</button>
-				<button class="add-cell-bottom" type="button" on:click={() => addCell('markdown')}>
+				<button class="add-cell-bottom" type="button" onclick={() => addCell('markdown')}>
 					<Icon icon="mingcute:text-line" width="14" height="14" />
 					<span>Add note</span>
 				</button>
