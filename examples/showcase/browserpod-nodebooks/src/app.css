@@ -1,0 +1,59 @@
+/* ── Tokens ────────────────────────────────────────────────────────────────── */
+:root {
+	--bg:          #000000;
+	--surface:     #0c0c0d;
+	--surface-2:   #16161a;
+	--border:      #232327;
+	--border-2:    #3a3a40;
+	--text:        #fafafa;
+	--text-2:      #d4d4d8;
+	--text-3:      #a1a1aa;
+	--text-4:      #71717a;
+	--green:       #34d399;
+	--green-dim:   rgba(52, 211, 153, 0.08);
+	--green-line:  rgba(52, 211, 153, 0.2);
+	--radius:      8px;
+}
+
+/* ── Reset ─────────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	font-family:
+		-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu,
+		Cantarell, 'Helvetica Neue', Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+}
+
+body {
+	min-height: 100vh;
+	background: var(--bg);
+	color: var(--text);
+}
+
+/* ── Page header ───────────────────────────────────────────────────────────── */
+.page-header {
+	margin-bottom: 1.5rem;
+	padding-bottom: 1.25rem;
+	border-bottom: 1px solid var(--border);
+}
+
+.page-header h1 {
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--text);
+	letter-spacing: -0.01em;
+	margin: 0 0 0.2rem 0;
+}
+
+.page-header p {
+	font-size: 14px;
+	color: var(--text-3);
+	margin: 0;
+}
