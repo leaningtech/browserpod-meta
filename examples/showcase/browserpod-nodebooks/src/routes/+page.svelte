@@ -278,7 +278,7 @@
 </script>
 
 <svelte:head>
-	<title>BrowserPod Nodebooks</title>
+	<title>Nodebooks</title>
 	<meta
 		name="description"
 		content="Run Node.js cells with markdown explanations in a live BrowserPod sandbox — like Jupyter, for JavaScript."
@@ -288,11 +288,11 @@
 <main class="app">
 	<div class="page-header page-header--row">
 		<div>
-			<h1>BrowserPod Nodebooks</h1>
+			<h1>Nodebooks</h1>
 			<p>
 				A stack of Node.js cells with markdown explanations, running in a single BrowserPod sandbox.
-				Files persist across cells, but each run is a fresh <code>node</code> process — like
-				Jupyter, but for JavaScript.
+				Files persist across cells, but each run is a fresh <code>node</code> process — like Jupyter,
+				but for JavaScript.
 			</p>
 		</div>
 		<div class="header-actions">
@@ -429,7 +429,9 @@
 									onclick={() => runCell(cell)}
 								>
 									<Icon
-										icon={cell.status === 'running' ? 'mingcute:loading-line' : 'mingcute:play-fill'}
+										icon={cell.status === 'running'
+											? 'mingcute:loading-line'
+											: 'mingcute:play-fill'}
 										width="12"
 										height="12"
 									/>
@@ -449,7 +451,11 @@
 									<Icon icon="mingcute:add-line" width="12" height="12" />
 									<span>Code below</span>
 								</button>
-								<button class="ghost-btn" type="button" onclick={() => addCell('markdown', cell.id)}>
+								<button
+									class="ghost-btn"
+									type="button"
+									onclick={() => addCell('markdown', cell.id)}
+								>
 									<Icon icon="mingcute:text-line" width="12" height="12" />
 									<span>Note below</span>
 								</button>
@@ -495,7 +501,11 @@
 									<span>Note</span>
 								</span>
 								<span class="toolbar-spacer"></span>
-								<button class="ghost-btn" type="button" onclick={() => (cell.editing = !cell.editing)}>
+								<button
+									class="ghost-btn"
+									type="button"
+									onclick={() => (cell.editing = !cell.editing)}
+								>
 									<Icon
 										icon={cell.editing ? 'mingcute:check-line' : 'mingcute:edit-2-line'}
 										width="12"
@@ -507,7 +517,11 @@
 									<Icon icon="mingcute:add-line" width="12" height="12" />
 									<span>Code below</span>
 								</button>
-								<button class="ghost-btn" type="button" onclick={() => addCell('markdown', cell.id)}>
+								<button
+									class="ghost-btn"
+									type="button"
+									onclick={() => addCell('markdown', cell.id)}
+								>
 									<Icon icon="mingcute:text-line" width="12" height="12" />
 									<span>Note below</span>
 								</button>
