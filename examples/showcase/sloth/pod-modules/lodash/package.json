@@ -1,0 +1,6 @@
+{
+  "name": "lodash",
+  "version": "0.0.0-sloth-shim",
+  "description": "Minimal shim: only toArray, used by node-emoji.",
+  "main": "index.js"
+}

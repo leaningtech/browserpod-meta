@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SLOTH</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="stage">
+      <pre id="console"></pre>
+      <!-- Home-screen logo. The terminal can't render images, so this PNG is
+           overlaid on the page above the menu, shown only on the home screen
+           (toggled by SLOTH's sloth:menu / sloth:deck sentinels). -->
+      <img id="home-logo" src="/slothbg.png" alt="SLOTH" hidden />
+      <!-- Side panel: shown when a runnable block opens a server portal. -->
+      <aside id="portal">
+        <header id="portal-bar">
+          <a id="portal-url" href="#" target="_blank" rel="noopener"></a>
+          <!-- Desktop annotation: draw on the slide showing in the panel. The
+               canvas below sits over the iframe; strokes POST to /draw, the same
+               endpoint the audience page reads, so they appear for everyone. -->
+          <span id="pen-tools" hidden>
+            <button class="pen-sw sel" data-col="#f33" style="background:#f33"></button>
+            <button class="pen-sw" data-col="#fd3" style="background:#fd3"></button>
+            <button class="pen-sw" data-col="#fff" style="background:#fff"></button>
+            <button id="pen-clear" title="Clear annotations">Clear</button>
+          </span>
+          <button id="pen-toggle" title="Draw on the slide">✎ Draw</button>
+          <button id="portal-close" title="Close portal">✕</button>
+        </header>
+        <div id="portal-body">
+          <iframe id="portal-frame" src="about:blank"
+            sandbox="allow-scripts allow-forms allow-same-origin allow-popups"></iframe>
+          <!-- Transparent draw layer over the iframe; only active in draw mode. -->
+          <canvas id="pen-canvas" hidden></canvas>
+        </div>
+      </aside>
+    </div>
+    <!-- Hidden: opened only when SLOTH's Upload menu item asks for a file. -->
+    <input id="file-input" type="file" accept=".md,.markdown,text/markdown" multiple hidden />
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
