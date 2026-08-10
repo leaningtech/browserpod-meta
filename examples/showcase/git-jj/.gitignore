@@ -1,0 +1,12 @@
+node_modules/
+.svelte-kit/
+dist/
+
+# Read-only browsercode checkout, kept as an implementation reference.
+reference/
+
+.env
+.env.*
+!.env.example
+
+.DS_Store

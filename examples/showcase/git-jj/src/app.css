@@ -1,0 +1,129 @@
+/*
+ * One accent on a cold near black, everything in a monospace stack so the chrome
+ * reads as the same surface as the editor. Colour is spent in two places: the accent,
+ * and the file glyphs in the tree.
+ *
+ * `source(none)` with an explicit `@source` keeps Tailwind's scanner inside src/, so
+ * the checkout in reference/ is never scanned.
+ */
+@import 'tailwindcss' source(none);
+@source "./**/*.{svelte,ts,js,html}";
+
+@theme {
+	/* Surfaces, darkest to lightest. */
+	--color-void: #08070c;
+	--color-pit: #0b0a11;
+	--color-panel: #100e18;
+	--color-raised: #17141f;
+	--color-hover: #1e1a2b;
+
+	/* Hairlines. */
+	--color-edge: #241f33;
+	--color-edge-soft: #1a1626;
+
+	/* Text. */
+	--color-fg: #e8e3f2;
+	--color-fg-dim: #a49bb8;
+	--color-fg-faint: #6b6480;
+
+	/* The accent, plus the two states that must never be mistaken for it. */
+	--color-bramble: #a970ff;
+	--color-bramble-soft: #c7a6ff;
+	--color-bramble-deep: #6b3fb0;
+	--color-thorn: #ff6b8a;
+	--color-sap: #6ee7a8;
+
+	--font-mono:
+		ui-monospace, 'SF Mono', 'JetBrains Mono', 'Cascadia Code', 'Fira Code', Menlo, Consolas,
+		monospace;
+	--font-sans: var(--font-mono);
+}
+
+@layer base {
+	html,
+	body {
+		height: 100%;
+	}
+
+	body {
+		background-color: var(--color-void);
+		color: var(--color-fg);
+		font-family: var(--font-mono);
+		-webkit-font-smoothing: antialiased;
+		overscroll-behavior: none;
+	}
+
+	/* Thin scrollbars everywhere outside Monaco, which draws its own. */
+	* {
+		scrollbar-width: thin;
+		scrollbar-color: #2e2740 transparent;
+	}
+
+	::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: #2e2740;
+		border-radius: 4px;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: #3d3454;
+	}
+
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	:focus-visible {
+		outline: 1px solid var(--color-bramble);
+		outline-offset: 1px;
+	}
+}
+
+@utility field {
+	/* Shared shape for the text inputs on the clone screen. */
+	background-color: var(--color-void);
+	border: 1px solid var(--color-edge);
+	border-radius: 0.375rem;
+	color: var(--color-fg);
+	font-family: var(--font-mono);
+	font-size: 12.5px;
+	padding: 0.5rem 0.625rem;
+	width: 100%;
+	outline: none;
+	transition:
+		border-color 120ms ease,
+		box-shadow 120ms ease;
+}
+
+@utility field-focus {
+	border-color: var(--color-bramble-deep);
+	box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-bramble) 12%, transparent);
+}
+
+/* A sweep under the clone log while a subprocess is running. */
+@keyframes bramble-sweep {
+	0% {
+		transform: translateX(-100%);
+	}
+	100% {
+		transform: translateX(400%);
+	}
+}
+
+@utility sweep {
+	animation: bramble-sweep 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes bramble-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@utility spin-slow {
+	animation: bramble-spin 0.9s linear infinite;
+}
