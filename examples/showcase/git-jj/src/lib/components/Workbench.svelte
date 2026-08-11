@@ -3,6 +3,7 @@
 	import EditorPane from './EditorPane.svelte';
 	import FileTree from './FileTree.svelte';
 	import Icon from './Icon.svelte';
+	import TerminalPanel from './TerminalPanel.svelte';
 	import type { Session } from '$lib/session.svelte';
 
 	let { session, onLeave }: { session: Session; onLeave: () => void } = $props();
@@ -10,8 +11,17 @@
 	let sidebarWidth = $state(248);
 	let dragging = $state(false);
 
+	let terminalOpen = $state(false);
+	/** Set on the first open, never cleared: hiding the panel must not throw its shells away. */
+	let terminalStarted = $state(false);
+	let terminalHeight = $state(280);
+	let draggingTerminal = $state(false);
+
 	const MIN_SIDEBAR = 170;
 	const MAX_SIDEBAR = 520;
+	const MIN_TERMINAL = 120;
+	/** Leaves room for the editor above it, whatever the window height is. */
+	const EDITOR_HEADROOM = 220;
 
 	function startDrag(event: PointerEvent) {
 		event.preventDefault();
@@ -28,9 +38,36 @@
 		window.addEventListener('pointerup', stop);
 	}
 
-	/** Ctrl/Cmd+S anywhere in the app saves the active file. */
+	function startTerminalDrag(event: PointerEvent) {
+		event.preventDefault();
+		draggingTerminal = true;
+		const move = (moveEvent: PointerEvent) => {
+			const max = Math.max(MIN_TERMINAL, window.innerHeight - EDITOR_HEADROOM);
+			terminalHeight = Math.min(max, Math.max(MIN_TERMINAL, window.innerHeight - moveEvent.clientY));
+		};
+		const stop = () => {
+			draggingTerminal = false;
+			window.removeEventListener('pointermove', move);
+			window.removeEventListener('pointerup', stop);
+		};
+		window.addEventListener('pointermove', move);
+		window.addEventListener('pointerup', stop);
+	}
+
+	function toggleTerminal() {
+		terminalOpen = !terminalOpen;
+		terminalStarted ||= terminalOpen;
+	}
+
+	/** Ctrl/Cmd+S saves the active file; Ctrl/Cmd+` toggles the terminal. */
 	function onKeydown(event: KeyboardEvent) {
-		if (!(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== 's') return;
+		if (!(event.ctrlKey || event.metaKey)) return;
+		if (event.key === '`') {
+			event.preventDefault();
+			toggleTerminal();
+			return;
+		}
+		if (event.key.toLowerCase() !== 's') return;
 		event.preventDefault();
 		void session.save();
 	}
@@ -73,6 +110,16 @@
 		</span>
 
 		<button
+			onclick={toggleTerminal}
+			title="Terminal (Ctrl/Cmd+`)"
+			class="flex items-center gap-1.5 rounded-md border px-2 py-1 text-[11px] transition {terminalOpen
+				? 'border-bramble/50 text-fg'
+				: 'border-edge text-fg-dim hover:border-bramble/50 hover:text-fg'}"
+		>
+			<Icon name="terminal" size={12} />
+			Terminal
+		</button>
+		<button
 			onclick={() => void session.save()}
 			disabled={!session.dirty}
 			title="Save the active file (Ctrl/Cmd+S)"
@@ -111,6 +158,29 @@
 			<EditorPane {session} />
 		</main>
 	</div>
+
+	{#if terminalStarted}
+		<!-- Hidden rather than unmounted: the shells and their scrollback outlive a toggle. -->
+		<div
+			class="flex shrink-0 flex-col"
+			style="height: {terminalHeight}px; {terminalOpen ? '' : 'display: none;'}"
+		>
+			<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+			<div
+				role="separator"
+				aria-orientation="horizontal"
+				aria-label="Resize the terminal"
+				onpointerdown={startTerminalDrag}
+				title="Drag to resize the terminal"
+				class="relative h-px shrink-0 cursor-row-resize bg-edge-soft transition-colors
+					after:absolute after:inset-x-0 after:-top-0.75 after:h-1.75 after:content-['']
+					hover:bg-bramble/60 {draggingTerminal ? 'bg-bramble' : ''}"
+			></div>
+			<div class="min-h-0 flex-1">
+				<TerminalPanel {session} open={terminalOpen} onClose={() => (terminalOpen = false)} />
+			</div>
+		</div>
+	{/if}
 
 	<footer
 		class="flex h-6 shrink-0 items-center gap-3 border-t border-edge-soft bg-panel px-3 text-[10.5px] text-fg-faint"
