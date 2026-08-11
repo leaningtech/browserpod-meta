@@ -29,7 +29,3 @@ src/lib/
   editor/               Monaco setup and per filetype glyphs
   components/           CloneScreen, Workbench, FileTree, EditorPane
 ```
-
-A few things worth knowing before changing the pod layer. `pod.run` exposes no exit status, so `run()` wraps commands in `bash -c` and parses a marker line carrying `$?`. The file API has no `readdir`, so the tree comes from two pruned `find` passes, and rename and delete run `mv` and `rm -rf`. Clones land in a staging directory and are only moved into place once they succeed, so a failed clone leaves the previous checkout alone.
-
-`reference/browsercode` is a read-only checkout of browsercode, kept as the source for the pod plumbing this app adapts. It is gitignored, excluded from `tsconfig.json` and the Vite watcher, and Tailwind's scanner is pinned to `src/`. One wrinkle: svelte-check globs the whole project for `svelte.config.js`, finds the ones inside that checkout, and prints warnings while loading their Vite configs; the check itself still only covers `src/`.
