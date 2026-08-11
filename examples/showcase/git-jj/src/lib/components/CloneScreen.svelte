@@ -15,8 +15,26 @@
 
 	let { session, onOpen }: { session: Session; onOpen: () => void } = $props();
 
-	let url = $state('https://github.com/chalk/ansi-styles');
-	let ref = $state('main');
+	const EXAMPLES = [
+		{
+			owner: 'leaningtech',
+			repo: 'webvm',
+			ref: 'main',
+			blurb: 'A Linux virtual machine that runs in the browser'
+		},
+		{
+			owner: 'leaningtech',
+			repo: 'browsercraft',
+			ref: 'main',
+			blurb: 'Minecraft 1.2.5 in the browser, via CheerpJ'
+		}
+	].map((entry) => ({ ...entry, url: `https://github.com/${entry.owner}/${entry.repo}` }));
+
+	/** The lightest of the four, so the first clone a visitor tries is not the slowest. */
+	const DEFAULT_EXAMPLE = EXAMPLES.find((e) => e.repo === 'svelte-browserpod-editor') ?? EXAMPLES[0];
+
+	let url = $state(DEFAULT_EXAMPLE.url);
+	let ref = $state(DEFAULT_EXAMPLE.ref);
 	let backend = $state<VcsId>('git');
 
 	let phase = $state<'idle' | 'working' | 'failed'>('idle');
@@ -40,11 +58,11 @@
 		ready: 'Ready'
 	});
 
-	const EXAMPLES = [
-		{ label: 'ansi-styles', url: 'https://github.com/chalk/ansi-styles' },
-		{ label: 'browserpod-meta', url: 'https://github.com/leaningtech/browserpod-meta' },
-		{ label: 'is-plain-obj', url: 'https://github.com/sindresorhus/is-plain-obj' }
-	];
+	function pick(example: (typeof EXAMPLES)[number]) {
+		url = example.url;
+		ref = example.ref;
+		fieldError = '';
+	}
 
 	/** Carriage returns rewrite the current line, so progress counts up in place. */
 	let current = '';
@@ -145,7 +163,7 @@
 </script>
 
 <div class="flex min-h-full items-center justify-center px-5 py-10">
-	<div class="w-full max-w-xl">
+	<div class="w-full max-w-2xl">
 		<!-- Wordmark -->
 		<div class="mb-8 flex items-baseline gap-2.5">
 			<span class="text-bramble"><Icon name="branch" size={19} strokeWidth={1.5} /></span>
@@ -206,19 +224,28 @@
 				<p class="mt-1.5 text-[11px] text-thorn">{fieldError}</p>
 			{/if}
 
-			<div class="mt-2 flex flex-wrap items-center gap-1.5">
-				<span class="text-[10.5px] text-fg-faint">try</span>
+			<p class="mt-4 mb-2 text-[10px] tracking-[0.16em] text-fg-faint uppercase">
+				Or try one of ours
+			</p>
+			<div class="grid gap-1.5 sm:grid-cols-2">
 				{#each EXAMPLES as example (example.url)}
+					{@const picked = url.trim().replace(/\/+$/, '') === example.url}
 					<button
 						type="button"
 						disabled={busy}
-						onclick={() => {
-							url = example.url;
-							fieldError = '';
-						}}
-						class="rounded border border-edge px-1.5 py-0.5 text-[10.5px] text-fg-dim transition hover:border-bramble/50 hover:text-fg disabled:opacity-50"
+						onclick={() => pick(example)}
+						aria-pressed={picked}
+						class="group rounded-lg border px-2.5 py-2 text-left transition disabled:opacity-50 {picked
+							? 'border-bramble/55 bg-bramble/8'
+							: 'border-edge hover:border-bramble/35 hover:bg-hover'}"
 					>
-						{example.label}
+						<span class="flex items-baseline gap-1.5">
+							<span class="truncate text-[11.5px] text-fg">{example.repo}</span>
+							<span class="ml-auto shrink-0 text-[9.5px] text-fg-faint">{example.ref}</span>
+						</span>
+						<span class="mt-0.5 block text-[10.5px] leading-snug text-fg-faint">
+							{example.blurb}
+						</span>
 					</button>
 				{/each}
 			</div>
@@ -341,7 +368,6 @@
 				crossOriginIsolated: {String(isolated)}
 			</span>
 			<span>filesystem persisted in IndexedDB</span>
-			<span>git and jj run as subprocesses in the pod</span>
 		</div>
 	</div>
 </div>
