@@ -23,9 +23,11 @@ src/lib/
   pod/boot.ts           boot or reopen the pod; BrowserPod is imported dynamically, client only
   pod/run.ts            run a subprocess, stream its output, recover an exit code
   pod/fs.ts             read and write files, plus mkdir, rename, delete, recursive list
+  pod/provision.ts      copy the jj binary into the pod, once per pod disk
   vcs/index.ts          VcsBackend, implemented for git and jj
   workspace.ts          clone and reopen, and the localStorage pointer to the last checkout
   session.svelte.ts     runes store: pod, workdir, tree, tabs, active file, dirty
   editor/               Monaco setup and per filetype glyphs
   components/           CloneScreen, Workbench, FileTree, EditorPane
 ```
+

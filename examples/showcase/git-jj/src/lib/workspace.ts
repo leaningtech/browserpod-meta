@@ -14,7 +14,7 @@ const STORAGE_KEY = 'bramble:workspace';
 
 export type SavedWorkspace = RepoRef & { workdir: string };
 
-export type Stage = 'booting' | 'cloning' | 'scanning' | 'ready';
+export type Stage = 'booting' | 'preparing' | 'cloning' | 'scanning' | 'ready';
 
 export type Reporter = { onLog?: LogSink; onStage?: (stage: Stage) => void };
 
@@ -37,8 +37,14 @@ export async function cloneWorkspace(
 	// Staged so a clone that fails leaves the checkout you already had alone.
 	const staging = `${workdir}.bramble-incoming`;
 
-	onStage?.('cloning');
 	const backend = createBackend(request.backend, pod, onLog);
+	if (backend.prepare) {
+		// Separate stage because installing a backend can take longer than the clone.
+		onStage?.('preparing');
+		await backend.prepare();
+	}
+
+	onStage?.('cloning');
 	const ref = backend.honorsRef ? request.ref.trim() : '';
 	if (!backend.honorsRef && request.ref.trim()) {
 		onLog?.(`jj clones the default branch; ignoring ref "${request.ref.trim()}".\n`);

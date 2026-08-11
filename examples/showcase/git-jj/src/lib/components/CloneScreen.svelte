@@ -34,6 +34,7 @@
 
 	const stageLabel = $derived<Record<Stage, string>>({
 		booting: 'Booting the sandbox',
+		preparing: 'Installing jj into the pod',
 		cloning: backend === 'jj' ? 'Cloning with jj' : 'Cloning with git',
 		scanning: 'Reading the working tree',
 		ready: 'Ready'

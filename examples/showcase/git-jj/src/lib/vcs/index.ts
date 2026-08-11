@@ -1,10 +1,11 @@
 /**
- * The two ways to get a repository into a pod. Both binaries ship in the pod image,
- * so a backend is the command line it runs plus what it can honour: git checks out an
- * arbitrary ref in one shallow shot, `jj git clone` always takes the default branch.
+ * The two ways to get a repository into a pod. A backend is the command line it runs plus
+ * what it can honour: git checks out an arbitrary ref in one shallow shot, `jj git clone`
+ * always takes the default branch. git is in the pod image; jj installs itself first.
  */
 import type { BrowserPod } from '@leaningtech/browserpod';
 import { POD_HOME } from '$lib/pod/fs';
+import { ensureJj } from '$lib/pod/provision';
 import { failed, failureMessage, run, type LogSink } from '$lib/pod/run';
 
 export type VcsId = 'git' | 'jj';
@@ -14,6 +15,8 @@ export interface VcsBackend {
 	readonly label: string;
 	/** Whether `clone` can target a ref, rather than the default branch. */
 	readonly honorsRef: boolean;
+	/** Installs whatever the pod is missing. Called once before `clone`, if present. */
+	prepare?(): Promise<void>;
 	/** Clones `url` at `ref` into the absolute pod path `dest`. Throws on failure. */
 	clone(url: string, ref: string, dest: string): Promise<void>;
 }
@@ -56,7 +59,13 @@ class JjBackend implements VcsBackend {
 		private readonly onLog?: LogSink
 	) {}
 
+	/** jj is not in the pod image; it is copied in from a static asset. */
+	async prepare(): Promise<void> {
+		await ensureJj(this.pod, this.onLog);
+	}
+
 	async clone(url: string, _ref: string, dest: string): Promise<void> {
+		await this.prepare();
 		await this.ensureIdentity();
 		await exec(this.pod, 'jj', ['git', 'clone', url, dest], this.onLog);
 	}
