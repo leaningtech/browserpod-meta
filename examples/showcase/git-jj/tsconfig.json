@@ -1,0 +1,17 @@
+{
+	"extends": "./.svelte-kit/tsconfig.json",
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strict": true,
+		"moduleResolution": "bundler"
+	},
+	// `reference/` holds a second, unrelated app. It is never compiled or type-checked.
+	// (The inherited `include` only covers src/, so this is belt and braces.)
+	"exclude": ["node_modules/**", "reference/**", "dist/**"]
+}

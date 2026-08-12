@@ -1,0 +1,2 @@
+# The pod binaries are shipped verbatim; never let line-ending normalisation near them.
+static/pod-bin/* binary
