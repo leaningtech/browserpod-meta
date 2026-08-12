@@ -171,12 +171,6 @@
 			<span class="text-[11.5px] text-fg-faint">browser repo explorer</span>
 		</div>
 
-		<p class="mb-7 max-w-md text-[12.5px] leading-relaxed text-fg-dim">
-			Clone a public repository into a BrowserPod sandbox with
-			<span class="text-fg">git</span>
-			or <span class="text-fg">jj</span>, then browse and edit the working tree right here. Edits are
-			written back into the pod, which keeps its filesystem between visits.
-		</p>
 
 		{#if saved && phase !== 'working'}
 			<div class="mb-5 flex items-center gap-3 rounded-lg border border-bramble/25 bg-bramble/6 p-3">
@@ -354,14 +348,5 @@
 			</div>
 		{/if}
 
-		<div class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1 text-[10.5px] text-fg-faint">
-			<span class="flex items-center gap-1.5">
-				<span class={isolated ? 'text-sap' : 'text-thorn'}>
-					<Icon name={isolated ? 'check' : 'alert'} size={11} />
-				</span>
-				crossOriginIsolated: {String(isolated)}
-			</span>
-			<span>filesystem persisted in IndexedDB</span>
-		</div>
 	</div>
 </div>
