@@ -14,7 +14,8 @@ import {
 	writePodFile,
 	type PodEntry
 } from './pod/fs';
-import type { VcsId } from './vcs';
+import { readCheckoutState, sameCheckout, type CheckoutState } from './pod/watch';
+import { createBackend, type VcsId } from './vcs';
 
 export type RepoRef = { url: string; ref: string; backend: VcsId; name: string };
 
@@ -29,6 +30,9 @@ export type Tab = {
 };
 
 const MAX_EDITABLE_BYTES = 1_000_000;
+
+/** How often to ask the pod where the checkout is parked. */
+const WATCH_INTERVAL_MS = 2500;
 
 /** Extensions we can refuse without a read. */
 const BINARY_EXTENSIONS = new Set([
@@ -90,9 +94,21 @@ export class Session {
 	/** A tree mutation or a save is in flight. */
 	busy = $state(false);
 	error = $state('');
+	/** Where the checkout is parked, as of the last poll. */
+	checkout = $state<CheckoutState | null>(null);
+	syncing = $state(false);
+	/** The branch a UI-initiated switch is moving to, while it runs. */
+	switchingTo = $state('');
+	movedNote = $state('');
 
 	get ready(): boolean {
 		return !!this.pod && !!this.workdir;
+	}
+
+	/** The live branch when a poll has answered, else the ref we cloned at. */
+	get branch(): string {
+		if (this.checkout) return this.checkout.branch || 'detached';
+		return this.repo?.ref ?? '';
 	}
 
 	get activeTab(): Tab | undefined {
@@ -122,6 +138,9 @@ export class Session {
 		this.tabs = [];
 		this.activePath = '';
 		this.error = '';
+		this.checkout = null;
+		this.movedNote = '';
+		this.switchingTo = '';
 	}
 
 	/** Drops the workspace but leaves the pod booted for the next clone. */
@@ -132,6 +151,9 @@ export class Session {
 		this.tabs = [];
 		this.activePath = '';
 		this.error = '';
+		this.checkout = null;
+		this.movedNote = '';
+		this.switchingTo = '';
 	}
 
 	private abs(relative: string): string {
@@ -271,6 +293,148 @@ export class Session {
 			}
 			await this.refreshTree();
 		});
+	}
+
+	// -------------------------------------------------------------------------
+	// Moving the checkout between branches
+	// -------------------------------------------------------------------------
+
+	async listBranches(): Promise<string[]> {
+		if (!this.pod || !this.workdir || !this.repo) return [];
+		return createBackend(this.repo.backend, this.pod).listBranches(this.workdir);
+	}
+
+	/** Moves the checkout onto `name` and pulls the tree and tabs after it. */
+	async switchBranch(name: string): Promise<string | null> {
+		if (!this.ready || !this.repo) return 'No workspace open';
+		if (this.switchingTo) return null;
+		this.switchingTo = name;
+		this.busy = true;
+		try {
+			await createBackend(this.repo.backend, this.pod!).switchTo(this.workdir, name);
+			// Record the new position before syncing, so the poller does not reload again.
+			try {
+				const state = await readCheckoutState(this.pod!, this.workdir, this.repo.backend);
+				if (state) this.checkout = state;
+			} catch {
+				// The next poll will catch up.
+			}
+			this.movedNote = `Switched to ${name}`;
+			this.error = '';
+		} catch (error) {
+			return messageOf(error);
+		} finally {
+			this.busy = false;
+			this.switchingTo = '';
+		}
+		await this.syncFromDisk();
+		return null;
+	}
+
+	// -------------------------------------------------------------------------
+	// Keeping up with changes made outside the app
+	// -------------------------------------------------------------------------
+
+	/** Re-reads every open tab from the pod. Dirty tabs are left alone. */
+	async reloadOpenTabs(): Promise<void> {
+		if (!this.pod || !this.workdir) return;
+		for (const tab of this.tabs) {
+			if (tab.content !== tab.saved) continue;
+			const blockedByType = binaryReason(tab.path);
+			if (blockedByType) continue;
+			try {
+				const content = await readPodFileWithinLimit(
+					this.pod,
+					this.abs(tab.path),
+					MAX_EDITABLE_BYTES
+				);
+				if (content === null) {
+					tab.blocked = `Larger than ${Math.round(MAX_EDITABLE_BYTES / 1000)} kB, so not opened.`;
+					continue;
+				}
+				tab.content = content;
+				tab.saved = content;
+				tab.blocked = looksBinary(content) ? 'Binary file, not shown.' : null;
+			} catch {
+				// Likely not in the new checkout; keep the tab so switching back restores it.
+				tab.content = '';
+				tab.saved = '';
+				tab.blocked = 'Not in the working tree any more.';
+			}
+		}
+	}
+
+	/** Pulls the tree and the open tabs back in line with what is on the pod's disk. */
+	async syncFromDisk(): Promise<void> {
+		if (!this.ready || this.syncing) return;
+		this.syncing = true;
+		try {
+			await this.refreshTree();
+			await this.reloadOpenTabs();
+		} finally {
+			this.syncing = false;
+		}
+	}
+
+	/** One poll: re-reads the tree if the checkout moved since the last answer. */
+	async pollCheckout(): Promise<boolean> {
+		if (!this.pod || !this.workdir || !this.repo || this.busy || this.syncing) return false;
+
+		let state: CheckoutState | null;
+		try {
+			state = await readCheckoutState(this.pod, this.workdir, this.repo.backend);
+		} catch {
+			return false;
+		}
+		if (!state) return false;
+
+		const previous = this.checkout;
+		this.checkout = state;
+		// The first answer is the baseline, not a change.
+		if (!previous || sameCheckout(previous, state)) return false;
+
+		this.movedNote =
+			previous.branch !== state.branch && state.branch
+				? `Switched to ${state.branch}`
+				: `Checkout moved to ${state.head.slice(0, 8)}`;
+		await this.syncFromDisk();
+		return true;
+	}
+
+	/** Polls until the returned stop function is called; idle while the tab is hidden. */
+	startWatching(intervalMs = WATCH_INTERVAL_MS): () => void {
+		if (typeof window === 'undefined') return () => {};
+
+		let stopped = false;
+		let running = false;
+
+		const tick = async () => {
+			if (stopped || running) return;
+			if (typeof document !== 'undefined' && document.hidden) return;
+			running = true;
+			try {
+				await this.pollCheckout();
+			} finally {
+				running = false;
+			}
+		};
+
+		const timer = setInterval(tick, intervalMs);
+		const onVisible = () => {
+			if (!document.hidden) void tick();
+		};
+		document.addEventListener('visibilitychange', onVisible);
+		window.addEventListener('focus', onVisible);
+		// Deferred: a synchronous first poll would make the caller's effect depend on `busy`.
+		const first = setTimeout(tick, 0);
+
+		return () => {
+			stopped = true;
+			clearTimeout(first);
+			clearInterval(timer);
+			document.removeEventListener('visibilitychange', onVisible);
+			window.removeEventListener('focus', onVisible);
+		};
 	}
 
 	private async mutate(action: () => Promise<void>): Promise<string | null> {

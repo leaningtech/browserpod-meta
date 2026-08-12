@@ -1,12 +1,8 @@
-/**
- * The two ways to get a repository into a pod. A backend is the command line it runs plus
- * what it can honour: git checks out an arbitrary ref in one shallow shot, `jj git clone`
- * always takes the default branch. git is in the pod image; jj installs itself first.
- */
+/** Cloning a repository into a pod and moving its checkout between branches. */
 import type { BrowserPod } from '@leaningtech/browserpod';
 import { POD_HOME } from '$lib/pod/fs';
 import { ensureJj } from '$lib/pod/provision';
-import { failed, failureMessage, run, type LogSink } from '$lib/pod/run';
+import { failed, failureMessage, run, stripAnsi, type LogSink } from '$lib/pod/run';
 
 export type VcsId = 'git' | 'jj';
 
@@ -15,18 +11,17 @@ export interface VcsBackend {
 	readonly label: string;
 	/** Whether `clone` can target a ref, rather than the default branch. */
 	readonly honorsRef: boolean;
-	/** Installs whatever the pod is missing. Called once before `clone`, if present. */
 	prepare?(): Promise<void>;
-	/** Clones `url` at `ref` into the absolute pod path `dest`. Throws on failure. */
 	clone(url: string, ref: string, dest: string): Promise<void>;
+	listBranches(workdir: string): Promise<string[]>;
+	switchTo(workdir: string, branch: string): Promise<void>;
 }
 
 export const VCS_OPTIONS: { id: VcsId; label: string; blurb: string }[] = [
-	{ id: 'git', label: 'git', blurb: 'shallow clone at a ref' },
-	{ id: 'jj', label: 'jj', blurb: 'jujutsu, default branch' }
+	{ id: 'git', label: 'git', blurb: 'shallow clone, every branch tip' },
+	{ id: 'jj', label: 'jj', blurb: 'jujutsu, on top of git' }
 ];
 
-/** Builds a backend bound to a pod, and optionally to a log sink for its output. */
 export function createBackend(id: VcsId, pod: BrowserPod, onLog?: LogSink): VcsBackend {
 	return id === 'jj' ? new JjBackend(pod, onLog) : new GitBackend(pod, onLog);
 }
@@ -42,39 +37,133 @@ class GitBackend implements VcsBackend {
 	) {}
 
 	async clone(url: string, ref: string, dest: string): Promise<void> {
-		const args = ['clone', '--depth', '1'];
+		// `--no-single-branch`: keep the other branch tips for later checkouts.
+		const args = ['clone', '--depth', '1', '--no-single-branch'];
 		if (ref) args.push('--branch', ref);
 		args.push(remoteUrl(url), dest);
 		await exec(this.pod, 'git', args, this.onLog);
+	}
+
+	async listBranches(workdir: string): Promise<string[]> {
+		const result = await run(
+			this.pod,
+			'git',
+			['for-each-ref', '--format=%(refname:short)', 'refs/heads', 'refs/remotes/origin'],
+			{ cwd: workdir }
+		);
+		if (failed(result)) throw new Error(failureMessage(result, 'Could not list branches'));
+		const names = stripAnsi(result.output)
+			.split(/\r?\n/)
+			.map((line) => line.trim())
+			.map((name) => (name.startsWith('origin/') ? name.slice('origin/'.length) : name))
+			.filter((name) => name && name !== 'origin' && name !== 'HEAD');
+		return [...new Set(names)].sort();
+	}
+
+	async switchTo(workdir: string, branch: string): Promise<void> {
+		const attempt = () =>
+			run(this.pod, 'git', ['checkout', branch], { cwd: workdir, onData: this.onLog });
+		const first = await attempt();
+		if (!failed(first)) return;
+		const fetch = await run(
+			this.pod,
+			'git',
+			['fetch', '--depth', '1', 'origin', `+refs/heads/${branch}:refs/remotes/origin/${branch}`],
+			{ cwd: workdir, onData: this.onLog }
+		);
+		if (failed(fetch)) {
+			throw new Error(failureMessage(first, `Could not check out ${branch}`));
+		}
+		const second = await attempt();
+		if (failed(second)) {
+			throw new Error(failureMessage(second, `Could not check out ${branch}`));
+		}
 	}
 }
 
 class JjBackend implements VcsBackend {
 	readonly id = 'jj' as const;
 	readonly label = 'jj';
-	readonly honorsRef = false;
+	readonly honorsRef = true;
 
 	constructor(
 		private readonly pod: BrowserPod,
 		private readonly onLog?: LogSink
 	) {}
 
-	/** jj is not in the pod image; it is copied in from a static asset. */
 	async prepare(): Promise<void> {
 		await ensureJj(this.pod, this.onLog);
 	}
 
-	async clone(url: string, _ref: string, dest: string): Promise<void> {
+	async clone(url: string, ref: string, dest: string): Promise<void> {
 		await this.prepare();
 		await this.ensureIdentity();
 		await exec(this.pod, 'jj', ['git', 'clone', url, dest], this.onLog);
+		if (ref && ref !== (await this.currentBookmark(dest))) await this.switchTo(dest, ref);
 	}
 
-	/** `jj git clone` writes a working copy commit, which needs an author. */
+	// `--no-pager` everywhere: the builtin pager blocks forever on the hidden pty.
+	// `--ignore-working-copy` on reads, so they never snapshot.
+
+	async listBranches(workdir: string): Promise<string[]> {
+		const result = await run(
+			this.pod,
+			'jj',
+			['--no-pager', '--ignore-working-copy', 'bookmark', 'list', '--all-remotes', '-T', 'name ++ "\\n"'],
+			{ cwd: workdir }
+		);
+		if (failed(result)) throw new Error(failureMessage(result, 'Could not list bookmarks'));
+		const names = stripAnsi(result.output)
+			.split(/\r?\n/)
+			.map((line) => line.trim())
+			.filter(Boolean);
+		return [...new Set(names)].sort();
+	}
+
+	async switchTo(workdir: string, branch: string): Promise<void> {
+		const attempt = () =>
+			run(this.pod, 'jj', ['--no-pager', 'new', branch], { cwd: workdir, onData: this.onLog });
+		const first = await attempt();
+		if (!failed(first)) return;
+		// An untracked remote bookmark is not addressable by its short name.
+		const track = await run(
+			this.pod,
+			'jj',
+			['--no-pager', 'bookmark', 'track', `${branch}@origin`],
+			{ cwd: workdir, onData: this.onLog }
+		);
+		if (failed(track)) throw new Error(failureMessage(first, `Could not switch to ${branch}`));
+		const second = await attempt();
+		if (failed(second)) {
+			throw new Error(failureMessage(second, `Could not switch to ${branch}`));
+		}
+	}
+
+	private async currentBookmark(workdir: string): Promise<string> {
+		const result = await run(
+			this.pod,
+			'jj',
+			[
+				'--no-pager',
+				'--ignore-working-copy',
+				'log',
+				'--no-graph',
+				'-r',
+				'latest(::@ & bookmarks())',
+				'-T',
+				'bookmarks'
+			],
+			{ cwd: workdir }
+		);
+		if (failed(result)) return '';
+		return stripAnsi(result.output).trim().split(/\s+/)[0]?.replace(/\*$/, '') ?? '';
+	}
+
 	private async ensureIdentity(): Promise<void> {
 		for (const [key, value] of [
 			['user.name', 'Bramble'],
-			['user.email', 'bramble@browserpod.local']
+			['user.email', 'bramble@browserpod.local'],
+			['ui.paginate', 'never']
 		]) {
 			const result = await run(this.pod, 'jj', ['config', 'set', '--user', key, value], {
 				cwd: POD_HOME
@@ -84,7 +173,6 @@ class JjBackend implements VcsBackend {
 	}
 }
 
-/** Echoes the command into the log and turns a failing exit into a throw. */
 async function exec(
 	pod: BrowserPod,
 	command: string,

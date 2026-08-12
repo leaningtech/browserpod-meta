@@ -13,6 +13,11 @@ export async function bootPod(storageKey = POD_STORAGE_KEY): Promise<BrowserPod>
 	if (typeof window === 'undefined') {
 		throw new PodBootError('BrowserPod can only boot in the browser.');
 	}
+	// The disk is held exclusively per tab; `?pod=<key>` lets a second window pick its own.
+	if (import.meta.env.DEV) {
+		const override = new URLSearchParams(window.location.search).get('pod');
+		if (override) storageKey = override;
+	}
 	if (!crossOriginIsolated) {
 		throw new PodBootError(
 			'This page is not cross-origin isolated, so SharedArrayBuffer is unavailable. ' +

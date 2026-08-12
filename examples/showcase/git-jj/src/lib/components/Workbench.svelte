@@ -1,5 +1,6 @@
 <script lang="ts">
 	/** The IDE shell: tree on the left, editor on the right, one line of status. */
+	import BranchMenu from './BranchMenu.svelte';
 	import EditorPane from './EditorPane.svelte';
 	import FileTree from './FileTree.svelte';
 	import Icon from './Icon.svelte';
@@ -73,6 +74,15 @@
 	}
 
 	const fileCount = $derived(session.tree.filter((entry) => !entry.dir).length);
+
+	$effect(() => session.startWatching());
+
+	// "Switched to x" is news, not state.
+	$effect(() => {
+		if (!session.movedNote) return;
+		const timer = setTimeout(() => (session.movedNote = ''), 6000);
+		return () => clearTimeout(timer);
+	});
 </script>
 
 <svelte:window
@@ -98,17 +108,31 @@
 			>
 				{session.repo.backend}
 			</span>
-			{#if session.repo.ref}
-				<span class="rounded border border-edge px-1.5 py-px text-[10px] text-fg-dim">
-					{session.repo.ref}
-				</span>
-			{/if}
+			<BranchMenu {session} />
+		{/if}
+
+		{#if session.movedNote}
+			<span
+				class="flex items-center gap-1.5 rounded border border-bramble/40 bg-bramble/8 px-1.5 py-px text-[10px] text-bramble-soft"
+			>
+				<Icon name="refresh" size={9} />
+				{session.movedNote}
+			</span>
 		{/if}
 
 		<span class="ml-auto hidden truncate text-[10.5px] text-fg-faint sm:block">
 			{session.workdir}
 		</span>
 
+		<button
+			onclick={() => void session.syncFromDisk()}
+			disabled={session.syncing}
+			title="Re-read the working tree from the pod"
+			aria-label="Refresh the working tree"
+			class="flex items-center gap-1.5 rounded-md border border-edge px-2 py-1 text-[11px] text-fg-dim transition hover:border-bramble/50 hover:text-fg disabled:opacity-40"
+		>
+			<span class={session.syncing ? 'spin-slow' : ''}><Icon name="refresh" size={12} /></span>
+		</button>
 		<button
 			onclick={toggleTerminal}
 			title="Terminal (Ctrl/Cmd+`)"
@@ -160,10 +184,13 @@
 	</div>
 
 	{#if terminalStarted}
-		<!-- Hidden rather than unmounted: the shells and their scrollback outlive a toggle. -->
+		<!-- Hidden, not unmounted, so shells survive a toggle; min-h-0 stops the renderer
+		     inflating the panel. -->
 		<div
-			class="flex shrink-0 flex-col"
-			style="height: {terminalHeight}px; {terminalOpen ? '' : 'display: none;'}"
+			class="flex min-h-0 shrink-0 flex-col overflow-hidden"
+			style="height: {terminalHeight}px; max-height: calc(100vh - {EDITOR_HEADROOM}px); {terminalOpen
+				? ''
+				: 'display: none;'}"
 		>
 			<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 			<div
@@ -205,10 +232,10 @@
 		{/if}
 
 		<span class="ml-auto flex items-center gap-3">
-			{#if session.busy}
+			{#if session.busy || session.syncing}
 				<span class="flex items-center gap-1.5 text-bramble-soft">
 					<span class="spin-slow"><Icon name="spinner" size={10} /></span>
-					working
+					{session.syncing ? 'reloading' : 'working'}
 				</span>
 			{/if}
 			<span>{fileCount} files</span>

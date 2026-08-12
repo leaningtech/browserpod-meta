@@ -106,6 +106,9 @@ function pad(text: string): string {
 const RC_PATH = `${POD_HOME}/.bramble-rc`;
 const RC = `# Written by bramble for its interactive shells.
 PS1='\\[${ESC}[38;5;141m\\]\\w\\[${ESC}[0m\\] \\[${ESC}[38;5;141m\\]❯\\[${ESC}[0m\\] '
+# A full-screen pager waiting for q reads as a hang in this small terminal.
+export PAGER=cat GIT_PAGER=cat
+alias jj='jj --no-pager'
 `;
 
 const rcWrites = new WeakMap<BrowserPod, Promise<void>>();
@@ -133,8 +136,13 @@ export async function openShell(
 	backend: VcsId
 ): Promise<void> {
 	const terminal = await pod.createDefaultTerminal(element);
-	// Read from the pod, never hardcoded; only the first tab pays for the probe.
-	writeToTerminal(terminal, banner(await toolVersion(pod, backend), backend));
+	// The version probe shares the run queue, so it gets a deadline: a shell must still
+	// open when something ahead of it is slow or stuck.
+	const version = await Promise.race([
+		toolVersion(pod, backend),
+		new Promise<null>((resolve) => setTimeout(() => resolve(null), 3000))
+	]);
+	writeToTerminal(terminal, banner(version, backend));
 	await ensureRc(pod);
 	void pod.run('bash', ['--rcfile', RC_PATH, '-i'], { terminal, cwd, echo: false, env: SHELL_ENV });
 }

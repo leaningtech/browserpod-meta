@@ -261,21 +261,15 @@
 					<input
 						id="ref"
 						bind:value={ref}
-						disabled={busy || backend === 'jj'}
+						disabled={busy}
 						spellcheck="false"
 						autocomplete="off"
 						placeholder="main"
 						class="field focus:field-focus disabled:opacity-40"
 					/>
-					{#if backend === 'jj'}
-						<p class="mt-1.5 text-[10.5px] text-fg-faint">
-							jj git clone takes the remote's default branch.
-						</p>
-					{:else}
-						<p class="mt-1.5 text-[10.5px] text-fg-faint">
-							Leave empty for the remote's default branch.
-						</p>
-					{/if}
+					<p class="mt-1.5 text-[10.5px] text-fg-faint">
+						Leave empty for the remote's default branch.
+					</p>
 				</div>
 
 				<div>
