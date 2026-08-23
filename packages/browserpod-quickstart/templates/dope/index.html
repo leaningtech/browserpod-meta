@@ -10,16 +10,30 @@
     <div class="container">
       <div class="header">
         <h1>{{PROJECT_NAME}}</h1>
-        <p>DOPE — Decentralized Orchestration Protocol for Execution</p>
+        <p>DOPE — Decentralized Orchestration Protocol for Execution · zNix bounded agent box</p>
       </div>
       <div class="grid">
+        <section>
+          <h2>zNix board</h2>
+          <div id="board"></div>
+        </section>
         <section>
           <h2>Swarm bus</h2>
           <pre id="bus"></pre>
         </section>
+      </div>
+      <div class="grid">
         <section>
           <h2>Pod console</h2>
           <pre id="console"></pre>
+        </section>
+        <section>
+          <h2>Inbox</h2>
+          <pre id="inbox"></pre>
+          <div class="controls">
+            <button id="trigger">fire trigger</button>
+            <button id="resolve">resolve inbox</button>
+          </div>
         </section>
       </div>
       <div class="controls">

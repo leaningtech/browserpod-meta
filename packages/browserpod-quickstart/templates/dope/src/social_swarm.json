@@ -1,0 +1,46 @@
+{
+  "$schema": "urn:znix:manifest:1.0",
+  "id": "social-swarm-demo",
+  "version": "1.0.0",
+  "owner": "anonymous",
+  "scope": "dope-swarm.local",
+  "modes": ["CREATE", "REACT"],
+  "address": {
+    "slug": "social-swarm-demo",
+    "endpoint": "http://localhost:5173/zNix/social-swarm-demo"
+  },
+  "composition": {
+    "agents": [
+      { "name": "curator", "role": "collect and rank swarm posts" },
+      { "name": "composer", "role": "draft a post from ranked items" }
+    ],
+    "services": [
+      { "name": "bus", "url": "broadcast://dope:default" },
+      { "name": "portals", "url": "portal://*" }
+    ],
+    "schedules": [
+      { "name": "sweep", "cron": "*/5 * * * *" }
+    ],
+    "pipelines": [
+      { "name": "post_to_swarm", "steps": ["collect", "rank", "compose", "gate", "publish"] }
+    ]
+  },
+  "toolset": {
+    "verbs": ["swarm.collect", "swarm.rank", "swarm.compose", "swarm.publish", "inbox.gate"],
+    "max_autonomy": true,
+    "escalate_to": "inbox"
+  },
+  "routes": {
+    "inbox": "http://localhost:5173/zNix/social-swarm-demo/inbox",
+    "trigger": "http://localhost:5173/zNix/social-swarm-demo/trigger",
+    "status": "http://localhost:5173/zNix/social-swarm-demo/status"
+  },
+  "triggers": {
+    "on_bus_event": { "event": "dope:job:done", "route": "post_to_swarm" },
+    "on_schedule": { "name": "sweep", "route": "post_to_swarm" }
+  },
+  "inbox_rules": {
+    "auto_approve": ["swarm.collect", "swarm.rank"],
+    "require_confirm": ["swarm.publish"]
+  }
+}

@@ -2,6 +2,9 @@
 	import { onMount } from 'svelte';
 	import { bootPod } from '$lib/dope/boot';
 	import { dope, gate, DOPE_VERSION, type DopeMessage } from '$lib/dope/protocol';
+	import { ZNix, type InboxItem } from '$lib/dope/znix';
+	import { boardCardSVG } from '$lib/dope/board';
+	import socialManifest from '$lib/dope/social_swarm.json';
 
 	let pod: import('@leaningtech/browserpod').BrowserPod | null = null;
 	let bootError = '';
@@ -12,6 +15,29 @@
 	let jobs: Record<string, string> = {}; // jobId → status
 	let policyText = JSON.stringify({ allow: ['run'], deny: [] }, null, 2);
 	let policyError = '';
+
+	// The zNix box: composed, addressed, bounded. Its board is the SVG eyes
+	// on it; its inbox is the escalation edge where publishes pause.
+	const box = new ZNix(socialManifest as never);
+	let boardSvg = boardCardSVG(box, { ok: box.isValid, inbox: box.inbox.length });
+	let inboxItems: InboxItem[] = box.inboxStatus();
+
+	function fireTrigger(name: string, payload: Record<string, unknown> = {}) {
+		const r = box.trigger(name, payload);
+		events = [
+			...events,
+			{ type: 'znix:trigger', payload: { trigger: name, ...r }, ts: Date.now(), node: nodeId || 'local' }
+		];
+		inboxItems = box.inboxStatus();
+		boardSvg = boardCardSVG(box, { ok: box.isValid, inbox: box.inbox.length });
+	}
+
+	function resolveInbox() {
+		const first = box.inboxStatus()[0];
+		if (first) box.resolveInbox(first.index);
+		inboxItems = box.inboxStatus();
+		boardSvg = boardCardSVG(box, { ok: box.isValid, inbox: box.inbox.length });
+	}
 
 	async function ensurePod() {
 		if (pod) return pod;
@@ -32,6 +58,10 @@
 				if (msg.type === 'dope:job:blocked') jobs[msg.payload.jobId as string] = 'blocked';
 				if (msg.type === 'dope:job:failed') jobs[msg.payload.jobId as string] = 'failed';
 				jobs = { ...jobs };
+				// REACT mode: the box listens for swarm events on its route.
+				if (box.triggers.on_bus_event && msg.type === box.triggers.on_bus_event.event) {
+					fireTrigger('on_bus_event', { type: msg.type });
+				}
 			});
 			// Re-announce so late tabs see this node.
 			bus.emit('dope:node:hello', { node: nodeId, portal: '', policy: {}, version: DOPE_VERSION }, { node: nodeId });
@@ -147,6 +177,42 @@
 						return `[${t}] ${e.type}${e.node ? ' · ' + e.node : ''}${p !== '{}' ? ' ' + p : ''}`;
 					})
 					.join('\n')}</pre>
+		</section>
+
+		<section class="bg-zinc-900 border border-zinc-800 rounded-lg p-4 lg:col-span-3">
+			<div class="flex items-center justify-between mb-2">
+				<h2 class="text-sm text-zinc-400">zNix box · {box.slug}</h2>
+				<span class="text-xs text-zinc-600">{box.compositionSummary().kinds.join(' + ')}</span>
+			</div>
+			<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+				<div class="bg-black/50 border border-zinc-800 rounded-lg p-3 flex items-center justify-center">
+					{@html boardSvg}
+				</div>
+				<div class="flex flex-col">
+					<div class="flex gap-2">
+						<button
+							class="px-3 py-1 rounded bg-indigo-600 hover:bg-indigo-500 text-xs"
+							onclick={() => fireTrigger('on_schedule', { cron: '*/5 * * * *' })}
+						>
+							fire schedule trigger
+						</button>
+						<button
+							class="px-3 py-1 rounded bg-zinc-700 hover:bg-zinc-600 text-xs"
+							onclick={resolveInbox}
+						>
+							resolve inbox
+						</button>
+					</div>
+					<div class="mt-3 flex-1">
+						<span class="text-xs text-zinc-500">inbox ({inboxItems.length}) — the bounded edge: publishes pause here</span>
+						<pre
+							class="h-48 overflow-auto bg-black/50 border border-zinc-800 rounded-lg p-2 mt-1 text-xs text-amber-300 whitespace-pre-wrap"
+						>{inboxItems.length === 0 ? '(empty — nothing escalated)' : inboxItems
+								.map((i) => `[${i.kind}] ${i.from} · ${i.route || ''}${i.verbs ? ' verbs=' + i.verbs.join(',') : ''}`)
+								.join('\n')}</pre>
+					</div>
+				</div>
+			</div>
 		</section>
 	</div>
 
