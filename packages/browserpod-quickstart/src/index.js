@@ -23,6 +23,11 @@ const templates = [
     name: 'bash',
     display: 'Bash shell',
     description: 'An interactive Bash shell'
+  },
+  {
+    name: 'dope',
+    display: 'DOPE swarm node',
+    description: 'Decentralized Orchestration Protocol for Execution — a pod preloaded with swarm comms, a token gate, and portal compute-node registration'
   }
 ];
 

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{PROJECT_NAME}} — DOPE</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>{{PROJECT_NAME}}</h1>
+        <p>DOPE — Decentralized Orchestration Protocol for Execution</p>
+      </div>
+      <div class="grid">
+        <section>
+          <h2>Swarm bus</h2>
+          <pre id="bus"></pre>
+        </section>
+        <section>
+          <h2>Pod console</h2>
+          <pre id="console"></pre>
+        </section>
+      </div>
+      <div class="controls">
+        <button id="spawn">spawn micro</button>
+        <button id="portal">open portal</button>
+        <span id="status">booting…</span>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
