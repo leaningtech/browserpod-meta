@@ -78,7 +78,7 @@ Developers use BrowserPod to **sandbox untrusted and AI-generated code** in the 
 <br>
 
 ## Features
-|   |  |
+| Feature | Description |
 | --- | --- |
 | **Kernel** | BrowserPod compiles full native runtimes to WebAssembly, targeting a Linux-compliant syscall interface rather than a limited JavaScript shim. |
 | **Sandbox** | BrowserPod runs directly in the browser, inheriting its security boundary, with additional cross-origin isolation. |
