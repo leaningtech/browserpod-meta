@@ -21,8 +21,12 @@
 </p>
 
 <p align="center">
+  <b>Build with:</b>&nbsp;&nbsp;
   <img src="assets/icons/WebAssembly.svg" alt="Wasm" title="Wasm" height="30">
-  &nbsp;&nbsp;
+</p>
+
+<p align="center">
+  <b>Supported languages:</b>&nbsp;&nbsp;
   <img src="assets/icons/NodeJS-Dark.svg" alt="Node.js" title="Node.js" height="30">
   &nbsp;&nbsp;
   <img src="assets/icons/Rust.svg" alt="Rust" title="Rust" height="30">
@@ -32,9 +36,10 @@
   <img src="assets/icons/Ruby.svg" alt="Ruby" title="Ruby" height="30">
   &nbsp;&nbsp;
   <img src="assets/icons/GoLang.svg" alt="Go" title="Go" height="30">
-  &nbsp;&nbsp;
-  <img src="assets/icons/Npm-Dark.svg" alt="npm" title="npm" height="30">
-  &nbsp;&nbsp;
+</p>
+
+<p align="center">
+  <b>Supported frameworks:</b>&nbsp;&nbsp;
   <img src="assets/icons/React-Dark.svg" alt="React" title="React" height="30">
   &nbsp;&nbsp;
   <img src="assets/icons/NextJS-Dark.svg" alt="Next.js" title="Next.js" height="30">
@@ -48,6 +53,11 @@
   <img src="assets/icons/Svelte.svg" alt="Svelte" title="Svelte" height="30">
   &nbsp;&nbsp;
   <img src="assets/icons/ExpressJS-Dark.svg" alt="Express.js" title="Express.js" height="30">
+</p>
+
+<p align="center">
+  <b>Supported tools:</b>&nbsp;&nbsp;
+  <img src="assets/icons/Npm-Dark.svg" alt="npm" title="npm" height="30">
   &nbsp;&nbsp;
   <img src="assets/icons/Vite-Dark.svg" alt="Vite" title="Vite" height="30">
   &nbsp;&nbsp;
@@ -58,7 +68,6 @@
   <img src="assets/icons/jj-logo.svg" alt="jj" title="jj" height="30">
   &nbsp;&nbsp;
   <img src="assets/icons/Git.svg" alt="Git" title="Git" height="30">
-
 </p>
 
 ## What is BrowserPod?
