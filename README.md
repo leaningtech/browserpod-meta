@@ -88,7 +88,7 @@ Developers use BrowserPod to **sandbox untrusted and AI-generated code** in the 
 | **Filesystem** | A block-based streaming virtual filesystem provides full POSIX compatibility. Disk images are streamed on demand, and any file changes stay local to the browser session using either IndexedDB or the Origin Private File System (OPFS). |
 | **Portals** | Ports that open in BrowserPod can be shared via a temporary private URL. This secure URL routes external traffic directly to the service running in the browser, enabling live previews and collaboration without any backend servers. |
 | **Tools** | BrowserPod provides a wide range of developer tools and frameworks, including bash, git and ripgrep, plus npm for Node.js. |
-| **Multithreading** | Web workers enable true multithreading and process isolation for complex, multi-process workloads that would normally require a full operating system. |
+| **Multithreading** | Web workers enable true multithreading for complex, multi-process workloads that would normally require a full operating system. |
 
 <br>
 
@@ -118,11 +118,11 @@ yarn add @leaningtech/browserpod
 
 BrowserPod supports Node.js and Rust, with Python currently in preview. Additional runtimes, including Go and Ruby, are in development.
 
-| Runtime  | Availability | Version |
+| Runtime  | Availability | Since |
 | ------------- | :------------- | :------------- |
-| Node.js | Live 🟢 | 22.15.0 |
-| Rust | Live 🟢 | 1.97.0 nightly |
-| Python | Preview 🟠 | 3.12.11 |
+| Node.js | Live 🟢 | browserpod-1.0 |
+| Rust | Live 🟢 | browserpod-3.0 |
+| Python | Preview 🟠 | TBA |
 | Go | 2026 🔴 | TBA |
 | Ruby | 2026 🔴 | TBA |
 
