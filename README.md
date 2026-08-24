@@ -80,7 +80,8 @@ Developers use BrowserPod to **sandbox untrusted and AI-generated code** in the 
 ## Features
 | Feature | Description |
 | --- | --- |
-| **Kernel** | BrowserPod compiles full native runtimes to WebAssembly, targeting a Linux-compliant syscall interface rather than a limited JavaScript shim. |
+| **WebAssembly** | BrowserPod compiles full native runtimes to WebAssembly, running them directly in the browser without a server. |
+| **Kernel** | BrowserPod's in-browser Linux kernel exposes a Linux-compliant syscall interface rather than a limited JavaScript shim. |
 | **Sandbox** | BrowserPod runs directly in the browser, inheriting its security boundary, with additional cross-origin isolation. |
 | **Runtimes** | In-browser runtimes for Node.js, Rust and Python (currently in preview). Ruby and Go are in development. |
 | **Compatibility** | The Node.js runtime ships with npm and Vite built in, and supports most frameworks (including React, Angular, Next.js and Express.js; see Node.js frameworks for more). Rust launches with jj, and more tools are coming to both the Rust and Python runtimes. |
