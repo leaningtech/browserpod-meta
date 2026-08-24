@@ -84,7 +84,7 @@ Developers use BrowserPod to **sandbox untrusted and AI-generated code** in the 
 | **Kernel** | BrowserPod's in-browser Linux kernel exposes a Linux-compliant syscall interface rather than a limited JavaScript shim. |
 | **Sandbox** | BrowserPod runs directly in the browser, inheriting its security boundary. |
 | **Runtimes** | In-browser runtimes for Node.js, Rust and Python (currently in preview). Ruby and Go are in development. |
-| **Compatibility** | The Node.js runtime ships with npm and Vite built in, and supports most frameworks (including React, Angular, Next.js and Express.js; see Node.js frameworks for more). Rust launches with jj, and more tools are coming to both the Rust and Python runtimes. |
+| **Compatibility** | The Node.js runtime ships with npm built in, and supports most frameworks and tools (including React, Angular, Next.js, Express.js and Vite; see Node.js frameworks for more). Most Rust CLI tools work unmodified, including jj, Codex and ripgrep. |
 | **Filesystem** | A block-based streaming virtual filesystem provides full POSIX compatibility. Disk images are streamed on demand, and any file changes stay local to the browser session using either IndexedDB or the Origin Private File System (OPFS). |
 | **Portals** | Ports that open in BrowserPod can be shared via a temporary private URL. This secure URL routes external traffic directly to the service running in the browser, enabling live previews and collaboration without any backend servers. |
 | **Tools** | BrowserPod provides a wide range of developer tools, functions and frameworks, including bash and git, plus npm for Node.js and jj for Rust. |
