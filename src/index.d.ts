@@ -18,8 +18,6 @@ export interface TextFile {
 	close(): Promise<void>;
 }
 
-export type FileMode = 'utf-8' | 'binary';
-
 export interface BootOptions {
 	/** Node.js major version to run inside the pod. */
 	nodeVersion?: string;
@@ -50,8 +48,8 @@ export class BrowserPod {
 
 	createDirectory(path: string, opts?: { recursive?: boolean }): Promise<void>;
 
-	createFile(path: string, mode: FileMode): Promise<BinaryFile | TextFile>;
-	openFile(path: string, mode: FileMode): Promise<BinaryFile | TextFile>;
+	createFile(path: string, mode: string): Promise<BinaryFile | TextFile>;
+	openFile(path: string, mode: string): Promise<BinaryFile | TextFile>;
 
 	createDefaultTerminal(consoleDiv: HTMLElement): Promise<Terminal>;
 	createCustomTerminal(opts: {
@@ -59,7 +57,4 @@ export class BrowserPod {
 		rows?: number;
 		onOutput: (buffer: ArrayBuffer, vt?: unknown) => void;
 	}): Promise<Terminal>;
-
-	/** Tear down the pod. Present at runtime, absent from the published types. */
-	shutdown(): Promise<void>;
 }
