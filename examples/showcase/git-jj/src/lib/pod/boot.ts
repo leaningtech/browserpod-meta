@@ -39,12 +39,3 @@ export async function bootPod(storageKey = POD_STORAGE_KEY): Promise<BrowserPod>
 
 	return await BrowserPod.boot({ apiKey, storageKey });
 }
-
-/** `shutdown` is not in the published types yet. */
-export async function shutdownPod(pod: BrowserPod): Promise<void> {
-	try {
-		await (pod as BrowserPod & { shutdown?: () => Promise<void> }).shutdown?.();
-	} catch (error) {
-		console.error('Failed to shut down pod:', error);
-	}
-}

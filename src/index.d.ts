@@ -1,17 +1,19 @@
-export class Terminal {}
-export class Process {}
+export interface Process {}
 
-export class BinaryFile {
-	write(data: ArrayBuffer): Promise<number>;
-
-	read(length: number): Promise<ArrayBuffer>;
-  
-	getSize(): Promise<number>;
-
-   close(): Promise<void>;
+export interface Terminal {
+	write(data: string): void;
 }
 
-export class TextFile {
+export interface BinaryFile {
+	write(data: ArrayBuffer): Promise<number>;
+	read(length: number): Promise<ArrayBuffer>;
+
+	getSize(): Promise<number>;
+
+	close(): Promise<void>;
+}
+
+export interface TextFile {
 	write(data: string): Promise<number>;
 
 	read(length: number): Promise<string>;
@@ -21,25 +23,30 @@ export class TextFile {
 	close(): Promise<void>;
 }
 
+export interface BootOptions {
+	/** Node.js major version to run inside the pod. */
+	nodeVersion?: string;
+	/** BrowserPod API key. */
+	apiKey: string;
+	/** Alternative portal domain, used when self-hosting. */
+	apiDomain?: string;
+	/** Persistence key for the pod's disk in IndexedDB. */
+	storageKey?: string;
+	/** Disk image to be mounted on /home. */
+	userImage?: string;
+}
+
+export interface RunOptions {
+	terminal: Terminal;
+	env?: Array<string>;
+	cwd?: string;
+	echo?: boolean;
+}
 
 export class BrowserPod {
-	static boot(opts: {
-		nodeVersion?: string;
-		apiKey: string;
-		storageKey?: string;
-		userImage?: string;
-	}): Promise<BrowserPod>;
+	static boot(opts: BootOptions): Promise<BrowserPod>;
 
-	run(
-		executable: string,
-		args: Array<string>,
-		opts: {
-			terminal: Terminal,
-			env?: Array<string>;
-			cwd?: string,
-			echo?: boolean
-		}
-	): Promise<Process>;
+	run(executable: string, args: Array<string>, opts: RunOptions): Promise<Process>;
 
 	onPortal(cb: ( args: { url: string, port: number }) => void): void;
 	onOpen(cb: ( urlOrPath: string ) => void): void;
@@ -47,7 +54,7 @@ export class BrowserPod {
 	createDirectory(
 		path: string,
 		opts?: { recursive?: boolean }
-  	): Promise<void>;
+	): Promise<void>;
 
 	createFile(path: string, mode: string): Promise<BinaryFile | TextFile>;
 
@@ -63,4 +70,3 @@ export class BrowserPod {
 		onOutput: (buffer: ArrayBuffer, vt?: unknown) => void;
 	}): Promise<Terminal>;
 }
-
