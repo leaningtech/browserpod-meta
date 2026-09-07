@@ -72,7 +72,7 @@
 
 ## What is BrowserPod?
 
-BrowserPod is a WebAssembly-based API that creates a lightweight Linux virtual machine directly in a user's browser tab. BrowserPod's in-browser Linux kernel supports sandboxed runtime environments including **Node.js**, **Rust** and **Python (preview)**, with more coming soon.
+BrowserPod is a WebAssembly-based API that creates a lightweight Linux virtual machine directly in a user's browser tab. Its in-browser Linux-like kernel supports sandboxed runtime environments including **Node.js**, **Rust** and **Python (preview)**, with more coming soon.
 
 Developers use BrowserPod to **sandbox untrusted and AI-generated code** in the browser, build web applications that **embed server-side processes client-side**, **create interactive documentation and playgrounds** and **run AI coding CLIs in-browser** without modification (e.g., Claude Code, Codex).
 <br>
@@ -81,14 +81,16 @@ Developers use BrowserPod to **sandbox untrusted and AI-generated code** in the 
 | Feature | Description |
 | --- | --- |
 | **WebAssembly** | BrowserPod compiles full native runtimes to WebAssembly, running them directly in the browser without a server. |
-| **Kernel** | BrowserPod's in-browser Linux kernel exposes a Linux-compliant syscall interface rather than a limited JavaScript shim. |
+| **Kernel** | BrowserPod's in-browser kernel exposes a Linux-compatible syscall interface rather than a limited JavaScript shim. |
 | **Sandbox** | BrowserPod runs directly in the browser, inheriting its security boundary. |
 | **Runtimes** | In-browser runtimes for Node.js, Rust and Python (currently in preview). Ruby and Go are in development. |
-| **Compatibility** | The Node.js runtime ships with npm built in, and supports most frameworks and tools (including React, Angular, Next.js, Express.js and Vite; see Node.js frameworks for more). Most Rust CLI tools work unmodified, including jj, Codex and ripgrep. |
+| **Compatibility** | The Node.js runtime ships with npm built in, and supports most frameworks and tools (including React, Angular, Next.js, Express.js and Vite; see Node.js frameworks for more). Most Rust CLI tools work unmodified, including jj, ripgrep and Codex. |
 | **Filesystem** | A block-based streaming virtual filesystem provides full POSIX compatibility. Disk images are streamed on demand, and any file changes stay local to the browser session using either IndexedDB or the Origin Private File System (OPFS). |
 | **Portals** | Ports that open in BrowserPod can be shared via a temporary private URL. This secure URL routes external traffic directly to the service running in the browser, enabling live previews and collaboration without any backend servers. |
 | **Tools** | BrowserPod provides a wide range of developer tools and frameworks, including bash, git and ripgrep, plus npm for Node.js. |
 | **Multithreading** | Web workers enable true multithreading for complex, multi-process workloads that would normally require a full operating system. |
+| **Terminal** | To connect a process's I/O, pass it a `Terminal` — an in-browser pseudo-terminal handle created via `createDefaultTerminal` or `createCustomTerminal`. BrowserPod uses xterm.js by default, but also supports other Wasm-compatible pseudo-terminals (e.g., ghosttyweb). |
+| **Networking** | BrowserPod provides controlled networking. To prevent malicious use, egress is limited to a whitelist of domains (e.g., github.com). To add domains for your project, reach out to us on Discord. |
 
 <br>
 
@@ -126,23 +128,13 @@ BrowserPod supports Node.js and Rust, with Python currently in preview. Addition
 | Go | 2026 🔴 | TBA |
 | Ruby | 2026 🔴 | TBA |
 
-## Requirements
+## Considerations
 
 ### Browser
 
 Chrome, Firefox, Edge and Safari are all supported. For maximum compatibility, we recommend Chromium-based browsers.
 
 In some experimental use cases that require significant client memory, BrowserPod may fail in Safari.
-
-### Terminal
-
-BrowserPod requires a terminal to run. A terminal is an opaque handle to a terminal emulator running inside a BrowserPod instance, created by `createDefaultTerminal` or `createCustomTerminal` and passed to `run` to connect a process to I/O.
-
-BrowserPod uses xterm.js, but also supports other Wasm-compatible pseudo-terminals (e.g., ghosttyweb). 
-
-### Networking
-
-BrowserPod provides controlled networking. To prevent malicious use, egress is limited to a whitelist of domains (e.g., github.com). To add domains for your project, reach out to us on Discord.
 
 ### Native binaries
 
@@ -202,7 +194,7 @@ Cross-Origin-Embedder-Policy: require-corp
 - **[Showcase](https://browserpod.io/showcase/)**: Community projects built on BrowserPod
 - **[Discord Community](https://discord.leaningtech.com)**: Get help and share your projects
 - **[GitHub Issues](https://github.com/leaningtech/browserpod-meta/issues)**: Report bugs and request features
-- **[Yarn 6 playground](https://v6.yarnpkg.com)**: Yarn 6 runs on BrowserPod in its official playground. 
+- **[Yarn 6 playground](https://v6.yarnpkg.com/playground)**: Yarn 6 runs on BrowserPod in its official playground. 
 
 <br>
 
