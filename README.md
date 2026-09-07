@@ -89,7 +89,7 @@ Developers use BrowserPod to **sandbox untrusted and AI-generated code** in the 
 | **Portals** | Ports that open in BrowserPod can be shared via a temporary private URL. This secure URL routes external traffic directly to the service running in the browser, enabling live previews and collaboration without any backend servers. |
 | **Tools** | BrowserPod provides a wide range of developer tools and frameworks, including bash, git and ripgrep, plus npm for Node.js. |
 | **Multithreading** | Web workers enable true multithreading for complex, multi-process workloads that would normally require a full operating system. |
-| **Terminal** | To connect a process's I/O, pass it a `Terminal` — an in-browser pseudo-terminal handle created via `createDefaultTerminal` or `createCustomTerminal`. BrowserPod uses xterm.js by default, but also supports other Wasm-compatible pseudo-terminals (e.g., ghosttyweb). |
+| **Terminal** | To connect a process's I/O, pass it a `Terminal`, an in-browser pseudo-terminal handle created via `createDefaultTerminal` or `createCustomTerminal`. BrowserPod uses xterm.js by default, but also supports other Wasm-compatible pseudo-terminals (e.g., ghosttyweb). |
 | **Networking** | BrowserPod provides controlled networking. To prevent malicious use, egress is limited to a whitelist of domains (e.g., github.com). To add domains for your project, reach out to us on Discord. |
 
 <br>
