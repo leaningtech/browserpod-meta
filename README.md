@@ -21,7 +21,7 @@
 </p>
 
 <p align="center">
-  <b>Build with:</b>&nbsp;&nbsp;
+  <b>Built with:</b>&nbsp;&nbsp;
   <img src="assets/icons/WebAssembly.svg" alt="Wasm" title="Wasm" height="30">
 </p>
 
