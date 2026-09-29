@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>name</key>
+  <string>Monokai</string>
+  <key>settings</key>
+  <array>
+    <dict>
+      <key>settings</key>
+      <dict>
+        <key>background</key><string>#222222</string>
+        <key>foreground</key><string>#F8F8F2</string>
+        <key>caret</key><string>#F8F8F2</string>
+        <key>lineHighlight</key><string>#333333</string>
+        <key>selection</key><string>#333333</string>
+        <key>gutter</key><string>#333333</string>
+        <key>gutterForeground</key><string>#93A1A1</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>Keyword</string>
+      <key>scope</key>
+      <string>keyword, keyword.other, keyword.control, storage.modifier, storage.type.struct, storage.type.enum, storage.type.trait, storage.type.impl, storage.type.function</string>
+      <key>settings</key>
+      <dict><key>foreground</key><string>#E6DB74</string></dict>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>Type</string>
+      <key>scope</key>
+      <string>storage.type, support.type, entity.name.type, entity.name.struct, entity.name.enum, entity.name.trait, meta.generic</string>
+      <key>settings</key>
+      <dict><key>foreground</key><string>#F92672</string></dict>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>Identifier</string>
+      <key>scope</key>
+      <string>variable, variable.other, variable.other.member, entity.name.function, meta.function-call, support.function</string>
+      <key>settings</key>
+      <dict><key>foreground</key><string>#66D9EF</string></dict>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>Punctuation</string>
+      <key>scope</key>
+      <string>punctuation, punctuation.definition, punctuation.section, punctuation.separator, punctuation.terminator, punctuation.accessor, meta.brace</string>
+      <key>settings</key>
+      <dict><key>foreground</key><string>#6C71C4</string></dict>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>String</string>
+      <key>scope</key>
+      <string>string, string.quoted</string>
+      <key>settings</key>
+      <dict><key>foreground</key><string>#A6E22E</string></dict>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>Constant</string>
+      <key>scope</key>
+      <string>constant, constant.numeric, constant.language, constant.character</string>
+      <key>settings</key>
+      <dict><key>foreground</key><string>#6C71C4</string></dict>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>Macro</string>
+      <key>scope</key>
+      <string>support.macro, meta.macro, entity.name.macro</string>
+      <key>settings</key>
+      <dict><key>foreground</key><string>#66D9EF</string></dict>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>Comment</string>
+      <key>scope</key>
+      <string>comment, comment.line, comment.block</string>
+      <key>settings</key>
+      <dict><key>foreground</key><string>#586E75</string></dict>
+    </dict>
+  </array>
+  <key>uuid</key>
+  <string>3f8c1b42-7d5e-4a19-9c60-2e1b7a4d5c33</string>
+</dict>
+</plist>

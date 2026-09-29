@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>amp</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Quicksand"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="terminal" id="amp-terminal">
+      <div class="title-bar">amp<a
+          class="bp-link"
+          href="https://browserpod.io"
+          target="_blank"
+          rel="noopener"
+          >Running on BrowserPod</a
+        ></div>
+      <div class="content" id="amp-console"></div>
+    </div>
+
+    <aside id="bash-drawer" aria-label="bash">
+      <div class="shell" id="bash-terminal">
+        <button
+          class="shell-bar"
+          id="bash-handle"
+          type="button"
+          disabled
+          aria-label="bash"
+          aria-expanded="false"
+          aria-controls="bash-console"
+        >
+          <span class="bp-mark"></span>
+        </button>
+        <div class="shell-body" id="bash-console"></div>
+      </div>
+    </aside>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

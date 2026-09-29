@@ -1,0 +1,181 @@
+@use "vendor/amp-website/base.css.scss";
+@use "vendor/amp-website/terminal.css.scss";
+
+/* Local, so metrics are certain. */
+@font-face {
+  font-family: "Fira Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("/fonts/fira-mono-400-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Fira Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("/fonts/fira-mono-400-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+    U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Fira Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url("/fonts/fira-mono-700-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Fira Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url("/fonts/fira-mono-700-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+    U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+
+/* Terminal is the page. */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: var(--base03);
+  overflow: hidden;
+}
+
+/* Leaves room for the lip. */
+#amp-terminal {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 31px);
+  margin-bottom: 0;
+}
+
+#amp-terminal > .content {
+  flex: 1;
+  min-height: 0;
+}
+
+#amp-terminal > .title-bar {
+  position: relative;
+}
+
+/* Match what xterm measured. */
+#amp-console .xterm,
+#amp-console .xterm-rows {
+  font-family: "Fira Mono", monospace;
+  font-size: 13px;
+}
+
+/* Out of flow, keeps centring. */
+.bp-link {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  color: #1c1c1c;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.bp-link:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+/* Closed, the bar still shows. */
+#bash-drawer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: min(20rem, 45vh);
+  z-index: 2;
+  transform: translateY(calc(100% - 31px));
+  transition: transform 200ms ease;
+}
+
+#bash-drawer.open {
+  transform: none;
+}
+
+/* bash panel, own rules */
+.shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 4px 4px 0 0;
+}
+
+/* The bar is the handle. */
+.shell-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 4px 0;
+  background-color: #666;
+  border: 1px solid #ccc;
+  border-width: 1px 1px 0 1px;
+  border-radius: 4px 4px 0 0;
+  box-shadow: inset 0 20px 50px #fff;
+  cursor: pointer;
+}
+
+.shell-bar:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.shell-bar:hover:not(:disabled) .bp-mark {
+  background-color: #111;
+}
+
+/* Alpha only, so no green. */
+.bp-mark {
+  display: block;
+  width: 20px;
+  height: 22px;
+  background-color: #2e2e2e;
+  mask: url("/bp-logo2.svg") no-repeat center / contain;
+  -webkit-mask: url("/bp-logo2.svg") no-repeat center / contain;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.95));
+}
+
+.shell-body {
+  flex: 1;
+  min-height: 0;
+  margin: 0 1px;
+  padding: 8px;
+  overflow: hidden;
+  color: var(--base00);
+  background-color: var(--base03);
+  border: 1px solid var(--base1);
+  border-top: none;
+}
+
+.shell pre {
+  margin: 0;
+  color: var(--base00);
+  font-family: "Fira Mono", monospace;
+  font-size: small;
+}
