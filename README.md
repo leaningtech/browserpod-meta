@@ -188,6 +188,12 @@ Cross-Origin-Embedder-Policy: require-corp
 
 - **[Learn more about cross-origin isolation](https://browserpod.io/docs/understanding-browserpod/cross-origin-isolation)**
 
+### Rust support
+
+While a full Rust runtime running in the pod is part of our roadmap, our current rust support is enabled through our **BrowserPod Rust compiler toolchain**, which allows you to compile Rust programs with BrowserPod as the target.
+
+For more information, please see our [Rust toolchain guide](https://browserpod.io/docs/guides/installing-rust-toolchain)
+
 ## Resources
 
 - **[Documentation](https://browserpod.io/docs)**: Complete guides, tutorials, and API reference
