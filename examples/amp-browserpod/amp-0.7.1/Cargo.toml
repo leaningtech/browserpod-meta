@@ -1,0 +1,63 @@
+[package]
+
+name = "amp"
+version = "0.7.1"
+authors = ["Jordan MacDonald <jordan@wastedintelligence.com>"]
+description = "A complete text editor for your terminal."
+homepage = "https://amp.rs"
+repository = "https://github.com/jmacdonald/amp"
+documentation = "https://amp.rs/docs"
+readme = "README.md"
+license-file = "LICENSE"
+keywords = ["text", "editor", "terminal", "modal"]
+edition="2021"
+
+[build-dependencies]
+regex = "1.10"
+
+[dependencies]
+app_dirs2 = "2.5"
+scribe = "0.8"
+bloodhound = "0.5"
+luthor = "0.2"
+fragment = "0.3"
+regex = "1.10"
+libc = "0.2"
+syntect = "5.1"
+termion = "2.0"
+error-chain = "0.12"
+unicode-segmentation = "1.10"
+yaml-rust = "0.4"
+smallvec = "1.11"
+lazy_static = "1.4"
+mio = "0.6"
+
+[dependencies.signal-hook]
+version = "0.1"
+features = ["mio-support"]
+
+# A Pod has no X server or Wayland compositor, and cli-clipboard's Unix
+# backends are unconditional, so we drop it there and stub it out instead.
+[target.'cfg(not(target_vendor = "browserpod"))'.dependencies]
+cli-clipboard = "0.4"
+
+[dependencies.git2]
+version = "0.18"
+# We use very little of the Git crate. Disabling its default features makes it
+# as bare as possible, and sidesteps its openssl dependency, among others.
+default-features = false # removes unused openssl dependency
+
+[profile.release-small]
+inherits = "release"
+lto = true
+codegen-units = 1
+opt-level = "z"
+strip = true
+
+[dev-dependencies]
+criterion = "0.5"
+
+[[bench]]
+name = "draw_buffer"
+path = "benches/view/draw_buffer.rs"
+harness = false

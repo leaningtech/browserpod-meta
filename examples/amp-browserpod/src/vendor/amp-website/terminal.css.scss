@@ -1,0 +1,108 @@
+body {
+  --base03:    #222;
+  --base02:    #333;
+  --base01:    #586e75;
+  --base00:    #f8f8f2;
+  --base1:     #93a1a1;
+  --yellow:    #e6db74;
+  --red:       #dc322f;
+  --magenta:   #f92672;
+  --violet:    #6c71c4;
+  --blue:      #66d9ef;
+  --cyan:      #2aa198;
+  --green:     #a6e22e;
+}
+
+.terminal {
+  border-radius: 4px 4px 0 0;
+  box-shadow: 0 0 5px #ccc;
+  margin-bottom: 25px;
+
+  .title-bar {
+    background-color: #666;
+    border-radius: 4px 4px 0 0;
+    border: 1px solid #ccc;
+    border-width: 1px 1px 0 1px;
+    box-shadow: inset 0 20px 50px #fff;
+    color: #555;
+    font-weight: bold;
+    padding: 5px 0;
+    text-align: center;
+    text-shadow: 0.5px 0.5px white;
+  }
+
+  .content {
+    background-color: var(--base03);
+    border: 1px solid var(--base1);
+    border-top: none;
+    box-shadow: 0 0 1px 0.5px #333;
+    color: var(--base00);
+    margin: 0 1px;
+    overflow: hidden;
+    padding: 8px;
+  }
+
+  pre {
+    color: var(--base00);
+    font-family: "Fira Mono", monospace;
+    font-size: small;
+    margin: 0;
+
+    &.code {
+      margin-left: 50px;
+    }
+
+    &.line-numbers {
+      background-color: var(--base02);
+      float: left;
+      padding: 0 10px;
+    }
+
+   .highlight {
+      background-color: var(--base02);
+      display: inline-block;
+      width: 100%;
+    }
+  }
+
+  .yellow {
+    color: var(--yellow);
+  }
+
+  .magenta {
+    color: var(--magenta);
+  }
+
+  .blue{
+    color: var(--blue);
+  }
+
+  .violet{
+    color: var(--violet);
+  }
+
+  .cursor {
+    animation: blink 1.5s steps(1, end) infinite;
+    font-weight: bold;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  .mode {
+    background-color: var(--green);
+    color: var(--base03);
+    float: left;
+  }
+
+  .file-name {
+    background-color: var(--base02);
+    float: left;
+  }
+
+  .git-status {
+    background-color: var(--base02);
+    text-align: right;
+  }
+}
