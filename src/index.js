@@ -1,4 +1,4 @@
-const version="3.5.0"
+const version="3.5.1"
 const dynImport = new Function("x", "return import(x)");
 async function loadLibrary()
 {
