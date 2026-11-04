@@ -153,17 +153,22 @@ function validateTemplateName(name) {
   return true;
 }
 
-async function copyFilesAndDirectories(src, dest, projectName, apiKey) {
+// npm strips .gitignore files from published packages, so templates ship them as _gitignore
+const renameFiles = {
+  _gitignore: '.gitignore'
+};
+
+async function copyFilesAndDirectories(src, dest, projectName) {
   const items = await fs.readdir(src);
 
   for (const item of items) {
     const srcPath = path.join(src, item);
-    const destPath = path.join(dest, item);
+    const destPath = path.join(dest, renameFiles[item] ?? item);
     const stat = await fs.stat(srcPath);
 
     if (stat.isDirectory()) {
       await fs.ensureDir(destPath);
-      await copyFilesAndDirectories(srcPath, destPath, projectName, apiKey);
+      await copyFilesAndDirectories(srcPath, destPath, projectName);
     } else if (isBinaryPath(srcPath)) {
       await fs.copyFile(srcPath, destPath);
     } else {
@@ -171,11 +176,19 @@ async function copyFilesAndDirectories(src, dest, projectName, apiKey) {
 
       // Replace template variables
       content = content.replace(/\{\{PROJECT_NAME\}\}/g, projectName);
-      content = content.replace(/\{\{API_KEY\}\}/g, apiKey || '');
 
       await fs.writeFile(destPath, content, 'utf8');
     }
   }
+}
+
+async function writeEnvFile(dest, apiKey) {
+  // An empty VITE_BP_APIKEY is still passed to BrowserPod.boot as a key, so leave it commented out
+  const content = apiKey
+    ? `VITE_BP_APIKEY=${apiKey}\n`
+    : '# Get an API key at https://console.browserpod.io\n# VITE_BP_APIKEY=your-key-here\n';
+
+  await fs.writeFile(path.join(dest, '.env'), content, 'utf8');
 }
 
 async function resolveProjectOptions(cliOptions) {
@@ -310,7 +323,8 @@ async function createProject(argv = process.argv.slice(2)) {
 
   try {
     await fs.ensureDir(targetPath);
-    await copyFilesAndDirectories(templatePath, targetPath, projectName, apiKey);
+    await copyFilesAndDirectories(templatePath, targetPath, projectName);
+    await writeEnvFile(targetPath, apiKey);
 
     console.log(chalk.green.bold('✅ Project created successfully!\n'));
     console.log(chalk.yellow('Next steps:'));
