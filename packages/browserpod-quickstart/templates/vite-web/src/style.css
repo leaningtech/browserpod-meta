@@ -63,6 +63,11 @@ p {
   text-decoration: underline;
 }
 
+#url.warning {
+  background: #fff4e5;
+  color: #8a4b00;
+}
+
 .preview-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
