@@ -1,18 +1,32 @@
 import { BrowserPod } from '@leaningtech/browserpod'
 import { copyFile } from './utils'
 
-// Initialize the Pod
-// VITE_BP_APIKEY is an environmental variable containing your Api Key
+// Read the API key
+// VITE_BP_APIKEY is an optional environment variable containing your API key
 // Its value is defined in the file `.env` in the project's main directory
-// To get an Api Key, visit https://console.browserpod.io
-const pod = await BrowserPod.boot({apiKey:import.meta.env.VITE_BP_APIKEY});
+// To get an API key, visit https://console.browserpod.io
+// An empty string would still count as a key, so treat it as no key
+const apiKey = import.meta.env.VITE_BP_APIKEY?.trim() || undefined;
+
+// Portals need an API key, so show how to enable the preview instead
+const urlDiv = document.getElementById("url");
+if (!apiKey) {
+  urlDiv.classList.add("warning");
+  urlDiv.innerHTML = 'The preview needs an API key. Add <code>VITE_BP_APIKEY</code> to <code>.env</code> and restart the dev server. Get a key at <a href="https://console.browserpod.io">console.browserpod.io</a>.';
+}
+
+// Initialize the Pod
+// With an API key the Pod can use Portals; without one it runs keyless
+// Keyless boot needs opinionatedFetch, as plain fetch fails CORS checks (e.g. during npm install)
+const pod = apiKey
+  ? await BrowserPod.boot({apiKey})
+  : await BrowserPod.boot({network:await BrowserPod.createFetchNetwork({fetch:BrowserPod.opinionatedFetch})});
 
 // Create a Terminal
 const terminal = await pod.createDefaultTerminal(document.querySelector("#console"));
 
 // Hook the portal to preview the web page in an iframe
 const portalIframe = document.getElementById("portal");
-const urlDiv = document.getElementById("url");
 pod.onPortal(({ url, port }) => {
   urlDiv.innerHTML = `Portal available at <a href="${url}">${url}</a> for local server listening on port ${port}`;
   portalIframe.src = url;
