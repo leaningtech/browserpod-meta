@@ -102,6 +102,16 @@ Developers use BrowserPod to **sandbox untrusted and AI-generated code** in the 
 npm create browserpod-quickstart
 ```
 
+Pick a template:
+
+| Template | What it runs |
+|---|---|
+| `vite-basic` | Node.js REPL |
+| `bash` | Bash terminal |
+| `vite-web` | Express server with a live preview (uses Portals) |
+
+The API key is optional. To enable [Portals](https://browserpod.io/docs/understanding-browserpod/portals), which let you preview and share services running inside your pod, register at [console.browserpod.io](https://console.browserpod.io) and paste your API key after choosing a template. You can also add `VITE_BP_APIKEY` to the project's `.env` later.
+
 ### npm
 
 ```
