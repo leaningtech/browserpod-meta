@@ -1,7 +1,13 @@
-export interface Process {}
+/** Awaiting a Process resolves to its exit code once it exits. */
+export interface Process {
+	then(
+		onExit: (exitCode: number) => void,
+		onError?: (error: unknown) => void
+	): void;
+}
 
 export interface Terminal {
-	write(data: string): void;
+	write(data: string | Uint8Array): void;
 }
 
 export interface BinaryFile {
@@ -28,9 +34,9 @@ export interface BootOptions {
 	nodeVersion?: string;
 	/** BrowserPod API key. */
 	apiKey: string;
-	/** Alternative portal domain, used when self-hosting. */
-	apiDomain?: string;
-	/** Persistence key for the pod's disk in IndexedDB. */
+	/** Alternative portal origin, such as "https://main.browserportal.io", used when self-hosting. */
+	apiOrigin?: string;
+	/** Persistence key for the pod's disk, stored in OPFS (IndexedDB if unsupported). Omit for an ephemeral pod. */
 	storageKey?: string;
 	/** Disk image to be mounted on /home. */
 	userImage?: string;
@@ -46,7 +52,7 @@ export interface RunOptions {
 export class BrowserPod {
 	static boot(opts: BootOptions): Promise<BrowserPod>;
 
-	run(executable: string, args: Array<string>, opts: RunOptions): Promise<Process>;
+	run(executable: string, args: Array<string>, opts: RunOptions): Process;
 
 	onPortal(cb: ( args: { url: string, port: number }) => void): void;
 	onOpen(cb: ( urlOrPath: string ) => void): void;
@@ -67,6 +73,6 @@ export class BrowserPod {
 	createCustomTerminal(opts: {
 		cols?: number;
 		rows?: number;
-		onOutput: (buffer: ArrayBuffer, vt?: unknown) => void;
+		onOutput: (buffer: Uint8Array, vt?: number) => void;
 	}): Promise<Terminal>;
 }
