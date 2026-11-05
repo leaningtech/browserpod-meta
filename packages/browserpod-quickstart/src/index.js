@@ -8,23 +8,41 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const API_KEY_URL = 'https://console.browserpod.io';
+
+const PORTALS_NOTE = `To enable Portals, which let you share the page or service running inside your pod,
+register at ${API_KEY_URL} and paste your API key after choosing a template.`;
+
 const templates = [
   {
-    name: 'vite-basic',
-    display: 'Basic',
-    description: 'A simple project running a basic script'
+    value: 'vite-basic',
+    title: 'Basic',
+    description: 'Node.js REPL',
+    usesPortals: false
   },
   {
-    name: 'vite-web',
-    display: 'Web Server',
-    description: 'A simple project running a web server'
+    value: 'bash',
+    title: 'Bash shell',
+    description: 'Interactive Bash terminal',
+    usesPortals: false
   },
   {
-    name: 'bash',
-    display: 'Bash shell',
-    description: 'An interactive Bash shell'
+    value: 'vite-web',
+    title: 'Web server',
+    description: 'Express server with a live preview',
+    usesPortals: true
   }
 ];
+
+const templateValues = templates.map(t => t.value).join(', ');
+
+function findTemplate(value) {
+  return templates.find(t => t.value === value);
+}
+
+function templateLabel(template) {
+  return `${template.title} - ${template.description}${template.usesPortals ? ' (uses Portals)' : ''}`;
+}
 
 const optionAliases = {
   '-t': 'template',
@@ -47,20 +65,32 @@ class PromptCancelledError extends Error {
 }
 
 function printHelp() {
+  const valueWidth = Math.max(...templates.map(t => t.value.length));
+  const templateList = templates
+    .map(t => `  ${t.value.padEnd(valueWidth)}   ${templateLabel(t)}`)
+    .join('\n');
+
   console.log(`Create Browserpod Quickstart
 
 Usage:
   create-browserpod-quickstart [project-name] [options]
 
 Options:
-  -t, --template <name>        Template to use (${templates.map(t => t.name).join(', ')})
+  -t, --template <name>        Template to use (${templateValues})
   -k, --api-key <key>          BrowserPod API key to write to .env
       --non-interactive        Fail instead of prompting for missing required values
   -h, --help                   Show this help message
 
+Templates:
+${templateList}
+
+The API key is optional. To enable Portals, which let you share the page
+or service running inside your pod, register at ${API_KEY_URL}
+and pass your key with --api-key, or add VITE_BP_APIKEY to .env later.
+
 Examples:
-  create-browserpod-quickstart my-app --template vite-web
-  create-browserpod-quickstart my-app --template bash --api-key bp_...
+  create-browserpod-quickstart my-app --template vite-basic
+  create-browserpod-quickstart my-app --template vite-web --api-key bp_...
 `);
 }
 
@@ -146,8 +176,8 @@ async function validateProjectName(name) {
 }
 
 function validateTemplateName(name) {
-  if (!templates.some(template => template.name === name)) {
-    return `Unknown template "${name}". Available templates: ${templates.map(t => t.name).join(', ')}`;
+  if (!findTemplate(name)) {
+    return `Unknown template "${name}". Available templates: ${templateValues}`;
   }
 
   return true;
@@ -183,12 +213,15 @@ async function copyFilesAndDirectories(src, dest, projectName) {
 }
 
 async function writeEnvFile(dest, apiKey) {
-  // An empty VITE_BP_APIKEY is still passed to BrowserPod.boot as a key, so leave it commented out
   const content = apiKey
     ? `VITE_BP_APIKEY=${apiKey}\n`
-    : '# Get an API key at https://console.browserpod.io\n# VITE_BP_APIKEY=your-key-here\n';
+    : `# Add your API key to enable Portals (register at ${API_KEY_URL})\n# VITE_BP_APIKEY=your-key-here\n`;
 
   await fs.writeFile(path.join(dest, '.env'), content, 'utf8');
+}
+
+function normalizeApiKey(apiKey) {
+  return apiKey?.trim() || undefined;
 }
 
 async function resolveProjectOptions(cliOptions) {
@@ -219,11 +252,16 @@ async function resolveProjectOptions(cliOptions) {
     throw new Error(`Missing required option${missing.length > 1 ? 's' : ''} for non-interactive mode: ${missing.join(', ')}`);
   }
 
-  if (hasRequiredOptions) {
+  const shouldPromptForKey = cliOptions.apiKey === undefined;
+
+  // The key is optional, so with everything else given only ask when a person can answer
+  const canPromptForKey = !cliOptions.nonInteractive && Boolean(process.stdin.isTTY);
+
+  if (hasRequiredOptions && !(canPromptForKey && shouldPromptForKey)) {
     return {
       template: cliOptions.template,
       projectName: cliOptions.projectName,
-      apiKey: cliOptions.apiKey || ''
+      apiKey: normalizeApiKey(cliOptions.apiKey)
     };
   }
 
@@ -235,8 +273,8 @@ async function resolveProjectOptions(cliOptions) {
       name: 'template',
       message: 'Select a template:',
       choices: templates.map(t => ({
-        title: `${t.display} - ${t.description}`,
-        value: t.name
+        title: templateLabel(t),
+        value: t.value
       }))
     });
   }
@@ -250,12 +288,14 @@ async function resolveProjectOptions(cliOptions) {
     });
   }
 
-  if (cliOptions.apiKey === undefined) {
+  if (shouldPromptForKey) {
     questions.push({
       type: 'password',
       name: 'apiKey',
-      message: 'BrowserPod API key (leave blank to add it later in .env, get one at https://console.browserpod.io):'
+      message: 'BrowserPod API key (optional, leave blank to skip):'
     });
+
+    console.log(`${PORTALS_NOTE}\n`);
   }
 
   let promptCancelled = false;
@@ -273,8 +313,22 @@ async function resolveProjectOptions(cliOptions) {
   return {
     template: cliOptions.template || response.template,
     projectName: cliOptions.projectName || response.projectName,
-    apiKey: cliOptions.apiKey !== undefined ? cliOptions.apiKey : response.apiKey
+    apiKey: normalizeApiKey(cliOptions.apiKey ?? response.apiKey)
   };
+}
+
+function printKeyNotice(template, projectName, apiKey) {
+  if (apiKey) {
+    return;
+  }
+
+  if (template.usesPortals) {
+    console.log(chalk.yellow.bold('This template previews its server through a Portal, which needs an API key.'));
+    console.log(chalk.yellow(`To see the preview, add VITE_BP_APIKEY=<your key> to ${projectName}/.env`));
+    console.log(chalk.yellow(`(register at ${API_KEY_URL}).\n`));
+  } else {
+    console.log(`To enable Portals, add VITE_BP_APIKEY=<your key> to ${projectName}/.env (register at ${API_KEY_URL}).\n`);
+  }
 }
 
 async function createProject(argv = process.argv.slice(2)) {
@@ -327,6 +381,7 @@ async function createProject(argv = process.argv.slice(2)) {
     await writeEnvFile(targetPath, apiKey);
 
     console.log(chalk.green.bold('✅ Project created successfully!\n'));
+    printKeyNotice(findTemplate(template), projectName, apiKey);
     console.log(chalk.yellow('Next steps:'));
     console.log(`  cd ${projectName}`);
     console.log('  npm install');

@@ -11,6 +11,6 @@
     "vite": "^7.2.4"
   },
   "dependencies": {
-    "@leaningtech/browserpod": "latest"
+    "@leaningtech/browserpod": "^3.5.0"
   }
 }
