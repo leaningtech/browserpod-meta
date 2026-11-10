@@ -13,6 +13,7 @@
     "LICENSE.txt",
     "COPYRIGHT.txt",
     "README.md",
+    "AGENTS.md",
     "index.js",
     "index.d.ts"
   ],
@@ -26,7 +27,7 @@
     "leaningtech"
   ],
   "scripts": {
-    "prepack": "cp ../../README.md ../../LICENSE.txt ../../COPYRIGHT.txt ../../src/index.js ../../src/index.d.ts ."
+    "prepack": "cp ../../README.md ../../AGENTS.md ../../LICENSE.txt ../../COPYRIGHT.txt ../../src/index.js ../../src/index.d.ts ."
   },
   "author": "Leaning Technologies",
   "license": "SEE LICENSE IN LICENSE.txt",
