@@ -1,10 +1,124 @@
-Copyright © 2025 Leaning Technologies. All Rights Reserved.
+BROWSERPOD COMMUNITY LICENCE
 
-The contents of this npm package, relating to BrowserPod, are proprietary to Leaning Technologies. The use, copying, distribution, or modification of these package contents, and the operation of the BrowserPod product, are strictly regulated by and conditioned upon acceptance of Leaning Technologies' official policies.
+Version 1.0 — effective 13 November 2026
 
-The use of BrowserPod is regulated by:
-1. Terms of Service (TOS): https://browserpod.io/browserpod-tos
-2. Pricing Policy: https://browserpod.io/browserpod-pricing-policy
-3. Privacy Policy: https://browserpod.io/browserpod-privacy-policy
+In plain words
 
-No rights are granted to use the contents of this package except as expressly permitted by the aforementioned policies.
+BrowserPod is free for any use — personal, commercial and production — as long as you credit it.
+
+- Free for everyone. Individuals, companies of any size, open-source projects, educators and AI agents can use BrowserPod in development, in production, in commercial products, in internal tools and in SaaS. There is no usage limit and no fee.
+- Credit BrowserPod. Show "Powered by BrowserPod" with a link to browserpod.io where your pods run. Tools and agents that run pods without a user interface credit BrowserPod in their documentation or README. A commercial licence removes this requirement: every BrowserPod Edge Pro plan includes one, or ask us for a written agreement.
+- Load it from us. Load the runtime and its disk images from our servers. Do not copy, host, mirror or bundle them. Self-hosting, vendoring and redistribution need an Enterprise licence.
+- It doesn't phone home. The runtime only downloads its own files and disk data from us. It sends no telemetry, licence checks or usage data. Those downloads tell our servers the user's IP address and the page's origin; the Runtime Privacy Policy (https://browserpod.io/runtime-privacy) explains what we do with them.
+- Versions stay put. Each published runtime version stays available, unchanged, at its own address, unless it has a critical security flaw.
+- Networking is separate. BrowserPod Edge (Portals, outbound networking through our network, TCP) is an optional service under its own Terms of Service (https://browserpod.io/terms). Runtime versions before 3.5.0 only start with an API key, so they can only be used together with Edge.
+- No warranty. BrowserPod is provided as is. Community support is on Discord.
+
+This summary is for convenience. The licence below is what applies.
+
+------------------------------------------------------------------------
+
+The licence
+
+1. Parties and acceptance
+
+This licence is granted by Leaning Technologies Limited, a company registered in England and Wales, of Nexus, Discovery Way, Leeds, LS2 3AA, United Kingdom ("Leaning Technologies", "we", "us"), to you, the individual or organisation that uses the Software ("you"). If you use the Software on behalf of an organisation, you accept this licence for that organisation and confirm you have authority to do so.
+
+By installing, loading or using the Software you accept this licence. If you do not accept it, do not use the Software.
+
+2. Definitions
+
+- "Software" means the BrowserPod runtime: the JavaScript, WebAssembly and other files that we publish at https://rt.browserpod.io/ (the "Runtime Files"); the disk images we publish at disks.browserpod.io or reference from the Runtime Files (the "Disk Images"); the npm package @leaningtech/browserpod (the "Package"); and their documentation.
+- "Official Servers" means rt.browserpod.io, disks.browserpod.io and any other address that we designate in the Package or the documentation for delivering the Runtime Files or Disk Images.
+- "Runtime Version" means a set of Runtime Files that we publish under a version-specific path on the Official Servers (for example https://rt.browserpod.io/4.0.0/).
+- "Application" means any website, web application, browser extension, native application, tool, agent or other software that you make, operate or distribute and that uses the Software.
+- "End User" means anyone who uses your Application.
+- "Edge" means BrowserPod Edge, our optional network service (including Portals, outbound networking, the API at api.browserpod.io and the console at console.browserpod.io), governed by the BrowserPod Edge Terms of Service.
+- "Pro Subscription" means an active, paid BrowserPod Edge Pro plan in your console account, which includes a commercial licence to use the Software without the credit required by 4.1 and 4.2.
+- "Enterprise Agreement" means a separate written agreement with Leaning Technologies for self-hosting, vendoring, redistribution, OEM or other rights not granted here.
+
+3. Licence grant
+
+Subject to the conditions of this licence, we grant you a worldwide, royalty-free, non-exclusive, non-transferable, non-sublicensable licence to:
+
+3.1 install the Package and include it, unmodified, as a dependency of your Application;
+3.2 cause the Runtime Files and Disk Images to be loaded from the Official Servers into the browsers of your End Users and your own browsers, and run them there; and
+3.3 use the Software for any purpose, including personal, educational, evaluation, development, testing, commercial and production purposes, in Applications of any kind and at any scale, and through AI agents and automated tools acting for you.
+
+Your End Users may use the Software as part of your Application without a separate licence from us.
+
+This licence does not limit any use of your own code, data or content that runs inside a pod.
+
+4. Attribution
+
+4.1 Visible credit. Where your Application shows a user interface, you must display a visible credit reading "Powered by BrowserPod" (or an equivalent wording approved by us), linked to https://browserpod.io, in a place where End Users can reasonably see it — for example on the page or screen that hosts the pod, in its loading state, in the footer, or on an About page reachable from it.
+4.2 Headless use. Where your Application runs pods without a user interface (for example a command-line tool, an AI agent or an automated pipeline), you must credit BrowserPod, with a link to https://browserpod.io, in its documentation or README.
+4.3 Console notice. The Runtime Files print a notice in the browser's developer console when a pod starts. You must not remove, hide or alter that notice, other than through means we provide (for example an API key).
+4.4 Exemptions. The requirements in 4.1 and 4.2 do not apply while you hold a commercial licence that removes them: a Pro Subscription, an Enterprise Agreement or another written agreement with us.
+4.5 You may use the BrowserPod name and logo only to give the credit required by this section, and only in a way that does not suggest that we endorse your Application.
+
+5. Loading only from the Official Servers
+
+Unless an Enterprise Agreement allows it, you must not:
+
+5.1 copy, host, mirror, re-serve, proxy, bundle or embed the Runtime Files or Disk Images, in whole or in part, in your Application, build output, servers, content delivery network or any other location ("vendoring" or "self-hosting"), other than the temporary caching that browsers and standard HTTP caches perform;
+5.2 distribute, sell, rent, lease, sublicense or otherwise make the Runtime Files or Disk Images available to anyone, except by having them loaded from the Official Servers as allowed in section 3; or
+5.3 modify the Runtime Files or Disk Images, or load modified versions of them.
+
+The Package may be redistributed only unmodified and only as a dependency of your Application.
+
+6. Other restrictions
+
+You must not:
+
+6.1 reverse engineer, decompile or disassemble the Software, except to the extent that applicable law expressly permits it despite this restriction;
+6.2 remove or circumvent any technical measure, notice or credit in the Software, except as section 4 allows;
+6.3 use the Software to place a disproportionate load on the Official Servers, or in a way that threatens their integrity or availability, for example by automated mass downloading unrelated to running pods; or
+6.4 use the Software in breach of applicable law.
+
+7. Paid licences
+
+The following require an Enterprise Agreement: self-hosting or vendoring the Runtime Files or Disk Images; redistribution of the Software, including OEM distribution inside your products; and modified versions of the Software. Removing the attribution requires a commercial licence: a Pro Subscription includes one, and an Enterprise Agreement can. Contact us at https://browserpod.io/contact.
+
+8. No call-home
+
+The Software contacts Leaning Technologies only to download the Runtime Files and Disk Images from the Official Servers. It does not send us telemetry, licence checks or data about what runs inside a pod. Because those downloads are made by the End User's browser, our servers receive information such as the End User's IP address, the origin of the page that loads the Software and the browser's user agent. We process it as described in the BrowserPod Runtime Privacy Policy at https://browserpod.io/runtime-privacy. You are responsible for telling your End Users, in your own privacy notice, that your Application loads software from a third party.
+
+This section does not apply to Edge. When your Application connects a pod to Edge, the Edge Terms of Service and the Edge and Console Privacy Policy apply to that use.
+
+9. Edge and earlier Runtime Versions
+
+9.1 Edge is optional and is not part of the Software. Using Edge requires an account and is governed by the BrowserPod Edge Terms of Service and Pricing Policy.
+9.2 This licence applies to all Runtime Versions, including those published before its effective date. Runtime Versions earlier than 3.5.0 cannot start a pod without an API key; using them therefore also requires an Edge account and acceptance of the Edge Terms of Service.
+
+10. Permanence of Runtime Versions
+
+10.1 Once published, a Runtime Version is not changed. We intend to keep each Runtime Version available at its version-specific path on the Official Servers indefinitely, so that Applications that load a specific Runtime Version keep working.
+10.2 We may withdraw or block a Runtime Version that has a critical security flaw. Where we do, we will publish a notice and a fixed Runtime Version to upgrade to.
+10.3 This section concerns the availability of Runtime Files. It does not mean that the terms of this licence, or of any earlier licence, will apply indefinitely (see section 11).
+
+11. Changes to this licence
+
+We may publish new versions of this licence at https://browserpod.io/license. A new version applies from its effective date. We will publish any new version that restricts the rights granted here at least thirty (30) days before it takes effect. Every version, with the dates it applied, stays available at https://browserpod.io/legal.
+
+12. Termination
+
+12.1 This licence ends automatically if you breach it.
+12.2 If you remedy the breach within thirty (30) days after we notify you of it, your licence is reinstated, unless you have breached it before.
+12.3 When the licence ends you must stop using the Software and remove the Package from your Applications. Sections 6, 13, 14 and 15 survive termination.
+
+13. No warranty
+
+The Software is provided "as is" and "as available", without warranty of any kind, express or implied, including warranties of merchantability, fitness for a particular purpose, title and non-infringement, and without any commitment to availability, performance or support. Community support is offered on a best-effort basis only.
+
+14. Limitation of liability
+
+To the maximum extent permitted by law, Leaning Technologies will not be liable for any direct, indirect, incidental, special, consequential or exemplary damages, or for loss of profits, revenue, data or goodwill, arising from or related to this licence or the Software, however caused. Nothing in this licence limits liability that cannot be limited by law, including liability for death or personal injury caused by negligence, or for fraud.
+
+15. Governing law
+
+This licence is governed by the laws of England and Wales. The courts of England and Wales have exclusive jurisdiction over any dispute arising from it.
+
+16. Contact
+
+Questions about this licence: info@browserpod.io. Privacy: privacy@browserpod.io.

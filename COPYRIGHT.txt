@@ -1,13 +1,8 @@
-© Copyright 2020-2025 Leaning Technologies Limited. All Rights Reserved.
+© Copyright 2020-2026 Leaning Technologies Limited. All Rights Reserved.
 
-This software and associated documentation files (the "Software") are
-proprietary to Leaning Technologies Limited. Unauthorized copying of this file,
-via any medium, is strictly prohibited unless prior written permission is
-obtained from Leaning Technologies Limited.
-
-Use of this Software is governed by the Licence Agreement provided as a separate
-file.
+BrowserPod is proprietary software of Leaning Technologies Limited. It is
+free for any use, with attribution, under the BrowserPod Community Licence
+in LICENSE.txt and at https://browserpod.io/license.
 
 For enquiries and permissions, contact Leaning Technologies
-
 <info@leaningtech.com>.

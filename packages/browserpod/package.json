@@ -11,6 +11,7 @@
   },
   "files": [
     "LICENSE.txt",
+    "COPYRIGHT.txt",
     "README.md",
     "index.js",
     "index.d.ts"
