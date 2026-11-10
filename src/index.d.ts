@@ -1,4 +1,10 @@
-export interface Process {}
+/**
+ * A process started by BrowserPod.run. Awaiting it resolves to the exit code. It rejects when the program cannot
+ * start or is killed by a signal.
+ */
+export interface Process {
+	then(onFulfilled?: (exitCode: number) => void, onRejected?: (reason: unknown) => void): void;
+}
 
 export interface Terminal {
 	write(data: string): void;
@@ -42,18 +48,23 @@ export interface BootOptions {
 
 export interface RunOptions {
 	terminal: Terminal;
+	/** Entries of the form "KEY=value", added to the default environment. */
 	env?: Array<string>;
+	/** Defaults to "/home/user". */
 	cwd?: string;
+	/** Writes the command line to the terminal. */
 	echo?: boolean;
 }
 
 export class BrowserPod {
 	static boot(opts: BootOptions): Promise<BrowserPod>;
 
-	run(executable: string, args: Array<string>, opts: RunOptions): Promise<Process>;
+	/** Runs executable, an absolute path or a name looked up in PATH. */
+	run(executable: string, args: Array<string>, opts: RunOptions): Process;
 
-	onPortal(cb: ( args: { url: string, port: number }) => void): void;
-	onOpen(cb: ( urlOrPath: string ) => void): void;
+	onPortal(cb: (args: { url: string; port: number }) => void): void;
+	/** Called when a program in the pod runs xdg-open. */
+	onOpen(cb: (urlOrPath: string) => void): void;
 
 	/** path is absolute. Creating an existing directory succeeds. */
 	createDirectory(
