@@ -7,7 +7,8 @@ export interface Process {
 }
 
 export interface Terminal {
-	write(data: string): void;
+	/** Writes to the terminal's output, not to the input of the processes running on it. */
+	write(data: string | Uint8Array): void;
 }
 
 export interface BinaryFile {
@@ -56,6 +57,15 @@ export interface RunOptions {
 	echo?: boolean;
 }
 
+export interface CustomTerminalOptions {
+	/** Defaults to 80. */
+	cols?: number;
+	/** Defaults to 24. */
+	rows?: number;
+	/** Receives the terminal's output. vt is the ID of the pod terminal that produced it, absent for Terminal.write. */
+	onOutput: (buffer: Uint8Array, vt?: number) => void;
+}
+
 export class BrowserPod {
 	static boot(opts: BootOptions): Promise<BrowserPod>;
 
@@ -80,13 +90,9 @@ export class BrowserPod {
 	openFile(path: string, mode: "binary"): Promise<BinaryFile>;
 	openFile(path: string, mode: "utf-8"): Promise<TextFile>;
 
-	createDefaultTerminal(
-		consoleDiv: HTMLElement,
-	): Promise<Terminal>;
+	/** An xterm.js terminal in consoleDiv, sized to it. */
+	createDefaultTerminal(consoleDiv: HTMLElement): Promise<Terminal>;
 
-	createCustomTerminal(opts: {
-		cols?: number;
-		rows?: number;
-		onOutput: (buffer: ArrayBuffer, vt?: unknown) => void;
-	}): Promise<Terminal>;
+	/** A headless terminal whose output goes to opts.onOutput. */
+	createCustomTerminal(opts: CustomTerminalOptions): Promise<Terminal>;
 }
