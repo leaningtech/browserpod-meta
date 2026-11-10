@@ -210,10 +210,11 @@ Cross-Origin-Embedder-Policy: require-corp
 
 ## Licensing
 
-BrowserPod is proprietary software. It's free to use for personal and open-source projects.
+BrowserPod is **free for any use, with attribution** — personal, commercial and production — under the [BrowserPod Community Licence](https://browserpod.io/license) ([`LICENSE.txt`](LICENSE.txt)).
 
-Commercial support, feature fast-tracking, sponsored development and consulting packages are available for Enterprise customers.
+- **Credit BrowserPod:** show "Powered by BrowserPod" with a link to [browserpod.io](https://browserpod.io) where your pods run; headless tools and agents credit it in their docs or README. A commercial licence removes this requirement: every BrowserPod Edge Pro plan includes one, or [ask us](https://browserpod.io/contact/) for a written agreement.
+- **Load the runtime from our CDN.** Self-hosting, vendoring and redistribution (OEM) need an [Enterprise licence](https://browserpod.io/contact/).
+- **No call-home:** the runtime only downloads its own files and disk data. See the [Runtime Privacy Policy](https://browserpod.io/runtime-privacy).
+- **Networking is optional:** [BrowserPod Edge](https://browserpod.io/pricing) (Portals, outbound networking, TCP) has its own [Terms](https://browserpod.io/terms) and [Pricing Policy](https://browserpod.io/pricing-policy), with a free monthly allowance.
 
-Generous token grants are available for start-ups and open-source projects.
-
-See our [pricing](https://browserpod.io/browserpod-pricing-policy) for more details or [contact us](https://browserpod.io/contact/) if you've got questions.
+Previous licence and policy versions are kept at [browserpod.io/legal](https://browserpod.io/legal).
