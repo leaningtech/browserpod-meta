@@ -44,10 +44,9 @@ BrowserPod is free for any use under the BrowserPod Community Licence
 (`LICENSE.txt`, https://browserpod.io/license), with conditions an integration
 must meet:
 
-- **Attribution:** a visible "Powered by BrowserPod" credit linking to
-  https://browserpod.io on the page that hosts the pod. A headless tool credits
-  BrowserPod in its README or docs. Add it, and tell the user.
+- **Attribution:** add a visible "Powered by BrowserPod" credit linking to
+  https://browserpod.io, and tell the user.
 - **Load the runtime from BrowserPod's CDN.** Don't copy, vendor, mirror or
-  self-host the runtime's files: that needs an Enterprise licence.
+  self-host the runtime's files: that needs the BrowserPod Enterprise Licence.
 - Plans and prices: https://browserpod.io/pricing. Tell the user which applies;
   don't choose for them.
