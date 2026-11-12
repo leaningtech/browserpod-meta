@@ -3,7 +3,7 @@
   &nbsp;•&nbsp;
   <a href="https://browserpod.io/docs">Docs</a>
   &nbsp;•&nbsp;
-  <a href="https://browsercode.io">BrowserCode</a>
+  <a href="https://browsercode.io">Try it on BrowserCode</a>
   &nbsp;•&nbsp;
   <a href="https://discord.leaningtech.com">Discord</a>
 </p>
@@ -72,9 +72,9 @@
 
 ## What is BrowserPod?
 
-BrowserPod is a microVM that runs in the browser. It sits between a virtual machine and a microVM: it boots a Linux-like kernel near-instantly, with a small footprint and on-demand loading. Node.js, Rust, git, bash and npm run on the user's own device, with zero latency, so compute costs you zero.
+BrowserPod is a microVM that runs in the browser. Pods boot a Linux-like kernel in WebAssembly, with a small footprint and on-demand loading. They provide multiple language runtimes, including Node.js, Python and Rust, and extensive tools including git, bash, npm and pnpm. Pods run on the end user's browser, with zero latency, near-instant boot, and zero compute costs.
 
-**New in BrowserPod 4.0:** BrowserPod is free, with no account or API key. When a pod needs the internet (a public URL, npm, GitHub), **BrowserPod Edge** connects it.
+**New in BrowserPod 4.0:** BrowserPod is now free to use for any purpose, under the BrowserPod Community Licence. Unlimited and unmetered. When a pod needs the internet (a public URL, npm, GitHub), you can connect it to **BrowserPod Edge**, a complete networking layer, or provide a custom network backend.
 
 Developers use BrowserPod to **sandbox untrusted and AI-generated code** in the browser, build web applications that **embed server-side processes client-side**, **create interactive documentation and playgrounds** and **run AI coding CLIs in-browser** without modification (e.g., Claude Code, Codex).
 <br>
@@ -82,18 +82,18 @@ Developers use BrowserPod to **sandbox untrusted and AI-generated code** in the 
 ## Features
 | Feature | Description |
 | --- | --- |
-| **WebAssembly** | BrowserPod compiles full native runtimes to WebAssembly, running them directly in the browser without a server. |
 | **Kernel** | BrowserPod's in-browser kernel exposes a Linux-compatible syscall interface rather than a limited JavaScript shim. |
-| **Sandbox** | BrowserPod runs directly in the browser, inheriting its security boundary. |
+| **WebAssembly executables** | BrowserPod runs full, unmodified WebAssembly builds of native tools and runtimes, running them directly in the users' browser. |
 | **Local execution** | Code runs on the user's device: zero latency between an agent and its code, and no compute cost to you. |
-| **Runtimes** | In-browser runtimes for Node.js 22 and Rust. Python is in preview, Go is coming soon and Ruby will follow. |
-| **Compatibility** | The Node.js runtime ships with npm built in, and supports most frameworks and tools (including React, Angular, Next.js, Express.js and Vite), with Wasm overrides for native dependencies (see [Native binaries](#native-binaries)). Most Rust CLI tools work unmodified, including jj, ripgrep and Codex. |
-| **Filesystem** | A block-based streaming virtual filesystem provides full POSIX compatibility. Disk images are streamed on demand, and any file changes stay local to the browser session using either IndexedDB or the Origin Private File System (OPFS). |
+| **Runtimes** | In-browser runtimes for Node.js, Rust, Python (preview), with Go coming soon. |
+| **Sandbox** | BrowserPod runs directly in the browser, inheriting its security boundary. |
+| **Filesystem** | A block-based streaming virtual filesystem provides images on demand, and any file changes stay local to the browser session using either IndexedDB or the Origin Private File System (OPFS). |
+| **Fidelity** | The full Node.js runtime is shipped, and supports most frameworks and tools (including React, Angular, Next.js, Express.js and Vite), with Wasm overrides for native dependencies (see [Native binaries](#native-binaries)). Rust CLI tools work unmodified, including jj, ripgrep and Codex. |
+| **Networking** | Pods can reach the network through the page's `fetch()`: HTTP, HTTPS and WebSocket to origins that allow CORS (`BrowserPod.opinionatedFetch` works also with npm registry). [BrowserPod Edge](#add-browserpod-edge) adds Portals, TCP connections and outbound HTTP access without CORS limits, under an allowlist. Custom allowlists come with Edge Pro. |
 | **Portals** | Ports that open in BrowserPod can be shared via a temporary private URL. This secure URL routes external traffic directly to the service running in the browser, enabling live previews and collaboration without any backend servers. Portals are part of [BrowserPod Edge](#add-browserpod-edge). |
-| **Tools** | BrowserPod provides a wide range of developer tools and frameworks, including bash, git and ripgrep, plus npm for Node.js. |
-| **Multithreading** | Web workers enable true multithreading for complex, multi-process workloads that would normally require a full operating system. |
+| **Tools** | BrowserPod provides a wide range of developer tools and frameworks, including bash, git and ripgrep, plus pnpm and npm for Node.js. |
+| **Multithreading** | Web workers enable true multithreading for complex, multi-process workloads. |
 | **Terminal** | To connect a process's I/O, pass it a `Terminal`, an in-browser pseudo-terminal handle created via `createDefaultTerminal` or `createCustomTerminal`. BrowserPod uses xterm.js by default, but also supports other Wasm-compatible pseudo-terminals (e.g., ghosttyweb). |
-| **Networking** | Without a key, a pod reaches the network through the page's `fetch()`: HTTP, HTTPS and WebSocket to origins that allow CORS (`BrowserPod.opinionatedFetch` adds the npm registry). [BrowserPod Edge](#add-browserpod-edge) adds Portals, TCP and outbound access without CORS limits, under an allowlist. Custom allowlists come with Edge Pro. |
 
 <br>
 
@@ -128,8 +128,6 @@ yarn add @leaningtech/browserpod
 ```
 
 ### Boot a pod
-
-No account or API key needed:
 
 ```js
 import { BrowserPod } from "@leaningtech/browserpod";
@@ -174,7 +172,7 @@ BrowserPod supports Node.js and Rust, with Python in preview. Go is coming soon;
 
 ### Browser
 
-Chromium-based browsers (Chrome, Edge) give the best results. Firefox and Safari work with some limitations, and memory-heavy workloads may fail in Safari.
+Chromium-based browsers (Chrome, Edge) give the best results. Firefox and Safari work with some limitations, and memory-heavy workloads may fail in mobile devices.
 
 ### Native binaries
 
