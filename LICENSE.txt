@@ -7,8 +7,8 @@ In plain words
 BrowserPod is free for any use — personal, commercial and production — as long as you credit it.
 
 - Free for everyone. Individuals, companies of any size, open-source projects, educators and AI agents can use BrowserPod in development, in production, in commercial products, in internal tools and in SaaS. There is no usage limit and no fee.
-- Credit BrowserPod. Show "Powered by BrowserPod" with a link to browserpod.io where your pods run. Tools and agents that run pods without a user interface credit BrowserPod in their documentation or README. A commercial licence removes this requirement: every BrowserPod Edge Pro plan includes one, or ask us for a written agreement.
-- Load it from us. Load the runtime and its disk images from our servers. Do not copy, host, mirror or bundle them. Self-hosting, vendoring and redistribution need an Enterprise licence.
+- Credit BrowserPod. Show "Powered by BrowserPod" with a link to browserpod.io where your pods run. Tools and agents that run pods without a user interface credit BrowserPod in their documentation or README. Edge Pro includes the Community Licence without attribution.
+- Load it from us. Load the runtime and its disk images from our servers. Do not copy, host, mirror or bundle them. Self-hosting, vendoring and redistribution need an Enterprise Licence.
 - It doesn't phone home. The runtime only downloads its own files and disk data from us. It sends no telemetry, licence checks or usage data. Those downloads tell our servers the user's IP address and the page's origin; the Runtime Privacy Policy (https://browserpod.io/runtime-privacy) explains what we do with them.
 - Versions stay put. Each published runtime version stays available, unchanged, at its own address, unless it has a critical security flaw.
 - Networking is separate. BrowserPod Edge (Portals, outbound networking through our network, TCP) is an optional service under its own Terms of Service (https://browserpod.io/terms). Runtime versions before 3.5.0 only start with an API key, so they can only be used together with Edge.
@@ -34,8 +34,8 @@ By installing, loading or using the Software you accept this licence. If you do 
 - "Application" means any website, web application, browser extension, native application, tool, agent or other software that you make, operate or distribute and that uses the Software.
 - "End User" means anyone who uses your Application.
 - "Edge" means BrowserPod Edge, our optional network service (including Portals, outbound networking, the API at api.browserpod.io and the console at console.browserpod.io), governed by the BrowserPod Edge Terms of Service.
-- "Pro Subscription" means an active, paid BrowserPod Edge Pro plan in your console account, which includes a commercial licence to use the Software without the credit required by 4.1 and 4.2.
-- "Enterprise Agreement" means a separate written agreement with Leaning Technologies for self-hosting, vendoring, redistribution, OEM or other rights not granted here.
+- "Pro Subscription" means an active, paid BrowserPod Edge Pro plan in your console account, which includes the BrowserPod Community Licence without attribution (see 4.4).
+- "Enterprise Licence" means a separate written licence agreement with Leaning Technologies, negotiated individually, for self-hosting, vendoring, redistribution, OEM or other rights not granted here.
 
 3. Licence grant
 
@@ -54,12 +54,12 @@ This licence does not limit any use of your own code, data or content that runs 
 4.1 Visible credit. Where your Application shows a user interface, you must display a visible credit reading "Powered by BrowserPod" (or an equivalent wording approved by us), linked to https://browserpod.io, in a place where End Users can reasonably see it — for example on the page or screen that hosts the pod, in its loading state, in the footer, or on an About page reachable from it.
 4.2 Headless use. Where your Application runs pods without a user interface (for example a command-line tool, an AI agent or an automated pipeline), you must credit BrowserPod, with a link to https://browserpod.io, in its documentation or README.
 4.3 Console notice. The Runtime Files print a notice in the browser's developer console when a pod starts. You must not remove, hide or alter that notice, other than through means we provide (for example an API key).
-4.4 Exemptions. The requirements in 4.1 and 4.2 do not apply while you hold a commercial licence that removes them: a Pro Subscription, an Enterprise Agreement or another written agreement with us.
+4.4 Community Licence without attribution. While you hold a Pro Subscription, this Licence applies to you without the requirements in 4.1 and 4.2. An Enterprise Licence or another written agreement with us may also waive them.
 4.5 You may use the BrowserPod name and logo only to give the credit required by this section, and only in a way that does not suggest that we endorse your Application.
 
 5. Loading only from the Official Servers
 
-Unless an Enterprise Agreement allows it, you must not:
+Unless an Enterprise Licence allows it, you must not:
 
 5.1 copy, host, mirror, re-serve, proxy, bundle or embed the Runtime Files or Disk Images, in whole or in part, in your Application, build output, servers, content delivery network or any other location ("vendoring" or "self-hosting"), other than the temporary caching that browsers and standard HTTP caches perform;
 5.2 distribute, sell, rent, lease, sublicense or otherwise make the Runtime Files or Disk Images available to anyone, except by having them loaded from the Official Servers as allowed in section 3; or
@@ -78,7 +78,7 @@ You must not:
 
 7. Paid licences
 
-The following require an Enterprise Agreement: self-hosting or vendoring the Runtime Files or Disk Images; redistribution of the Software, including OEM distribution inside your products; and modified versions of the Software. Removing the attribution requires a commercial licence: a Pro Subscription includes one, and an Enterprise Agreement can. Contact us at https://browserpod.io/contact.
+The following require an Enterprise Licence: self-hosting or vendoring the Runtime Files or Disk Images; redistribution of the Software, including OEM distribution inside your products; and modified versions of the Software. Removing the attribution requires the Community Licence without attribution, included in a Pro Subscription, or an Enterprise Licence. Contact us at https://browserpod.io/contact.
 
 8. No call-home
 
