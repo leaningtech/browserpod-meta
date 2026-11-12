@@ -84,7 +84,7 @@ The following require an Enterprise Licence: self-hosting or vendoring the Runti
 
 The Software contacts Leaning Technologies only to download the Runtime Files and Disk Images from the Official Servers. It does not send us telemetry, licence checks or data about what runs inside a pod. Because those downloads are made by the End User's browser, our servers receive information such as the End User's IP address, the origin of the page that loads the Software and the browser's user agent. We process it as described in the BrowserPod Runtime Privacy Policy at https://browserpod.io/runtime-privacy. You are responsible for telling your End Users, in your own privacy notice, that your Application loads software from a third party.
 
-This section does not apply to Edge. When your Application connects a pod to Edge, the Edge Terms of Service and the Edge and Console Privacy Policy apply to that use.
+This section does not apply when your Application gives the Software an API key: the Software then contacts Edge, including to check your plan, and the Edge Terms of Service and the Edge and Console Privacy Policy apply to that use.
 
 9. Edge and earlier Runtime Versions
 
