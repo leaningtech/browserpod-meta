@@ -1,9 +1,10 @@
 # BrowserPod: notes for coding agents
 
 You are reading this in the `@leaningtech/browserpod` package (or the
-`browserpod-meta` repository). BrowserPod is a microVM that runs in the
-browser, built on WebAssembly: Node.js 22, Rust, git, bash and npm run on a
-Linux-like kernel in the browser tab, on the user's device. This package is a
+`browserpod-meta` repository). BrowserPod is the microVM that runs in the
+browser: a Linux environment in a browser tab. Programs such as `node`, `bash`,
+`git` and Rust binaries run as processes on a Linux-like kernel, client-side,
+and the user's files stay on their device. This package is a
 small loader: it imports the runtime from BrowserPod's CDN. A pod boots with no
 API key and no account.
 
@@ -29,8 +30,6 @@ and the docs disagree, the docs win.
   a key in code; change server or production configuration (headers, proxies);
   copy, vendor or self-host the runtime's files; choose or buy a plan or a
   licence.
-- In copy (a README, a credit, a page), call BrowserPod "the microVM that runs
-  in the browser". Say "Linux-like kernel", never "runs Linux" or "Linux VM".
 
 ## The essentials
 
@@ -53,7 +52,8 @@ and the docs disagree, the docs win.
 - **Native npm binaries don't run.** Swap them for Wasm builds with
   `overrides` (e.g. `esbuild` → `esbuild-wasm`, `rollup` → `@rollup/wasm-node`).
 - **What runs:** Node.js 22, Rust programs, git, bash and common command-line
-  tools. Python is a preview; Go is coming soon; Ruby is not available.
+  tools. Python is a preview only; Go is coming soon; Ruby and Rails
+  are not available.
   Chromium-based browsers give the best results; Firefox and Safari work with
   some limitations.
 - Starter project: `npm create browserpod-quickstart`.
