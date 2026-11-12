@@ -12,7 +12,7 @@
   <img alt="BrowserPod" width="96" src="assets/browserpod-dark.png">
   <br>
   BrowserPod
-  <br>
+  <br><br>
   The microVM that runs in the browser
 </h3>
 
@@ -72,7 +72,9 @@
 
 ## What is BrowserPod?
 
-BrowserPod is a microVM that runs in the browser. Pods boot a Linux-like kernel in WebAssembly, with a small footprint and on-demand loading. They provide multiple language runtimes, including Node.js, Python and Rust, and extensive tools including git, bash, npm and pnpm. Pods run on the end user's browser, with zero latency, near-instant boot, and zero compute costs.
+BrowserPod is a microVM that runs in the browser. 
+
+A Pod boots a Linux-like kernel in WebAssembly, with a small footprint and on-demand loading. It provides multiple language runtimes, including Node.js, Python and Rust, and extensive tools including git, bash, npm and pnpm. Pods run on the end user's browser, with zero latency, near-instant boot, and zero compute costs.
 
 **New in BrowserPod 4.0:** BrowserPod is now free to use for any purpose, under the BrowserPod Community Licence. Unlimited and unmetered. When a pod needs the internet (a public URL, npm, GitHub), you can connect it to **BrowserPod Edge**, a complete networking layer, or provide a custom network backend.
 
@@ -82,7 +84,7 @@ Developers use BrowserPod to **sandbox untrusted and AI-generated code** in the 
 ## Features
 | Feature | Description |
 | --- | --- |
-| **Kernel** | BrowserPod's in-browser kernel exposes a Linux-compatible syscall interface rather than a limited JavaScript shim. |
+| **Kernel** | BrowserPod's in-browser kernel exposes a comprehensive Linux-compatible syscall interface rather than a limited JavaScript shim. |
 | **WebAssembly executables** | BrowserPod runs full, unmodified WebAssembly builds of native tools and runtimes, running them directly in the users' browser. |
 | **Local execution** | Code runs on the user's device: zero latency between an agent and its code, and no compute cost to you. |
 | **Runtimes** | In-browser runtimes for Node.js, Rust, Python (preview), with Go coming soon. |
