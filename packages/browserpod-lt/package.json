@@ -1,6 +1,6 @@
 {
   "name": "@leaningtech/browserpod",
-  "version": "3.6.0",
+  "version": "4.0.0",
   "type": "module",
   "main": "index.js",
   "types": "index.d.ts",
