@@ -12,7 +12,7 @@ const apiKey = import.meta.env.VITE_BP_APIKEY?.trim() || undefined;
 const urlDiv = document.getElementById("url");
 if (!apiKey) {
   urlDiv.classList.add("warning");
-  urlDiv.innerHTML = 'The preview needs an API key. Add <code>VITE_BP_APIKEY</code> to <code>.env</code> and restart the dev server. Get a key at <a href="https://console.browserpod.io">console.browserpod.io</a>.';
+  urlDiv.innerHTML = 'This preview uses a Portal, a BrowserPod Edge feature that needs an API key. Your server is running, but without a key it can\'t be shown here. Add <code>VITE_BP_APIKEY</code> to <code>.env</code> and restart the dev server. Get a free key at <a href="https://console.browserpod.io">console.browserpod.io</a>.';
 }
 
 // Initialize the Pod
