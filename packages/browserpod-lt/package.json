@@ -4,7 +4,7 @@
   "type": "module",
   "main": "index.js",
   "types": "index.d.ts",
-  "description": "Sandboxed Dev Environments in any Browser",
+  "description": "MicroVM that runs in the browser. Node.js, Rust, git and bash with near-instant starts and zero latency.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/leaningtech/browserpod-meta.git"
@@ -18,6 +18,8 @@
     "index.d.ts"
   ],
   "keywords": [
+    "microvm",
+    "browser",
     "webassembly",
     "node",
     "virtualization",
