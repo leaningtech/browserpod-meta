@@ -72,7 +72,7 @@ function printHelp() {
     .map(t => `  ${t.value.padEnd(valueWidth)}   ${templateLabel(t)}`)
     .join('\n');
 
-  console.log(`Create Browserpod Quickstart
+  console.log(`Create BrowserPod Quickstart
 
 Usage:
   create-browserpod-quickstart [project-name] [options]
@@ -325,7 +325,7 @@ function printKeyNotice(template, projectName, apiKey) {
   }
 
   if (template.usesPortals) {
-    console.log(chalk.yellow.bold('This template previews its server through a Portal, which needs an API key.'));
+    console.log(chalk.yellow.bold('This template previews its server through a Portal, a BrowserPod Edge feature that needs an API key.'));
     console.log(chalk.yellow(`To see the preview, add VITE_BP_APIKEY=<your key> to ${projectName}/.env`));
     console.log(chalk.yellow(`(register at ${API_KEY_URL}).\n`));
   } else {
@@ -350,7 +350,7 @@ async function createProject(argv = process.argv.slice(2)) {
     return;
   }
 
-  console.log(chalk.blue.bold('🚀 Create Browserpod Quickstart\n'));
+  console.log(chalk.blue.bold('🚀 Create BrowserPod Quickstart\n'));
 
   let response;
 
@@ -389,7 +389,7 @@ async function createProject(argv = process.argv.slice(2)) {
     console.log(`  cd ${projectName}`);
     console.log('  npm install');
     console.log('  npm run dev');
-    console.log(`\nDocs: ${DOCS_URL} · Discord: ${DISCORD_URL}`);
+    console.log(`\nDocs: ${chalk.cyan(DOCS_URL)} · Discord: ${chalk.cyan(DISCORD_URL)}`);
     console.log(chalk.gray('\nHappy coding! 🎉'));
 
   } catch (error) {
