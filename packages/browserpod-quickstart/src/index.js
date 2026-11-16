@@ -9,6 +9,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const API_KEY_URL = 'https://console.browserpod.io';
+const DOCS_URL = 'https://browserpod.io/docs';
+const DISCORD_URL = 'https://discord.leaningtech.com';
 
 const PORTALS_NOTE = `To enable Portals, which let you preview and share services running inside your pod,
 register at ${API_KEY_URL} and paste your API key after choosing a template.`;
@@ -387,6 +389,7 @@ async function createProject(argv = process.argv.slice(2)) {
     console.log(`  cd ${projectName}`);
     console.log('  npm install');
     console.log('  npm run dev');
+    console.log(`\nDocs: ${DOCS_URL} · Discord: ${DISCORD_URL}`);
     console.log(chalk.gray('\nHappy coding! 🎉'));
 
   } catch (error) {
