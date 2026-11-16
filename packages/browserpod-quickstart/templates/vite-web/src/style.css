@@ -100,3 +100,14 @@ pre {
     grid-template-columns: 1fr;
   }
 }
+
+footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #8b8b95;
+}
+
+footer a {
+  color: #d4d4d8;
+}
