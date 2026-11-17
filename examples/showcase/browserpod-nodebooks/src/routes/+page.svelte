@@ -278,14 +278,6 @@
 	});
 </script>
 
-<svelte:head>
-	<title>NodeBooks — a notebook with a honk</title>
-	<meta
-		name="description"
-		content="Run Node.js cells with markdown notes in a live BrowserPod sandbox — Jupyter, for JavaScript, with a studious goose."
-	/>
-</svelte:head>
-
 <main class="app">
 	<header class="masthead">
 		<div class="masthead-goose" aria-hidden="true">
