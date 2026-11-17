@@ -1041,6 +1041,17 @@ body {
   letter-spacing: 0.03em;
 }
 
+.dos-window-title {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: 0;
+}
+
+.intro a {
+  color: inherit;
+}
+
 .dos-window-wordmark {
   display: block;
   width: min(72%, 264px);
