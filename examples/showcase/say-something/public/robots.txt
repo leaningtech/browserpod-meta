@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://saysomething.browserpod.io/sitemap.xml

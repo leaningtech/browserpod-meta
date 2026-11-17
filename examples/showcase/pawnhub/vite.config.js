@@ -1,6 +1,7 @@
 import { copyFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
+import { PAGES } from './scripts/pages.config.mjs';
 
 const cloudflareMetaFiles = ['_headers', '_redirects'];
 
@@ -25,6 +26,10 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         singlePlayer: resolve(__dirname, 'single-player.html'),
+        // One landing page per entry in scripts/pages.config.mjs.
+        ...Object.fromEntries(
+          PAGES.map((page) => [page.slug, resolve(__dirname, `${page.slug}.html`)])
+        ),
       },
     },
   },

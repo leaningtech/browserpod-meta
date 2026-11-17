@@ -3,7 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PawnHub</title>
+    <title>PawnHub: Play Chess Online with a Friend or Stockfish</title>
+    <meta name="description" content="Play chess online with a friend through an invite link, or against the Stockfish engine. Free, with zero sign-up. The game server runs in your browser tab." />
+    <link rel="canonical" href="https://pawnhub.browserpod.io/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PawnHub" />
+    <meta property="og:title" content="PawnHub: Play Chess Online with a Friend or Stockfish" />
+    <meta property="og:description" content="Play chess online with a friend through an invite link, or against the Stockfish engine. Free, with zero sign-up. The game server runs in your browser tab." />
+    <meta property="og:url" content="https://pawnhub.browserpod.io/" />
+    <meta name="twitter:card" content="summary" />
     <link rel="icon" type="image/png" href="/project/assets/logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,8 +28,8 @@
           <img src="/project/assets/logo.png" alt="PawnHub" class="launcher-logo" />
           <div>
             <div class="launcher-eyebrow">PawnHub</div>
-            <h1 class="launcher-title">Choose your game</h1>
-            <p class="launcher-copy">Pick how you want to play before the game environment starts.</p>
+            <h1 class="launcher-title">Play chess with a friend or against Stockfish</h1>
+            <p class="launcher-copy">Choose how you want to play. PawnHub runs the game server in your browser tab.</p>
           </div>
         </div>
 
@@ -62,6 +70,7 @@
         </div>
 
         <p class="launcher-status" id="launchStatus">Choose your game type and timer, then launch.</p>
+        <p class="launcher-credit"><a href="https://browserpod.io" target="_blank" rel="noopener">Powered by BrowserPod</a></p>
 
         <div class="launcher-footer">
           <label class="launcher-field timer-field">
@@ -70,6 +79,20 @@
           </label>
           <button class="launcher-start" type="button" id="launchGameButton">Launch Game</button>
         </div>
+
+        <section class="launcher-notes">
+          <div>
+            <h2>Two ways to play</h2>
+            <ul>
+              <li>Play a friend online: start a match and send them the invite link.</li>
+              <li>Play the Stockfish engine: choose your colour, the depth and the clock.</li>
+            </ul>
+            <p class="launcher-notes-links">
+              <a href="/play-chess-with-a-friend">Play chess with a friend</a>
+              <a href="/play-against-stockfish">Play against Stockfish</a>
+            </p>
+          </div>
+        </section>
       </div>
     </div>
     <div id="hostStatus" class="host-status checking">Host: Checking...</div>

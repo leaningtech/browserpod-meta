@@ -13,6 +13,27 @@ import { formatError } from './lib/pod-utils.js';
 
 const app = document.querySelector('#app');
 const terminalHost = document.querySelector('#terminal-host');
+
+// Landing pages (see scripts/pages.config.mjs) describe themselves through
+// data attributes on #app. The home page has none of them.
+const pageConfig = {
+  heading: app.dataset.heading || '',
+  tagline:
+    app.dataset.tagline ||
+    'Free file converter that runs on your device. Your files stay with you.',
+  sourceLabel: app.dataset.sourceLabel || '',
+  preferredTarget: app.dataset.target || '',
+};
+const popularConversions = [
+  ['/webp-to-png', 'WebP to PNG'],
+  ['/pdf-to-jpg', 'PDF to JPG'],
+  ['/webp-to-jpg', 'WebP to JPG'],
+  ['/pdf-to-png', 'PDF to PNG'],
+  ['/png-to-jpg', 'PNG to JPG'],
+  ['/jpg-to-png', 'JPG to PNG'],
+  ['/wav-to-mp3', 'WAV to MP3'],
+  ['/json-to-csv', 'JSON to CSV'],
+];
 const acceptList = getSupportedSourceExtensions()
   .map((extension) => `.${extension}`)
   .join(',');
@@ -96,7 +117,9 @@ async function setFile(file) {
   state.targets = file ? getTargetsForSource(state.sourceExt) : [];
   state.targetExt = state.targets.includes(state.targetExt)
     ? state.targetExt
-    : state.targets[0] ?? '';
+    : state.targets.includes(pageConfig.preferredTarget)
+      ? pageConfig.preferredTarget
+      : state.targets[0] ?? '';
 
   if (file && state.targets.length === 0) {
     state.error = 'Unsupported file type.';
@@ -228,14 +251,26 @@ function render() {
   app.innerHTML = `
     <main class="shell">
       <section class="mast">
-        <h1 class="mast-title">Wololo</h1>
+        ${
+          pageConfig.heading
+            ? `
+              <a class="mast-home" href="/">Wololo</a>
+              <h1 class="mast-title mast-title-page">${escapeHtml(pageConfig.heading)}</h1>
+            `
+            : '<h1 class="mast-title">Wololo</h1>'
+        }
+        <p class="mast-tagline">${escapeHtml(pageConfig.tagline)}</p>
       </section>
 
       <section class="rail">
         <label class="dropzone ${state.isDragging ? 'dropzone-dragging' : ''}" for="file-input">
           <input id="file-input" class="visually-hidden" type="file" accept="${acceptList}" />
           <span class="dropzone-main">${
-            state.file ? escapeHtml(state.file.name) : 'Drop a file'
+            state.file
+              ? escapeHtml(state.file.name)
+              : pageConfig.sourceLabel
+                ? `Drop a ${escapeHtml(pageConfig.sourceLabel)} file`
+                : 'Drop a file'
           }</span>
           <span class="dropzone-meta">${state.file ? 'Replace' : 'Choose'}</span>
         </label>
@@ -324,9 +359,24 @@ function render() {
           : ''
       }
 
+      ${
+        pageConfig.heading
+          ? ''
+          : `
+            <section class="rail">
+              <p class="section-label">Popular</p>
+              <ul class="popular-links">
+                ${popularConversions
+                  .map(([href, label]) => `<li><a href="${href}">${label}</a></li>`)
+                  .join('')}
+              </ul>
+            </section>
+          `
+      }
+
       <section class="rail rail-meta">
         <p class="meta-note">Supports ${supportedTypesLabel}</p>
-        <p class="meta-note">Powered by BrowserPod</p>
+        <p class="meta-note"><a href="https://browserpod.io" target="_blank" rel="noopener">Powered by BrowserPod</a></p>
       </section>
     </main>
   `;

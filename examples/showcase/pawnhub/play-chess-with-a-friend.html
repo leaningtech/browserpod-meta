@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Play Chess with a Friend Online, Free | PawnHub</title>
+    <meta name="description" content="Play chess online with a friend: start a game, send the invite link and play in your browsers. Free, with zero sign-up. Powered by BrowserPod." />
+    <link rel="canonical" href="https://pawnhub.browserpod.io/play-chess-with-a-friend" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PawnHub" />
+    <meta property="og:title" content="Play Chess with a Friend Online, Free | PawnHub" />
+    <meta property="og:description" content="Play chess online with a friend: start a game, send the invite link and play in your browsers. Free, with zero sign-up. Powered by BrowserPod." />
+    <meta property="og:url" content="https://pawnhub.browserpod.io/play-chess-with-a-friend" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" type="image/png" href="/project/assets/logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap"
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div class="launcher-overlay has-notes" id="launcher" data-default-mode="multiplayer">
+      <div class="launcher-shell">
+        <div class="launcher-brand">
+          <img src="/project/assets/logo.png" alt="PawnHub" class="launcher-logo" />
+          <div>
+            <div class="launcher-eyebrow">PawnHub</div>
+            <h1 class="launcher-title">Play chess with a friend online</h1>
+            <p class="launcher-copy">Start a game, send the invite link and play. PawnHub runs the game server in your browser tab.</p>
+          </div>
+        </div>
+
+        <div class="launcher-modes" id="modePicker">
+          <button class="mode-card selected" type="button" data-mode="single" id="singleModeButton">
+            <span class="mode-title">Single Player</span>
+            <span class="mode-copy">Play against the AI immediately.</span>
+          </button>
+          <button class="mode-card" type="button" data-mode="multiplayer" id="multiModeButton">
+            <span class="mode-title">Multiplayer Online</span>
+            <span class="mode-copy">Create a game link and invite another player.</span>
+          </button>
+        </div>
+
+        <div class="launcher-panel" id="singleOptions">
+          <div class="launcher-section-title">Single Player Setup</div>
+          <label class="launcher-field">
+            <span>Play as</span>
+            <select id="launchAiRole">
+              <option value="black">White</option>
+              <option value="white">Black</option>
+            </select>
+          </label>
+          <label class="launcher-field">
+            <span>AI depth</span>
+            <select id="launchAiDepth"></select>
+          </label>
+          <label class="launcher-field">
+            <span>AI think time (ms)</span>
+            <input id="launchAiThinkingTime" type="number" min="1" max="100" value="50" />
+            <div class="launcher-field-hint">Enter a value from 1 to 100 ms.</div>
+          </label>
+        </div>
+
+        <div class="launcher-panel hidden" id="multiOptions">
+          <div class="launcher-section-title">Online Multiplayer Setup</div>
+          <p class="launcher-note">Start an online match and share a clear invite link with your opponent.</p>
+        </div>
+
+        <p class="launcher-status" id="launchStatus">Choose your game type and timer, then launch.</p>
+        <p class="launcher-credit"><a href="https://browserpod.io" target="_blank" rel="noopener">Powered by BrowserPod</a></p>
+
+        <div class="launcher-footer">
+          <label class="launcher-field timer-field">
+            <span>Clock per side (minutes)</span>
+            <input id="launchTimerMinutes" type="number" min="1" max="120" value="10" />
+          </label>
+          <button class="launcher-start" type="button" id="launchGameButton">Launch Game</button>
+        </div>
+
+        <section class="launcher-notes">
+          <div>
+            <h2>How to play chess with a friend</h2>
+            <ol>
+              <li>Choose Multiplayer Online and set the clock, from 1 to 120 minutes per side.</li>
+              <li>Press Launch Online Match.</li>
+              <li>Send the invite link to your friend. The game starts when they open it.</li>
+            </ol>
+          </div>
+          <div>
+            <h2>Good to know</h2>
+            <ul>
+              <li>Free to play, with zero accounts and zero downloads for either player.</li>
+              <li>The game server runs in the host’s browser tab through BrowserPod, so the match lasts for as long as the host keeps that tab open.</li>
+              <li>Legal moves, check and the clock are enforced for both players.</li>
+            </ul>
+            <p class="launcher-notes-links">
+              <a href="/play-against-stockfish">Play against Stockfish</a>
+              <a href="/">PawnHub home</a>
+            </p>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div id="hostStatus" class="host-status checking">Host: Checking...</div>
+    <div id="url" class="url-bar">Waiting for portal...</div>
+    <iframe id="portal" class="portal-hidden" title="Built with BrowserPod"></iframe>
+    <pre id="console" aria-hidden="true"></pre>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

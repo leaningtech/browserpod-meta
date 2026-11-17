@@ -126,6 +126,22 @@ button {
   background: var(--frame);
 }
 
+.launch-title {
+  margin: 0;
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.eyebrow a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.eyebrow a:hover {
+  text-decoration: underline;
+}
+
 .lede {
   margin: 0;
   max-width: 34rem;

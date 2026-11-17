@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "build:runner": "node ./scripts/build-runner.mjs",
+    "build:pages": "node ./scripts/generate-pages.mjs",
     "dev": "npm run build:runner && vite",
     "build": "npm run build:runner && vite build",
     "preview": "vite preview"

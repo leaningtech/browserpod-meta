@@ -3,43 +3,93 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SLOTH</title>
+    <title>SLOTH: Markdown Slides, Presented and Shared in Your Browser</title>
+    <meta name="description" content="SLOTH turns markdown into slide decks. Present in a terminal, share a live audience view by link, run Node.js code on slides and collect survey responses." />
+    <link rel="canonical" href="https://sloth.browserpod.io/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="SLOTH" />
+    <meta property="og:title" content="SLOTH: Markdown Slides, Presented and Shared in Your Browser" />
+    <meta property="og:description" content="SLOTH turns markdown into slide decks. Present in a terminal, share a live audience view by link, run Node.js code on slides and collect survey responses." />
+    <meta property="og:url" content="https://sloth.browserpod.io/" />
+    <meta property="og:image" content="https://sloth.browserpod.io/sloth-thumbnail.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="stylesheet" href="/src/style.css" />
+    <link rel="stylesheet" href="/src/home.css" />
   </head>
   <body>
-    <div id="stage">
-      <pre id="console"></pre>
-      <!-- Home-screen logo. The terminal can't render images, so this PNG is
-           overlaid on the page above the menu, shown only on the home screen
-           (toggled by SLOTH's sloth:menu / sloth:deck sentinels). -->
-      <img id="home-logo" src="/slothbg.png" alt="SLOTH" hidden />
-      <!-- Side panel: shown when a runnable block opens a server portal. -->
-      <aside id="portal">
-        <header id="portal-bar">
-          <a id="portal-url" href="#" target="_blank" rel="noopener"></a>
-          <!-- Desktop annotation: draw on the slide showing in the panel. The
-               canvas below sits over the iframe; strokes POST to /draw, the same
-               endpoint the audience page reads, so they appear for everyone. -->
-          <span id="pen-tools" hidden>
-            <button class="pen-sw sel" data-col="#f33" style="background:#f33"></button>
-            <button class="pen-sw" data-col="#fd3" style="background:#fd3"></button>
-            <button class="pen-sw" data-col="#fff" style="background:#fff"></button>
-            <button id="pen-clear" title="Clear annotations">Clear</button>
-          </span>
-          <button id="pen-toggle" title="Draw on the slide">✎ Draw</button>
-          <button id="portal-close" title="Close portal">✕</button>
-        </header>
-        <div id="portal-body">
-          <iframe id="portal-frame" src="about:blank"
-            sandbox="allow-scripts allow-forms allow-same-origin allow-popups"></iframe>
-          <!-- Transparent draw layer over the iframe; only active in draw mode. -->
-          <canvas id="pen-canvas" hidden></canvas>
+    <main class="home">
+      <header class="hero">
+        <img class="hero-logo" src="/slothbg.png" alt="SLOTH" width="440" height="283" />
+        <h1>Markdown slides, presented and shared from your browser</h1>
+        <p class="lede">
+          SLOTH turns a markdown file into a slide deck. Present it in a terminal, share a live
+          view with your audience by link and run Node.js code on your slides. SLOTH is free to use.
+        </p>
+        <a class="cta" href="/app">Open SLOTH</a>
+      </header>
+
+      <section class="sample" aria-label="Example deck">
+        <pre><code>%title: My talk
+%author: Your Name
+
+# Title slide
+
+A subtitle.
+
+---
+
+## Second slide
+
+- a point
+- a second point</code></pre>
+        <p class="sample-note">A deck is a markdown file. A line of three dashes starts a new slide.</p>
+      </section>
+
+      <section class="features">
+        <h2>What SLOTH does</h2>
+        <div class="grid">
+          <article>
+            <h3>Write slides in markdown</h3>
+            <p>Top-level headings render as large ASCII art, code blocks are highlighted and a pause line reveals a slide step by step. Speaker notes stay on your presenter view.</p>
+          </article>
+          <article>
+            <h3>Share a live view by link</h3>
+            <p>Present mode serves an audience page on a shareable link. The page follows your slides as you move through them, as clean HTML slides or with a terminal look.</p>
+          </article>
+          <article>
+            <h3>Run code on a slide</h3>
+            <p>Press <kbd>r</kbd> to run a slide's Node.js snippet. Output streams in a pane beside the slide, and an app that opens a port appears next to the terminal.</p>
+          </article>
+          <article>
+            <h3>Collect survey responses</h3>
+            <p>Add single choice, multiple choice, rating and free text questions to a deck. Responses are saved as a CSV file inside your browser tab, ready to download.</p>
+          </article>
+          <article>
+            <h3>Use your phone as a clicker</h3>
+            <p>Scan the QR code on the presenter view and move through your slides from your phone.</p>
+          </article>
+          <article>
+            <h3>Choose from hundreds of themes</h3>
+            <p>SLOTH includes its own themes plus 365 palettes from the Gogh collection, with a picker to fine-tune individual colours.</p>
+          </article>
         </div>
-      </aside>
-    </div>
-    <!-- Hidden: opened only when SLOTH's Upload menu item asks for a file. -->
-    <input id="file-input" type="file" accept=".md,.markdown,text/markdown" multiple hidden />
-    <script type="module" src="/src/main.js"></script>
+      </section>
+
+      <section class="local">
+        <h2>Runs on your device</h2>
+        <p>
+          SLOTH runs a Node.js process inside your browser tab through
+          <a href="https://browserpod.io">BrowserPod</a>. Your decks, files and survey responses
+          stay in the tab until you download them, and the app is ready to use as soon as it loads.
+        </p>
+        <a class="cta" href="/app">Open SLOTH</a>
+      </section>
+
+      <footer class="foot">
+        <a href="/mentimeter-alternative">SLOTH as a Mentimeter alternative</a>
+        <a href="/slido-alternative">SLOTH as a Slido alternative</a>
+        <a href="https://browserpod.io">Powered by BrowserPod</a>
+      </footer>
+    </main>
   </body>
 </html>

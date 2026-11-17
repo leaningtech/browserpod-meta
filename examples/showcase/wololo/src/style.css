@@ -57,6 +57,18 @@ a {
   padding: 0 0 1.5rem;
 }
 
+.mast-tagline {
+  margin: 1rem 0 0;
+  max-width: 34ch;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.meta-note a {
+  color: inherit;
+}
+
 .mast-title {
   margin: 0;
   font-size: clamp(3rem, 8vw, 4.8rem);
@@ -250,4 +262,85 @@ a {
   .target-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+/* Landing pages for single conversions (scripts/pages.config.mjs). */
+
+.mast-home {
+  display: inline-block;
+  margin: 0 0 0.9rem;
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', 'SFMono-Regular', 'Menlo', 'Consolas',
+    'Liberation Mono', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.mast-home:hover {
+  text-decoration: underline;
+}
+
+.mast-title-page {
+  font-size: clamp(2.2rem, 6vw, 3.2rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.popular-links,
+.notes-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+}
+
+.popular-links a,
+.notes a {
+  color: var(--ink);
+}
+
+.has-notes #app {
+  min-height: auto;
+  padding-top: 64px;
+}
+
+.notes {
+  width: min(100%, calc(34rem + 36px));
+  margin: 0 auto;
+  padding: 16px 18px 64px;
+}
+
+.notes-block {
+  border-top: 1px solid var(--line);
+  padding: 1.2rem 0 0;
+  margin-top: 1.2rem;
+}
+
+.notes h2 {
+  margin: 0 0 0.8rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.notes ol,
+.notes ul:not(.notes-links) {
+  margin: 0;
+  padding-left: 1.2rem;
+  line-height: 1.55;
+}
+
+.notes li + li {
+  margin-top: 0.35rem;
+}
+
+.notes-links li + li {
+  margin-top: 0;
+}
+
+.notes > .meta-note {
+  margin-top: 1.6rem;
 }
