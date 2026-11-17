@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env.local
+
+# public/amp is committed, so
+# the deploy needs no toolchain.
+
+# Cargo build output.
+amp-0.7.1/target/

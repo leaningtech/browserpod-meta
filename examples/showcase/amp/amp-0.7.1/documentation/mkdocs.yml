@@ -1,0 +1,32 @@
+site_name: Amp
+docs_dir: 'pages'
+theme:
+  logo: 'images/logo.svg'
+  favicon: 'images/terminal.ico'
+  name: 'material'
+  palette:
+    primary: 'blue grey'
+    accent: 'red'
+  features:
+    - content.code.annotate
+repo_name: 'jmacdonald/amp'
+repo_url: 'https://github.com/jmacdonald/amp'
+nav:
+  - 'index.md'
+  - 'installation.md'
+  - 'usage.md'
+  - 'configuration.md'
+extra:
+  palette:
+    primary: 'blue grey'
+    accent: 'red'
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.smartsymbols
+extra_css:
+  - 'stylesheets/extra.css'
+copyright: 'Copyright &copy; 2015 - 2018 Jordan MacDonald'
