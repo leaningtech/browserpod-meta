@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verdaccio</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <main class="main">
+      <section id="loading" class="loading">
+        <div id="spinner" class="spinner" aria-hidden="true"></div>
+        <p id="step" class="step">Starting BrowserPod</p>
+        <p id="detail" class="detail">This page runs the registry, so keep it open while you use it.</p>
+      </section>
+      <iframe id="app" class="app" title="Verdaccio" credentialless hidden></iframe>
+      <pre id="logs" class="logs" hidden></pre>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

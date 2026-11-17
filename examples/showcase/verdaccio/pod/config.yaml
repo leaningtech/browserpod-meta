@@ -1,0 +1,45 @@
+# Verdaccio defaults, plus
+# listen for the portal and
+# json logs
+storage: ./storage
+
+listen: 0.0.0.0:4873
+
+web:
+  title: Verdaccio
+
+auth:
+  htpasswd:
+    file: ./htpasswd
+
+uplinks:
+  npmjs:
+    url: https://registry.npmjs.org/
+
+packages:
+  '@*/*':
+    access: $all
+    publish: $authenticated
+    unpublish: $authenticated
+    proxy: npmjs
+  '**':
+    access: $all
+    publish: $authenticated
+    unpublish: $authenticated
+    proxy: npmjs
+
+server:
+  keepAliveTimeout: 60
+
+middlewares:
+  audit:
+    enabled: true
+
+# json: pretty needs workers
+log:
+  type: stdout
+  format: json
+  level: http
+
+i18n:
+  web: en-US
