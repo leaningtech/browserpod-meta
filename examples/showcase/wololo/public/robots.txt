@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://wololo.browserpod.io/sitemap.xml
