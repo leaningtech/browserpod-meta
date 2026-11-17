@@ -285,7 +285,8 @@ if (!multiplayerAvailable) {
     launcherNote.textContent = "Online multiplayer is unavailable until VITE_BP_APIKEY is configured for this deployment.";
   }
 }
-setSelectedMode("single");
+// Landing pages preselect a mode through data-default-mode on the launcher.
+setSelectedMode(launcher?.dataset.defaultMode || "single");
 modeButtons.forEach((button) => {
   button.addEventListener("click", () => {
     setSelectedMode(button.dataset.mode || "single");

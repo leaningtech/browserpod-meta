@@ -46,6 +46,54 @@ body {
   display: none;
 }
 
+/* The launcher can be taller than the screen once it carries page text. */
+.launcher-overlay {
+  overflow-y: auto;
+  align-items: start;
+}
+
+/* Centres the panel when it fits and keeps its top reachable when it is tall. */
+.launcher-shell {
+  margin-block: auto;
+}
+
+.launcher-notes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--panel-border);
+  color: #c1c8d2;
+  font-size: 0.98rem;
+}
+
+.launcher-notes h2 {
+  margin: 0 0 10px;
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+.launcher-notes ol,
+.launcher-notes ul {
+  padding-left: 1.2rem;
+}
+
+.launcher-notes li + li {
+  margin-top: 6px;
+}
+
+.launcher-notes-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 14px;
+}
+
+.launcher-notes a {
+  color: var(--accent);
+}
+
 .launcher-shell {
   width: min(960px, 100%);
   display: grid;
@@ -197,6 +245,15 @@ body {
 
 .launcher-note {
   margin: 0;
+  color: #c1c8d2;
+}
+
+.launcher-credit {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.launcher-credit a {
   color: #c1c8d2;
 }
 
