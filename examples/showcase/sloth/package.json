@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "build:pages": "node ./scripts/generate-pages.mjs",
     "pod-modules": "node scripts/build-pod-modules.mjs",
     "dev": "vite",
     "build": "vite build",
