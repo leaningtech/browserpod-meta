@@ -1,0 +1,230 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.875rem;
+}
+
+pre {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 0.5rem;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.875rem;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  overflow-y: auto;
+  background: #1e1e1e;
+  color: #c2c2c2;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.overlay[hidden] {
+  display: none;
+}
+
+.overlay h1 {
+  margin-bottom: 0.25rem;
+  color: #e6e6e6;
+  font-size: 1.75rem;
+  text-align: center;
+}
+
+.logo {
+  flex: none;
+  min-height: auto;
+  overflow: visible;
+  padding: 0;
+  background: none;
+  align-self: center;
+  color: #4fc1ff;
+  font-family: Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.loading {
+  text-align: center;
+}
+
+/* Keeps the top scrollable */
+#setup {
+  justify-content: flex-start;
+}
+
+.setup {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 40rem;
+  margin: auto;
+}
+
+.about {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.about .lead {
+  color: #e6e6e6;
+  font-size: 1.1rem;
+}
+
+.about h2 {
+  margin-bottom: 0.15rem;
+  color: #e6e6e6;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.warning {
+  padding: 0.75rem 1rem;
+  border-left: 3px solid #c58a3b;
+  background: #2a2419;
+  color: #ead2a3;
+}
+
+.setup fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border: 1px solid #333;
+  padding: 0.75rem 1rem 1rem;
+}
+
+.setup legend {
+  padding: 0 0.35rem;
+  color: #e6e6e6;
+  font-weight: 600;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.option {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.6rem;
+  row-gap: 0.1rem;
+  align-items: baseline;
+  cursor: pointer;
+}
+
+.option .hint {
+  grid-column: 2;
+}
+
+.option input:disabled ~ span {
+  opacity: 0.5;
+}
+
+.option-name {
+  color: #e6e6e6;
+}
+
+.hint {
+  color: #a8a8a8;
+  font-size: 0.875rem;
+}
+
+.tag {
+  padding: 0 0.35rem;
+  border: 1px solid #c58a3b;
+  color: #e0a458;
+  font-size: 0.8rem;
+}
+
+.setup details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.setup summary {
+  cursor: pointer;
+  color: #e6e6e6;
+}
+
+.setup details[open] summary {
+  margin-bottom: 0.5rem;
+}
+
+.setup details .hint:first-of-type {
+  margin-bottom: 0.5rem;
+}
+
+.setup a {
+  color: #4fc1ff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.setup a:hover,
+.setup a:focus-visible {
+  color: #8fd8ff;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #333;
+  font-size: 0.875rem;
+}
+
+.start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.setup button {
+  flex: none;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid #4fc1ff;
+  background: transparent;
+  color: #4fc1ff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.setup button:hover,
+.setup button:focus-visible {
+  background: #4fc1ff;
+  color: #1e1e1e;
+}

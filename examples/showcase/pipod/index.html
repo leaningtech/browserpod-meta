@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PiPod</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <pre id="console"></pre>
+    <div id="setup" class="overlay" hidden>
+      <form id="setup-form" class="setup">
+        <pre class="logo" aria-hidden="true">⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⠾⠷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⣀⣤⡾⠟⠋⠁⠀⠀⢸⣧⠸⠷⣦⡀⠀⠀⠀⠀
+⠀⣠⣴⠿⠛⠁⠀⠀⣀⣤⣶⠟⢸⣿⠀⠀⢸⣿⢰⣦⣄⠀
+⢰⡿⠁⠀⠀⣠⣴⡾⠛⠉⠀⠀⢸⣿⢰⡾⢸⣿⠀⠈⢻⡇
+⢺⡇⠀⠀⣼⡟⠁⠀⠀⢀⣠⣶⢸⣿⠀⠀⢸⣿⠀⠀⢸⡇
+⢸⡇⠀⠀⣿⡇⠀⠀⣼⡟⠉⠀⢸⣿⠀⠀⢸⣿⠀⠀⢸⡇
+⢸⡇⠀⠀⣿⡇⠀⠀⣿⡇⠀⣀⣼⡟⠀⠀⢸⣿⠀⠀⢸⡇
+⣾⡇⠀⠀⣿⡇⠀⠀⣩⣴⡾⠛⠉⠀⠀⠀⣸⡿⠀⠀⢸⡇
+⠸⣧⡀⠀⠙⠿⠶⠿⣋⡅⠀⠀⢀⣠⣶⠿⠛⠁⠀⢀⣾⠇
+⠀⠙⠿⣶⣄⡀⠀⠀⠙⢷⣶⡾⠟⠋⠀⠀⢀⣠⣶⠿⠋⠀
+⠀⠀⠀⠀⠙⠻⢷⣦⣀⠀⠀⠀⠀⣀⣴⡾⠟⠉⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠈⠛⠿⠶⠶⠿⠛⠁⠀⠀⠀⠀⠀⠀⠀</pre>
+        <h1>PiPod</h1>
+        <div class="about">
+          <p class="lead">PiPod runs open-weight models as a free coding agent, entirely on your device. Your prompts and code never leave it.</p>
+          <section>
+            <h2>Models</h2>
+            <p>Open-weight models, licensed under <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener">Apache 2.0</a>, downloaded from <a href="https://huggingface.co" target="_blank" rel="noopener">Hugging Face</a> the first time you choose one. They're saved in your browser's storage, so later visits don't download them again.</p>
+          </section>
+          <section>
+            <h2>Harness</h2>
+            <p>A fork of <a href="https://github.com/itayinbarr/little-coder" target="_blank" rel="noopener">Little Coder</a>, which adapts the <a href="https://github.com/earendil-works/pi/tree/main/packages/coding-agent" target="_blank" rel="noopener">Pi</a> agent harness for smaller models. PiPod's changes improve the harness and its compatibility with BrowserPod.</p>
+          </section>
+          <section>
+            <h2>Inference</h2>
+            <p>Models run on your device's GPU through <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API" target="_blank" rel="noopener">WebGPU</a>, using <a href="https://github.com/google-ai-edge/LiteRT-LM" target="_blank" rel="noopener">LiteRT-LM</a>, whose runtime is compiled to <a href="https://webassembly.org" target="_blank" rel="noopener">WebAssembly</a>. The legacy engine, <a href="https://www.sipp.sh/" target="_blank" rel="noopener">Sipp</a>, runs <a href="https://github.com/ggml-org/llama.cpp" target="_blank" rel="noopener">llama.cpp</a> compiled to WebAssembly, also on WebGPU. Both are used unmodified. PiPod needs a browser with WebGPU.</p>
+          </section>
+          <section>
+            <h2>Execution</h2>
+            <p>Code runs in <a href="https://browserpod.io" target="_blank" rel="noopener">BrowserPod</a>, a Linux-like sandbox with <a href="https://nodejs.org" target="_blank" rel="noopener">Node.js</a> that runs in this tab. BrowserPod is used unmodified.</p>
+          </section>
+        </div>
+        <p class="warning" role="note">Running a model takes a lot of processing power. On less powerful devices, or with larger models, your browser may stop responding for a while.</p>
+        <fieldset>
+          <legend>Model</legend>
+          <p class="hint">Larger models take longer to download and use more of your device's resources. Smaller models are quicker to download but less reliable at tool calls.</p>
+          <div id="models" class="options"></div>
+          <details>
+            <summary>Advanced</summary>
+            <p class="hint">Legacy engine. These can be tried on devices with limited resources.</p>
+            <div id="legacy-models" class="options"></div>
+          </details>
+        </fieldset>
+        <fieldset>
+          <legend>BrowserPod</legend>
+          <div class="options">
+            <label class="option">
+              <input type="radio" name="network" value="key" />
+              <span class="option-name">With key</span>
+              <span class="hint">Web access, and portal links for servers you run.</span>
+            </label>
+            <label class="option">
+              <input type="radio" name="network" value="keyless" />
+              <span class="option-name">Without key</span>
+              <span class="hint">No portal links, and limited web access (npm works).</span>
+            </label>
+          </div>
+          <p id="no-key" class="hint" hidden>This build has no BrowserPod key.</p>
+        </fieldset>
+        <div class="start">
+          <p class="hint">Start downloads the chosen model into your browser's storage, unless it's already saved there.</p>
+          <button type="submit">Start</button>
+        </div>
+        <footer class="links">
+          <a href="https://github.com/leaningtech/browserpod-meta" target="_blank" rel="noopener">BrowserPod on GitHub</a>
+          <a href="https://www.npmjs.com/package/@leaningtech/browserpod" target="_blank" rel="noopener">BrowserPod on npm</a>
+        </footer>
+      </form>
+    </div>
+    <div id="loading" class="overlay loading" role="status" hidden>
+      <pre class="logo" aria-hidden="true">⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⠾⠷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⣀⣤⡾⠟⠋⠁⠀⠀⢸⣧⠸⠷⣦⡀⠀⠀⠀⠀
+⠀⣠⣴⠿⠛⠁⠀⠀⣀⣤⣶⠟⢸⣿⠀⠀⢸⣿⢰⣦⣄⠀
+⢰⡿⠁⠀⠀⣠⣴⡾⠛⠉⠀⠀⢸⣿⢰⡾⢸⣿⠀⠈⢻⡇
+⢺⡇⠀⠀⣼⡟⠁⠀⠀⢀⣠⣶⢸⣿⠀⠀⢸⣿⠀⠀⢸⡇
+⢸⡇⠀⠀⣿⡇⠀⠀⣼⡟⠉⠀⢸⣿⠀⠀⢸⣿⠀⠀⢸⡇
+⢸⡇⠀⠀⣿⡇⠀⠀⣿⡇⠀⣀⣼⡟⠀⠀⢸⣿⠀⠀⢸⡇
+⣾⡇⠀⠀⣿⡇⠀⠀⣩⣴⡾⠛⠉⠀⠀⠀⣸⡿⠀⠀⢸⡇
+⠸⣧⡀⠀⠙⠿⠶⠿⣋⡅⠀⠀⢀⣠⣶⠿⠛⠁⠀⢀⣾⠇
+⠀⠙⠿⣶⣄⡀⠀⠀⠙⢷⣶⡾⠟⠋⠀⠀⢀⣠⣶⠿⠋⠀
+⠀⠀⠀⠀⠙⠻⢷⣦⣀⠀⠀⠀⠀⣀⣴⡾⠟⠉⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠈⠛⠿⠶⠶⠿⠛⠁⠀⠀⠀⠀⠀⠀⠀</pre>
+      <h1>PiPod</h1>
+      <p id="load-pod">Starting the pod</p>
+      <p id="load-model">Starting the model</p>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

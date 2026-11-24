@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.env.local
+.DS_Store
+
+# build-little-coder.sh scratch
+little-coder-stage/

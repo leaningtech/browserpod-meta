@@ -1,0 +1,39 @@
+PiPod
+Copyright 2026 The PiPod authors
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+PiPod builds on the third-party software below. Each component is
+covered by its own licence, not by PiPod's.
+
+Bundled in pod/little-coder.tgz.* (unpacked into the pod at runtime)
+--------------------------------------------------------------------
+- Little Coder (https://github.com/itayinbarr/little-coder)
+  Apache License 2.0. Modified by PiPod; see "What PiPod changes in
+  Little Coder" in README.md.
+- Pi coding agent, @mariozechner/pi-coding-agent
+  (https://github.com/earendil-works/pi)
+  MIT License. Modified by PiPod (bash tool and path handling).
+- The npm dependencies of Little Coder and Pi, each under its own
+  licence. Every package's licence file is kept inside the tarball.
+
+npm dependencies of the web app (not bundled in this repository)
+-----------------------------------------------------------------
+- BrowserPod, @leaningtech/browserpod (https://browserpod.io)
+  BrowserPod Community Licence. BrowserPod is free to use but is not
+  open source. Its runtime is loaded from BrowserPod's servers and is
+  not copied, modified or redistributed by PiPod.
+- LiteRT-LM, @litert-lm/core (https://github.com/google-ai-edge/LiteRT-LM)
+  Apache License 2.0.
+- Sipp, @sipphq/sipp (https://www.sipp.sh/)
+  Apache License 2.0.
+- @huggingface/jinja (https://github.com/huggingface/huggingface.js)
+  MIT License.
+
+Models (downloaded from Hugging Face at runtime, not distributed here)
+----------------------------------------------------------------------
+- Gemma 4 E4B and E2B (litert-community LiteRT builds), Apache License 2.0
+- Qwen2.5 Coder 1.5B Instruct (litert-community LiteRT build),
+  Apache License 2.0
+- Qwen3.5 4B (unsloth GGUF build), Apache License 2.0
+- Tiny-Agent-a 0.5B (driaforall), Apache License 2.0
