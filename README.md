@@ -22,6 +22,57 @@
   <a href="https://npm.im/@leaningtech/browserpod"><img alt="npm" src="https://img.shields.io/npm/v/@leaningtech/browserpod"></a>
 </p>
 
+Linux-like microVM that runs in the browser: Node.js, npm, git, bash and Rust inside a web page, on the user's device, no key.
+
+## Try it in one file
+
+In an empty folder, install the package:
+
+```sh
+npm install @leaningtech/browserpod
+```
+
+Save this next to it as `index.html`:
+
+```html
+<!doctype html>
+<div id="console"></div>
+<p>Powered by <a href="https://browserpod.io">BrowserPod</a></p>
+<script type="module">
+  import { BrowserPod } from "./node_modules/@leaningtech/browserpod/index.js";
+
+  const pod = await BrowserPod.boot({});
+  const terminal = await pod.createDefaultTerminal(document.querySelector("#console"));
+  await pod.run("node", ["-v"], { terminal });
+  await pod.run("git", ["--version"], { terminal });
+</script>
+```
+
+Serve the folder with the [cross-origin isolation](#cross-origin-isolation) headers, then open http://localhost:8000:
+
+```sh
+npx local-web-server --cors.opener-policy same-origin --cors.embedder-policy require-corp
+```
+
+The page boots a pod (BrowserPod's microVM) in the browser tab, connects a terminal and runs `node -v` and `git --version` inside it. No API key or account needed.
+
+### When to use it
+
+- Run AI coding CLIs (Claude Code, Codex) in the browser without modification
+- Sandbox untrusted and AI-generated code in the user's browser, not on your servers
+- Embed server-side processes (Node.js, git, bash, Rust CLIs) client-side in a web app
+- Interactive documentation and playgrounds
+
+### Limits
+
+- The page must be [cross-origin isolated](#cross-origin-isolation) (COOP/COEP headers).
+- Without a key, the pod reaches the network through the page's `fetch()`: only origins that allow CORS. Portals, TCP and access without CORS limits need [BrowserPod Edge](#add-browserpod-edge).
+- npm packages that ship native binaries need their Wasm builds ([Native binaries](#native-binaries)).
+
+### For coding agents
+
+[`AGENTS.md`](AGENTS.md) · [BrowserPod skill](https://browserpod.io/skills/browserpod/SKILL.md) · [Docs as Markdown (llms.txt)](https://browserpod.io/docs/llms.txt) · [BrowserPod for AI agents](https://browserpod.io/solutions/ai-agents)
+
 <p align="center">
   <b>Built with:</b>&nbsp;&nbsp;
   <img src="assets/icons/WebAssembly.svg" alt="Wasm" title="Wasm" height="30">
