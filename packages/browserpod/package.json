@@ -4,7 +4,7 @@
   "type": "module",
   "main": "index.js",
   "types": "index.d.ts",
-  "description": "MicroVM that runs in the browser. Node.js, Rust, git and bash with near-instant starts and zero latency.",
+  "description": "Linux-like microVM that runs in the browser: Node.js, npm, git, bash and Rust inside a web page, on the user's device, no key.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/leaningtech/browserpod-meta.git"
@@ -26,7 +26,20 @@
     "sandbox",
     "agents",
     "wasm",
-    "leaningtech"
+    "leaningtech",
+    "linux",
+    "vm",
+    "virtual-machine",
+    "bash",
+    "shell",
+    "terminal",
+    "git",
+    "nodejs",
+    "npm",
+    "code-execution",
+    "webcontainer",
+    "in-browser",
+    "rust"
   ],
   "scripts": {
     "prepack": "cp ../../README.md ../../AGENTS.md ../../LICENSE.txt ../../COPYRIGHT.txt ../../src/index.js ../../src/index.d.ts ."
