@@ -4,7 +4,7 @@
   "type": "module",
   "main": "index.js",
   "types": "index.d.ts",
-  "description": "Linux-like microVM that runs in the browser: Node.js, npm, git, bash and Rust inside a web page, on the user's device, no key.",
+  "description": "Linux-like microVM that runs in the browser with near-instant starts: Node.js, npm, git, bash and Rust. No API key.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/leaningtech/browserpod-meta.git"

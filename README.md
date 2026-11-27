@@ -22,7 +22,7 @@
   <a href="https://npm.im/@leaningtech/browserpod"><img alt="npm" src="https://img.shields.io/npm/v/@leaningtech/browserpod"></a>
 </p>
 
-Linux-like microVM that runs in the browser: Node.js, npm, git, bash and Rust inside a web page, on the user's device, no key.
+Linux-like microVM that runs in the browser with near-instant starts: Node.js, npm, git, bash and Rust. No API key.
 
 ## Try it in one file
 
@@ -36,6 +36,10 @@ Save this next to it as `index.html`:
 
 ```html
 <!doctype html>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; }
+  #console { height: 240px; padding: 8px; background: #000; border-radius: 8px; }
+</style>
 <div id="console"></div>
 <p>Powered by <a href="https://browserpod.io">BrowserPod</a></p>
 <script type="module">
@@ -56,22 +60,33 @@ npx local-web-server --cors.opener-policy same-origin --cors.embedder-policy req
 
 The page boots a pod (BrowserPod's microVM) in the browser tab, connects a terminal and runs `node -v` and `git --version` inside it. No API key or account needed.
 
-### When to use it
+## When to use it
 
-- Run AI coding CLIs (Claude Code, Codex) in the browser without modification
+- Run AI coding CLIs (Claude Code, Codex, Pi) in the browser without modification
 - Sandbox untrusted and AI-generated code in the user's browser, not on your servers
 - Embed server-side processes (Node.js, git, bash, Rust CLIs) client-side in a web app
 - Interactive documentation and playgrounds
 
-### Limits
+## Limits
 
 - The page must be [cross-origin isolated](#cross-origin-isolation) (COOP/COEP headers).
 - Without a key, the pod reaches the network through the page's `fetch()`: only origins that allow CORS. Portals, TCP and access without CORS limits need [BrowserPod Edge](#add-browserpod-edge).
 - npm packages that ship native binaries need their Wasm builds ([Native binaries](#native-binaries)).
+- Chromium-based browsers give the best results; Firefox and Safari work [with some limitations](#browser).
 
-### For coding agents
+## For coding agents
 
 [`AGENTS.md`](AGENTS.md) · [BrowserPod skill](https://browserpod.io/skills/browserpod/SKILL.md) · [Docs as Markdown (llms.txt)](https://browserpod.io/docs/llms.txt) · [BrowserPod for AI agents](https://browserpod.io/solutions/ai-agents)
+
+## What is BrowserPod?
+
+BrowserPod is a microVM that runs in the browser. 
+
+A Pod boots a Linux-like kernel in WebAssembly, with a small footprint and on-demand loading. It provides multiple language runtimes, including Node.js, Python and Rust, and extensive tools including git, bash, npm and pnpm. Pods run on the end user's browser, with zero latency, near-instant boot, and zero compute costs.
+
+**New in BrowserPod 4.0:** BrowserPod is now free to use for any purpose, under the BrowserPod Community Licence. Unlimited and unmetered. When a pod needs the internet (a public URL, npm, GitHub), you can connect it to **BrowserPod Edge**, a complete networking layer, or provide a custom network backend.
+
+Developers use BrowserPod to **sandbox untrusted and AI-generated code** in the browser, build web applications that **embed server-side processes client-side**, **create interactive documentation and playgrounds** and **run AI coding CLIs in-browser** without modification (e.g., Claude Code, Codex).
 
 <p align="center">
   <b>Built with:</b>&nbsp;&nbsp;
@@ -121,15 +136,6 @@ The page boots a pod (BrowserPod's microVM) in the browser tab, connects a termi
   <img src="assets/icons/Git.svg" alt="Git" title="Git" height="30">
 </p>
 
-## What is BrowserPod?
-
-BrowserPod is a microVM that runs in the browser. 
-
-A Pod boots a Linux-like kernel in WebAssembly, with a small footprint and on-demand loading. It provides multiple language runtimes, including Node.js, Python and Rust, and extensive tools including git, bash, npm and pnpm. Pods run on the end user's browser, with zero latency, near-instant boot, and zero compute costs.
-
-**New in BrowserPod 4.0:** BrowserPod is now free to use for any purpose, under the BrowserPod Community Licence. Unlimited and unmetered. When a pod needs the internet (a public URL, npm, GitHub), you can connect it to **BrowserPod Edge**, a complete networking layer, or provide a custom network backend.
-
-Developers use BrowserPod to **sandbox untrusted and AI-generated code** in the browser, build web applications that **embed server-side processes client-side**, **create interactive documentation and playgrounds** and **run AI coding CLIs in-browser** without modification (e.g., Claude Code, Codex).
 <br>
 
 ## Features
